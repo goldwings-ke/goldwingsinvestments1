@@ -12,9 +12,10 @@ import firebase from 'firebase'
     measurementId: "G-CWGB6PH2CG"
   };
   // Initialize Firebase
+  if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
-
+  }
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
 export default firebase;
