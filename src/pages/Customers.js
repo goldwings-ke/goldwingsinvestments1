@@ -15,8 +15,8 @@ class Customers extends React.Component {
       viewItems :[],
       user: null,
       optionsOne: [],
-      optionsTwo: [],
       bizinfo: [],
+      currencyItems: [],
       id: '',
       balance: '',
       billing_address: '',
@@ -37,13 +37,13 @@ class Customers extends React.Component {
       viewRecord: false,
       isExists: false,
       search: false,
-      initialized: false
+      initialized: false,
+      displayPane: 'form'
      
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.logout = this.logout.bind(this); 
-    this.onlyUnique = this.onlyUnique.bind(this); 
     this.initialize = this.initialize.bind(this); 
     this.initialize2 = this.initialize2.bind(this); 
     this.uiConfig = {
@@ -148,16 +148,92 @@ class Customers extends React.Component {
         });
       }); 
 
+// populate currency
+  var count = 0;
+    const taxRef = firebase.database().ref('currencies/'+
+       uid+'/'+businessKeyId);
+        taxRef.on('value', (snapshot) => {
+          let currency_items = snapshot.val();
+          let newCurrencyState = [];
+          let currencyOption = [];
+            for (let mCurrencyItem in currency_items) {
+              let name = currency_items[mCurrencyItem].name;
+              let symbol = currency_items[mCurrencyItem].symbol;
+              count++;
+              currencyOption.push({
+                value: name,
+                label: symbol
+              });
+              newCurrencyState.push({
+                id: mCurrencyItem,
+                country: currency_items[mCurrencyItem].country,
+                name: currency_items[mCurrencyItem].name,
+                symbol: currency_items[mCurrencyItem].symbol
+              });
+            }
+            this.setState({
+              currencyItems: newCurrencyState,
+              optionsOne: currencyOption
+            });
+        });
+      if(count === 0){
+       let type = "NONE";
+       let currencyOption = [];
+        currencyOption.push({
+          value: type,
+          label: type
+        });
+
+        this.setState({
+          optionsOne: currencyOption
+        });
+      }
+
   }
   
-  onlyUnique(){
 
-  }
 
   handleChange(e){
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    if(e.target.name === "searchbar"){
+      if(e.target.value === ""){
+          this.setState({
+          items: this.state.itemsOrig
+        })
+      } else{
+        let newState = [];
+       {this.state.items.filter(item => item.name.
+        includes(e.target.value)).map(filteredItem => (
+          newState.push({
+            id: filteredItem.itemId,
+            currency: filteredItem.currency, 
+            businessKeyId:  filteredItem.businessKeyId,
+            delivery_address: filteredItem.delivery_address,
+            email_address:  filteredItem.email_address,
+            invoices:   filteredItem.invoices,
+            phone_contact1:  filteredItem.phone_contact1,
+            phone_contact2:  filteredItem.phone_contact2,
+            name: filteredItem.name,
+            log:  filteredItem.log,
+            tax_no:  filteredItem.tax_no, 
+            balance:  filteredItem.balance,
+            billing_address:  filteredItem.billing_address,
+            business_identifier:  filteredItem.business_identifier,
+            uid:  filteredItem.uid,
+            code: filteredItem.code,
+            credit_limit: filteredItem.credit_limit
+          })
+        ))}
+
+        this.setState({
+          items: newState
+        })
+      }
+    } else if(e.target === 'currency'){
+
+    } else
+      this.setState({
+        [e.target.name]: e.target.value
+      })
   }
 
   handleSubmit(e){
@@ -200,6 +276,10 @@ class Customers extends React.Component {
             uid:  item.uid,
             isExists: true
         })
+
+          this.setState({
+            displayPane: 'form'
+          })
       }
 
   });
@@ -242,6 +322,38 @@ class Customers extends React.Component {
   }
 
   render(){
+    var address ="";
+    var businessName = "";
+    var emailHome = "";
+    var emailOffice = "";
+    var locationCountry = "";
+    var taxIdentifier = "";
+    var telephoneHome = "";
+    var telephoneOffice = "";
+    var mBizInfo = [];
+    const footer = () => {
+      if(this.state.user){
+        mBizInfo = this.state.bizinfo.slice();
+          for(let x of mBizInfo){
+            businessName = x.name;
+            address = x.address ;
+            emailHome = x.emailHome;
+            emailOffice = x.emailOffice ;
+            locationCountry = x.locationCountry;
+            taxIdentifier = x.taxIdentifier;
+            telephoneHome = x.telephoneHome;
+            telephoneOffice = x.telephoneOffice;
+        }
+        var mFooter = address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
+        taxIdentifier;
+        return(
+          <div>{mFooter}</div>
+        );
+      }
+      return(
+        <div>Welcome!</div>
+      )
+    }
     const renderAuthButton = () => {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
@@ -253,7 +365,7 @@ class Customers extends React.Component {
                 this.initialize2();
                 return (<div>Loading..</div>);
               }
-            if(this.state.isExists){
+            if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
                <h3>{item.name} </h3>
@@ -269,8 +381,34 @@ class Customers extends React.Component {
               );    
             }
             else{
+              /* display form */
               return(
-                <div>Edit | Add Customer</div>
+                <div>
+        <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>+New</button>
+                <form onSubmit={this.handleSubmit} >
+                <input class="w3-input" type="text" name="name" placeholder="Customer Name" onChange={this.handleChange} value={this.state.name} />
+                <input class="w3-input" type="text" name="code" placeholder="Code No" onChange={this.handleChange} value={this.state.code} />                
+                <input class="w3-input" type="text" name="phone_contact1" placeholder="Phone Contact 1" onChange={this.handleChange} value={this.state.phone_contact1} />
+                <input class="w3-input" type="text" name="phone_contact2" placeholder="Phone Contact 2" onChange={this.handleChange} value={this.state.phone_contact2} />                                            
+                <input class="w3-input" type="text" name="tax_no" placeholder="Tax No." onChange={this.handleChange} value={this.state.tax_no} />                                                
+                <input class="w3-input" type="text" name="email_address" placeholder="Email Address" onChange={this.handleChange} value={this.state.email_address} />
+                <input class="w3-input" type="text" name="billing_address" placeholder="Billing Address" onChange={this.handleChange} value={this.state.billing_address} />
+                <input class="w3-input" type="text" name="business_identifier" placeholder="Business Identifier" onChange={this.handleChange} value={this.state.business_identifier}/>
+                <input class="w3-input" type="text" name="credit_limit" placeholder="Credit Limit" onChange={this.handleChange} value={this.state.credit_limit} />
+                <input class="w3-input" type="text" name="delivery_address" placeholder="Delivery Address" onChange={this.handleChange} value={this.state.delivery_address} />
+                      
+                 <div class="w3-dropdown-hover">
+                  <button class="w3-button">Select Currency!</button>
+                  <div class="w3-dropdown-content w3-bar-block w3-border">
+                   <span class="w3-bar-item w3-button" onClick={this.handleChange} value="">Link 1</span>
+                   <span class="w3-bar-item w3-button">Link 2</span>
+                   <span class="w3-bar-item w3-button">Link 3</span>
+                  </div>
+                 </div>
+                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.symbol} />
+                  <button type="submit" name="save" style={{width: "45%"}}>Save</button>
+                </form>
+                </div>
               );
             }          
           }
@@ -289,7 +427,7 @@ class Customers extends React.Component {
   </div>
   {renderAuthButton()}
   <div className="w3-container w3-teal" >
-    <p>Riverside Drive, Office Park | Phone 0722-514880, 4446538, 4449210 | Email: goldwingsevents@gmail.com | P.O. Box 16852 - 00620</p>
+    <p>{footer()}</p>
   </div>
 </div>
   );
