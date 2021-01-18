@@ -1,11 +1,24 @@
 import React from "react";
-import "./style.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+import Sidebar from "./components/Sidebar";
+import "./App.css";
 
-export default function App() {
+function App() {
   return (
-    <div>
-      <h1>Hello StackBlitz!</h1>
-      <p>Start editing to see some magic happen :)</p>
-    </div>
+    <>
+      <Router>
+        <Sidebar />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/services" component={Services} />
+          <Route path="/contact" component={Contact} />
+        </Switch>
+      </Router>
+    </>
   );
 }
+
+export default App;
