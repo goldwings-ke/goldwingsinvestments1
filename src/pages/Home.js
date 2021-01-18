@@ -1,5 +1,5 @@
 import React from "react";
-import Dome from './Dome.jpg';
+import Dome from './Dome.jpeg';
 
 function Home() {
   return (
