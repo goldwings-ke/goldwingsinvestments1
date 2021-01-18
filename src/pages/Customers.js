@@ -405,7 +405,7 @@ class Customers extends React.Component {
                    <span class="w3-bar-item w3-button">Link 3</span>
                   </div>
                  </div>
-                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.symbol} />
+                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.currency} />
                   <button type="submit" name="save" style={{width: "45%"}}>Save</button>
                 </form>
                 </div>
