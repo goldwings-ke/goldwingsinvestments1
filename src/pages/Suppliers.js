@@ -3,11 +3,11 @@ import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
 
-class Customers extends React.Component {
+class Suppliers extends React.Component {
   constructor(){
     super();
         this.state = {
-      path: 'customers',
+      path: 'suppliers',
       currentItem: '',
       username: '',
       items: [],
@@ -113,7 +113,7 @@ class Customers extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('customers/'+
+      const itemsRef = firebase.database().ref('suppliers/'+
        uid+'/'+businessKeyId)
        .orderByChild('name');
         itemsRef.on('value', (snapshot) => {
@@ -247,7 +247,7 @@ class Customers extends React.Component {
     var n = d.getTime();
     var name = this.state.name;
       if(name === '' || name === null){
-        alert("Please Enter Customer Name!");
+        alert("Please Enter Supplier Name!");
         return;
       }
     var m_user = firebase.auth().currentUser;
@@ -391,7 +391,7 @@ class Customers extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/customers/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/suppliers/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
@@ -495,7 +495,7 @@ class Customers extends React.Component {
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }
-    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Customers List</button>
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Suppliers List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
 
@@ -514,4 +514,4 @@ class Customers extends React.Component {
  }
 }
 
-export default Customers;
+export default Suppliers;

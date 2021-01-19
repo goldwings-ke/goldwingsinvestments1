@@ -11,9 +11,9 @@ function Sidebar() {
         <div></div>
       </button>
       <ul onClick={showSidebar} style={{display: "block"}}>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/customers">Customers</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
+        <li style={{backgroundColor: "orange"}}><Link to="/">Home</Link></li>
+        <li style={{backgroundColor: "orange"}}><Link to="/customers">Customers</Link></li>
+        <li style={{backgroundColor: "orange"}}><Link to="/suppliers">Suppliers</Link></li>
       </ul>
     </nav>
   );

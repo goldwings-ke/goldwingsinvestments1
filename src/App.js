@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Customers from "./pages/Customers";
-import Contact from "./pages/Contact";
+import Suppliers from "./pages/Suppliers";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
@@ -14,7 +14,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/customers" component={Customers} />
-          <Route path="/contact" component={Contact} />
+          <Route path="/suppliers" component={Suppliers} />
         </Switch>
       </Router>
     </>
