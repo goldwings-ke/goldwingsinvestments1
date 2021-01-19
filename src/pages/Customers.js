@@ -35,10 +35,10 @@ class Customers extends React.Component {
       uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
       businessKeyId: '',
       viewRecord: false,
-      isExists: false,
       search: false,
       initialized: false,
-      displayPane: 'form'
+      isExists: false,
+      displayPane: 'list'
      
     }
     this.handleChange = this.handleChange.bind(this);
@@ -144,7 +144,8 @@ class Customers extends React.Component {
         }// end for loop
         this.setState({
           items: newState,
-          itemsOrig: newState
+          itemsOrig: newState,
+          isExists: true
         });
       }); 
 
@@ -237,7 +238,80 @@ class Customers extends React.Component {
   }
 
   handleSubmit(e){
-    e.preventDefault;
+    e.preventDefault();
+      if(!this.state.user){
+        alert("Please Log in!");
+        return;
+      }
+    var d = new Date();
+    var n = d.getTime();
+    var name = this.state.name;
+      if(name === '' || name === null){
+        alert("Please Enter Customer Name!");
+        return;
+      }
+    var m_user = firebase.auth().currentUser;
+    var uid = m_user.uid;
+    var businessKeyId ="";
+   var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
+    var saved = "Saved!"; 
+    var itemsRef = null;
+       if(this.state.isExists){
+        itemsRef = firebase.database().ref('customers/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        saved = "Updated!";
+      }    
+      else {
+        itemsRef = firebase.database().ref('customers/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+      }
+      const item = {
+        balance: '0',
+        billing_address: this.state.billing_address,
+        business_identifier: this.state.business_identifier,
+        code: this.state.code,
+        credit_limit: this.state.credit_limit,
+        currency: this.state.currency,
+        delivery_address: this.state.delivery_address,
+        email_address: this.state.email_address,
+        invoices: '0',
+        log: n,
+        name: this.state.name,
+        phone_contact1: this.state.phone_contact1,
+        phone_contact2: this.state.phone_contact2,
+        tax_no: this.state.tax_no,
+        uid: uid,
+        businessKeyId: businessKeyId
+      }
+      if(this.state.isExists)
+        itemsRef.set(item);
+      else
+        itemsRef.push(item);
+      
+      this.setState({
+        displayPane: 'list',
+        items: this.state.itemsOrig,
+        isExists: true
+      })
+      
+      alert(saved);
+  }
+
+  handleClick(index) {
+    if(index === 1)
+      this.setState({
+        displayPane: 'list',
+        items: this.state.itemsOrig,
+        isExists: true
+    })
+    if(index === 2){
+      clear();
+      this.setState({
+        displayPane: 'form',
+      })
+    }
+
   }
   
   logout() { 
@@ -250,12 +324,15 @@ class Customers extends React.Component {
   }
 
   viewItem(itemId){
+    this.setState({
+      displayPane: 'form'
+    })
   var m_user = firebase.auth().currentUser;
   var uid = m_user.uid; 
   var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
-        this.menu.value = item.currency;
+        /*this.menu.value = item.currency;*/
         this.setState({
             id: itemId,
             balance: item.balance,
@@ -273,17 +350,14 @@ class Customers extends React.Component {
             phone_contact2: item.phone_contact2,
             tax_no: item.tax_no,
             businessKeyId:  item.businessKeyId,
-            uid:  item.uid,
-            isExists: true
+            uid:  item.uid
         })
 
-          this.setState({
-            displayPane: 'form'
-          })
+
       }
 
   });
- 
+
   }
 
   clear(){
@@ -319,6 +393,7 @@ class Customers extends React.Component {
       const itemRef = firebase.database()
       .ref(`/customers/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
+      
   }
 
   render(){
@@ -371,7 +446,7 @@ class Customers extends React.Component {
                <h3>{item.name} </h3>
                <p>Contact: <strong>{item.phone_contact1} {item.phone_contact2}</strong></p>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
-                <button onClick={() => this.removeItem(item.id)}>Remove</button>
+                <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
              </li>
               );
@@ -384,7 +459,7 @@ class Customers extends React.Component {
               /* display form */
               return(
                 <div>
-        <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>+New</button>
+        <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form onSubmit={this.handleSubmit} >
                 <input class="w3-input" type="text" name="name" placeholder="Customer Name" onChange={this.handleChange} value={this.state.name} />
                 <input class="w3-input" type="text" name="code" placeholder="Code No" onChange={this.handleChange} value={this.state.code} />                
@@ -406,7 +481,7 @@ class Customers extends React.Component {
                   </div>
                  </div>
                   <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.currency} />
-                  <button type="submit" name="save" style={{width: "45%"}}>Save</button>
+                  <button type="submit" name="save" style={{width: "20%"}}>Save</button>
                 </form>
                 </div>
               );
@@ -417,6 +492,11 @@ class Customers extends React.Component {
  <div className="w3-container" style={{width: "80%"}}>
   <div className="w3-container w3-teal" >
     <h1>Goldwings Investments Limited</h1>
+    {this.state.user ? <button onClick={this.logout}>Log Out</button>
+      : null
+    }
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Customers List</button>
+    <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
 
   {/*<img src={Dome} alt="Dome Tent" />*/}
