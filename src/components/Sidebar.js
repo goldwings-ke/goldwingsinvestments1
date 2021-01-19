@@ -14,6 +14,7 @@ function Sidebar() {
         <li style={{backgroundColor: "orange"}}><Link to="/">Home</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/customers">Customers</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/suppliers">Suppliers</Link></li>
+        <li style={{backgroundColor: "orange"}}><Link to="/employees">Employees</Link></li>
       </ul>
     </nav>
   );
