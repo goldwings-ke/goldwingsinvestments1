@@ -201,7 +201,44 @@ class Employees extends React.Component {
 
 
   handleChange(e){
-    if(e.target.name === "searchbar"){
+    var firstName=this.state.firstName;
+    var middleName =this.state.middleName;;
+    var lastName = this.state.lastName;
+    var fullName = "";
+    if(e.target.name === 'firstName' || e.target.name === 'middleName' 
+    || e.target.name === 'lastName'){
+
+        if(e.target.name === 'firstName')
+          firstName = e.target.value;
+        else
+          firstName = this.state.value;  
+        if(e.target.name === 'middleName')
+          middleName = e.target.value;
+        else
+          middleName = this.state.value;
+        if(e.target.name === 'lastName')
+          lastName = e.target.value;
+        else
+          lastName = this.state.value;
+        if(firstName)
+          fullName = firstName;
+        if(middleName){
+          if(middleName)
+          fullName += " " + middleName;
+          else
+          fullName += middleName;
+        }
+        if(lastName){
+          if(lastName)
+          fullName += " " + lastName;
+          else
+          fullName += lastName;
+        }
+        if(fullName)
+          this.setState({
+            [e.target.name]: e.target.value
+          })
+    } else if(e.target.name === "searchbar"){
       if(e.target.value === ""){
           this.setState({
           items: this.state.itemsOrig
@@ -238,12 +275,13 @@ class Employees extends React.Component {
           items: newState
         })
       }
-    } else if(e.target === 'currency'){
-
     } else
       this.setState({
         [e.target.name]: e.target.value
       })
+
+
+
   }
 
   handleSubmit(e){
@@ -254,6 +292,7 @@ class Employees extends React.Component {
       }
     var d = new Date();
     var n = d.getTime();
+
     var fullName = this.state.fullName;
       if(fullName === '' || fullName === null){
         alert("Please Enter Employee Name!");
@@ -476,10 +515,11 @@ class Employees extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
-                <input class="w3-input" type="text" name="First Name" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
+                <input class="w3-input" type="text" name="fiName" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
                 <input class="w3-input" type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} value={this.state.middleName} />
                 <input class="w3-input" type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} value={this.state.lastName} />
-                <input class="w3-input" type="text" name="fullName" placeholder="Full Name" onChange={this.handleChange} value={this.state.fullName} />
+                <label>Full Name:</label>
+                <p class="w3-input" >{this.state.fullName}</p>
                 <input class="w3-input" type="text" name="code" placeholder="Code No" onChange={this.handleChange} value={this.state.code} />                
                 <input class="w3-input" type="text" name="phone_contact1" placeholder="Phone Contact 1" onChange={this.handleChange} value={this.state.phone_contact1} />
                 <input class="w3-input" type="text" name="phone_contact2" placeholder="Phone Contact 2" onChange={this.handleChange} value={this.state.phone_contact2} />                                            
