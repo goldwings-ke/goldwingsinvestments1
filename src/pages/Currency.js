@@ -5,7 +5,7 @@ import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
 
-class TaxSettings extends React.Component {
+class Currency extends React.Component {
   constructor(){
     super();
       this.state = {
@@ -372,4 +372,4 @@ class TaxSettings extends React.Component {
  }
 }
 
-export default TaxSettings;
+export default Currency;

@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
-import TaxSettings from './TaxSettings'
+import TaxSettings from './TaxSettings';
+import Currency from './Currency';
 
 class Settings extends React.Component {
   constructor(){
@@ -80,17 +81,20 @@ class Settings extends React.Component {
   }
 
   handleClick(index){
-    if(index === 1){
+    if(index === 1)
         this.setState({
           displayPane: "settings"
         })
-    }
+    
 
-    if(index === 3){
+    if(index === 3)
       this.setState({
         displayPane: "tax"
       })
-    }
+    if(index === 4)
+      this.setState({
+        displayPane: "currency"
+      })    
   }
 
   render(){
@@ -130,6 +134,10 @@ class Settings extends React.Component {
       if(this.state.displayPane === "tax")
       return(
         <TaxSettings/>
+      );
+      else if(this.state.displayPane === "currency")
+      return(
+        <Currency/>
       );
       else{
         return(
