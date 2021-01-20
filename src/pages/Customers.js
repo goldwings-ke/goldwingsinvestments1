@@ -16,7 +16,6 @@ class Customers extends React.Component {
       user: null,
       optionsOne: [],
       bizinfo: [],
-      currencyItems: [],
       id: '',
       balance: '',
       billing_address: '',
@@ -34,7 +33,6 @@ class Customers extends React.Component {
       tax_no: '',
       uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
       businessKeyId: '',
-      viewRecord: false,
       search: false,
       initialized: false,
       isExists: false,
@@ -205,7 +203,7 @@ class Customers extends React.Component {
        {this.state.items.filter(item => item.name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({
-            id: filteredItem.itemId,
+            id: filteredItem.id,
             currency: filteredItem.currency, 
             businessKeyId:  filteredItem.businessKeyId,
             delivery_address: filteredItem.delivery_address,

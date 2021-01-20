@@ -229,7 +229,7 @@ class ItemsNonInventory extends React.Component {
        {this.state.items.filter(item => item.itemName.
         includes(e.target.value)).map(filteredItem => (
           newState.push({
-          id: filteredItem.itemId,
+          id: filteredItem.id,
           barCode: filteredItem.barCode, 
           businessKeyId:  filteredItem.businessKeyId,
           category: filteredItem.category,

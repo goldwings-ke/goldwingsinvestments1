@@ -211,7 +211,7 @@ class Employees extends React.Component {
        {this.state.items.filter(item => item.name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({
-            id: filteredItem.itemId,
+            id: filteredItem.id,
             currency: filteredItem.currency, 
             businessKeyId:  filteredItem.businessKeyId,
             delivery_address: filteredItem.delivery_address,
