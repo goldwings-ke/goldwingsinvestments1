@@ -201,44 +201,9 @@ class Employees extends React.Component {
 
 
   handleChange(e){
-    var firstName=this.state.firstName;
-    var middleName =this.state.middleName;;
-    var lastName = this.state.lastName;
-    var fullName = "";
-    if(e.target.name === 'firstName' || e.target.name === 'middleName' 
-    || e.target.name === 'lastName'){
 
-        if(e.target.name === 'firstName')
-          firstName = e.target.value;
-        else
-          firstName = this.state.value;  
-        if(e.target.name === 'middleName')
-          middleName = e.target.value;
-        else
-          middleName = this.state.value;
-        if(e.target.name === 'lastName')
-          lastName = e.target.value;
-        else
-          lastName = this.state.value;
-        if(firstName)
-          fullName = firstName;
-        if(middleName){
-          if(middleName)
-          fullName += " " + middleName;
-          else
-          fullName += middleName;
-        }
-        if(lastName){
-          if(lastName)
-          fullName += " " + lastName;
-          else
-          fullName += lastName;
-        }
-        if(fullName)
-          this.setState({
-            [e.target.name]: e.target.value
-          })
-    } else if(e.target.name === "searchbar"){
+
+    if(e.target.name === "searchbar"){
       if(e.target.value === ""){
           this.setState({
           items: this.state.itemsOrig
@@ -280,6 +245,30 @@ class Employees extends React.Component {
         [e.target.name]: e.target.value
       })
 
+
+    var firstName=this.state.firstName;
+    var middleName =this.state.middleName;;
+    var lastName = this.state.lastName;
+    var fullName = "";
+
+        if(firstName)
+          fullName = firstName;
+        if(middleName){
+          if(fullName)
+          fullName = fullName + " " + middleName;
+          else
+          fullName = middleName;
+        }
+        if(lastName){
+          if(fullName)
+          fullName = fullName + " " + lastName;
+          else
+          fullName = lastName;
+        }
+        if(fullName)
+          this.setState({
+            fullName: fullName
+          })
 
 
   }
@@ -515,7 +504,7 @@ class Employees extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
-                <input class="w3-input" type="text" name="fiName" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
+                <input class="w3-input" type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
                 <input class="w3-input" type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} value={this.state.middleName} />
                 <input class="w3-input" type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} value={this.state.lastName} />
                 <label>Full Name:</label>

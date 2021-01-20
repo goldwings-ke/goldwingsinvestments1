@@ -9,7 +9,7 @@ class Currency extends React.Component {
   constructor(){
     super();
       this.state = {
-      path: 'tax_codes',
+      path: 'currencies',
       currentItem: '',
       username: '',
       items: [],
@@ -18,12 +18,13 @@ class Currency extends React.Component {
       user: null,
       optionsOne: [],
       bizinfo: [],
-      businessKeyId: '',
+      country: '',
       log: 0,
-      tax_code: '',
-      tax_rate: 0,
+      name: '',
+      symbol : '',
       uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
       id: '',
+      businessKeyId: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -102,20 +103,21 @@ class Currency extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('tax_codes/'+
+      const itemsRef = firebase.database().ref('currencies/'+
        uid+'/'+businessKeyId)
-       .orderByChild('tax_code');
+       .orderByChild('country');
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let newState = [];
         for (let item in items) {
           newState.push({
-            businessKeyId: items[item].businessKeyId,
+            country: items[item].country,
             log: items[item].log,
-            tax_code: items[item].tax_code,
-            tax_rate: items[item].tax_rate,
+            name: items[item].name,
+            symbol : items[item].symbol,
             uid: items[item].uid,
-            id: item
+            id: item,
+            businessKeyId: businessKeyId
           });
         }// end for loop
         this.setState({
@@ -135,15 +137,16 @@ class Currency extends React.Component {
         })
       } else{
         let newState = [];
-       {this.state.items.filter(item => item.tax_code.
+       {this.state.items.filter(item => item.country.
         includes(e.target.value)).map(filteredItem => (
           newState.push({            
-            businessKeyId:  filteredItem.businessKeyId,
+            country: filteredItem.country,
             log: filteredItem.log,
-            tax_code: filteredItem.tax_code,
-            tax_rate: filteredItem.tax_rate,
+            name: filteredItem.name,
+            symbol : filteredItem.symbol,
             uid: filteredItem.uid,
-            id: filteredItem.id
+            id: filteredItem.id,
+            businessKeyId: filteredItem.businessKeyId
           })
         ))}
 
@@ -165,9 +168,14 @@ class Currency extends React.Component {
       }
     var d = new Date();
     var n = d.getTime();
-    var taxCode = this.state.tax_code;
-      if(taxCode === '' || taxCode === null){
-        alert("Please Enter Tax Code!");
+    var country = this.state.country;
+      if(country === '' || country === null){
+        alert("Please Enter Country!");
+        return;
+      }
+    var name = this.state.name;
+      if(name === '' || name === null){
+        alert("Please Enter Name!");
         return;
       }
     var m_user = firebase.auth().currentUser;
@@ -180,19 +188,21 @@ class Currency extends React.Component {
     var saved = "Saved!"; 
     var itemsRef = null;
        if(this.state.isExists){
-        itemsRef = firebase.database().ref('tax_codes/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('currencies/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
         saved = "Updated!";
       }    
       else {
-        itemsRef = firebase.database().ref('tax_codes/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('currencies/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
       }
 
       const item = {
-        businessKeyId: businessKeyId,
+        country: this.state.country,
         log: n,
-        tax_code: this.state.tax_code,
-        tax_rate: this.state.tax_rate,
-        uid: uid
+        name: this.state.name,
+        symbol : this.state.symbol,
+        uid: this.state.uid,
+        id: this.state.id,
+        businessKeyId: this.state.businessKeyId
       }
       if(this.state.isExists)
         itemsRef.set(item);
@@ -246,12 +256,13 @@ class Currency extends React.Component {
       let myid=item.id;
       if(myid === itemId){
         this.setState({
-            businessKeyId: item.businessKeyId,
+            country: item.country,
             log: item.log,
-            tax_code: item.tax_code,
-            tax_rate: item.tax_rate,
+            name: item.name,
+            symbol : item.symbol,
             uid: item.uid,
             id: itemId,
+            businessKeyId: item.businessKeyId
         })
       }
   });
@@ -260,11 +271,12 @@ class Currency extends React.Component {
 
   clear(){
     this.setState({
+      country: '',
       log: 0,
-      tax_code: '',
-      tax_rate: 0,
+      name: '',
+      symbol : '',
       id: '',
-      isExists: false
+      isExists: false,
     })
 
   }
@@ -278,7 +290,7 @@ class Currency extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/tax_codes/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/currencies/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
@@ -330,8 +342,8 @@ class Currency extends React.Component {
             if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
-               <h3>{item.tax_code} </h3>
-               <p>Tax Rate %: <strong>{item.tax_rate}</strong></p>
+               <h3>{item.name} {item.symbol} </h3>
+               <p><strong>{item.country}</strong></p>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
@@ -348,9 +360,9 @@ class Currency extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                   <form class="w3-container" onSubmit={this.handleSubmit} >
-                    <input class="w3-input" type="text" name="tax_code" placeholder="Tax Code Name" onChange={this.handleChange} value={this.state.tax_code} />
-                    <label>Tax Rate %:</label>
-                    <input class="w3-input" type="number" name="tax_rate" placeholder="0.0" onChange={this.handleChange} value={this.state.tax_rate} />
+                    <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
+                    <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
+                    <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
                     <button type="submit" name="save" style={{width: "20%"}}>Save</button>
                   </form>
                  </div>
@@ -361,7 +373,7 @@ class Currency extends React.Component {
     return (
  <div className="w3-container" style={{width: "80%"}}>
  <div className="w3-container" >
-    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Tax Settings List</button>
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Currency List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
  
