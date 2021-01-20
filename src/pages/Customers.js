@@ -460,7 +460,7 @@ class Customers extends React.Component {
               return(
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
-                <form onSubmit={this.handleSubmit} >
+                <form class="w3-container" onSubmit={this.handleSubmit} >
                 <input class="w3-input" type="text" name="name" placeholder="Customer Name" onChange={this.handleChange} value={this.state.name} />
                 <input class="w3-input" type="text" name="code" placeholder="Code No" onChange={this.handleChange} value={this.state.code} />                
                 <input class="w3-input" type="text" name="phone_contact1" placeholder="Phone Contact 1" onChange={this.handleChange} value={this.state.phone_contact1} />

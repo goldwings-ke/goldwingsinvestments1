@@ -35,8 +35,9 @@ class ItemsNonInventory extends React.Component {
       initialized: false,
       isExists: false,
       displayPane: 'list'
-     
-    }
+      }
+
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.logout = this.logout.bind(this); 
@@ -166,7 +167,22 @@ class ItemsNonInventory extends React.Component {
             for (let mTaxItem in tax_items) {
               let type = tax_items[mTaxItem].tax_code;
               let rate = tax_items[mTaxItem].tax_rate;
-              count++;
+              if(count === 0){
+                taxOption.push({
+                  value: "NONE",
+                  label: "NONE"
+                });
+
+                newTaxState.push({
+                  id: "NONE",
+                  businessKeyId: tax_items[mTaxItem].businessKeyId,
+                  log: tax_items[mTaxItem].log,
+                  taxType: "NONE",
+                  tax_rate: 0,
+                  uid: tax_items[mTaxItem].uid,
+                });
+              }
+              
               taxOption.push({
                 value: type,
                 label: type
@@ -179,6 +195,7 @@ class ItemsNonInventory extends React.Component {
                 tax_rate: tax_items[mTaxItem].tax_rate,
                 uid: tax_items[mTaxItem].uid,
               });
+              count++;
             }
             this.setState({
               taxItems: newTaxState,
@@ -237,7 +254,7 @@ class ItemsNonInventory extends React.Component {
       this.setState({
         [e.target.name]: e.target.value.trim()
       })
-      alert(e.target.value);
+      
   }
 
   handleSubmit(e){
@@ -421,9 +438,7 @@ class ItemsNonInventory extends React.Component {
       itemRef.remove();
       
   }
-  handleChosen(label){
-    alert("Hello!");
-  }
+
   render(){
     var address ="";
     var businessName = "";
@@ -488,35 +503,30 @@ class ItemsNonInventory extends React.Component {
               return(
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
-                <form onSubmit={this.handleSubmit} >
+                <form class="w3-container" onSubmit={this.handleSubmit} >
                 <input class="w3-input" type="text" name="itemName" placeholder="Item Name" onChange={this.handleChange} value={this.state.itemName} />
-                <div class="w3-dropdown-hover">
-                  <button class="w3-button w3-orange" >Sub Item Of</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border" ref = {(input)=> this.menu3 = input}>
+                <label>Sub Item Of:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu3 = input}>
                   {this.state.items.map((item,index) => {
-                   var rfbDepth = item.depth;
-                   var rfbItemName = item.itemName;
-                   var myTxt ="";
+                  var rfbDepth = item.depth;
+                  var rfbItemName = item.itemName;
+                  var myTxt ="";
                     for(let i=0;i<rfbDepth;i++)
-                      myTxt += "  ";
+                      myTxt += " ";
                       myTxt +=rfbItemName;
                       return (
-                     <span class="w3-bar-item w3-button" value ={myTxt}>{rfbItemName}</span>
+                        <option value ={myTxt}>{rfbItemName}</option>
                       )
                   })}
-                  </div>
-                 </div><br/>
-
-                <div class="w3-dropdown-hover">
-                  <button class="w3-button w3-orange" >Category</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border" ref = {(input)=> this.menu = input} value={this.state.category} >
+                </select><br/>
+                <label>Category:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu = input} >
                   {this.state.optionsOne.map((cat,index) => {
-                   return (
-                     <span class="w3-bar-item w3-button" name={cat.label} value ={cat.value} onClick={(cat) => this.handleChosen(cat.label)}>{cat.label}</span>
-                      )
+                    return (
+                      <option value ={cat.value}>{cat.label}</option>
+                    )
                   })}
-                  </div>
-                 </div>
+                </select><br/>
                 <input class="w3-input" type="text" name="category" placeholder="New Category" onChange={this.handleChange} value={this.state.category} />                
                 <input class="w3-input" type="text" name="barCode" placeholder="Bar Code" onChange={this.handleChange} value={this.state.barCode} />
                 <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
@@ -524,20 +534,16 @@ class ItemsNonInventory extends React.Component {
                 <input class="w3-input" type="number" name="costPrice" placeholder="0.0" onChange={this.handleChange} value={this.state.costPrice} />   
                 <label>Sale Price:</label>   
                 <input class="w3-input" type="number" name="salePrice" placeholder="0.0" onChange={this.handleChange} value={this.state.salePrice} />
-                      
-                 <div class="w3-dropdown-hover">
-                  <button class="w3-button w3-orange" >Tax Type</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border" ref = {(input)=> this.menu2 = input}>
-                 {this.state.optionsTwo.map((tax,index) => {
-                  return (
-                    <span class="w3-bar-item w3-button" value ={tax.value}>{tax.label}</span>
-                  )
-               })}
-                   
-                  </div>
-                 </div>
+                <label>Tax Type:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input}>
+                  {this.state.optionsTwo.map((tax,index) => {
+                    return (
+                      <option value ={tax.value}>{tax.label}</option>
+                    )
+                  })}
+               </select>
                   <input class="w3-input" type="text" name="taxType" placeholder="Tax Type" onChange={this.handleChange} value={this.state.taxType} />
-                  <button type="submit" name="save" style={{width: "20%"}}>Save</button>
+                  <button type="submit" name="save" style={{maxWidth: "20%"}}>Save</button>
                 </form>
                 </div>
               );

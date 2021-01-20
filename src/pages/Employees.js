@@ -475,7 +475,7 @@ class Employees extends React.Component {
               return(
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
-                <form onSubmit={this.handleSubmit} >
+                <form class="w3-container" onSubmit={this.handleSubmit} >
                 <input class="w3-input" type="text" name="First Name" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
                 <input class="w3-input" type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} value={this.state.middleName} />
                 <input class="w3-input" type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} value={this.state.lastName} />

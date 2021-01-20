@@ -1,0 +1,1 @@
+src="https://kit.fontawesome.com/fe8a354427.js" crossorigin="anonymous"

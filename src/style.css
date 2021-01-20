@@ -133,3 +133,11 @@ button {
   padding: 10px 6px;
   
 }
+
+select {
+  max-width: 20%;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+}
