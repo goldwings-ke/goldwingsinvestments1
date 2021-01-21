@@ -211,12 +211,11 @@ class ChartOfAccounts extends React.Component {
     }
     var saved = "Saved!"; 
     var itemsRef = null;
-    var data = "";
        if(this.state.isExists){
         itemsRef = firebase.database().ref('chart_of_accounts/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
         saved = "Updated!";
 
-        data = {
+        const data = {
           account_name: this.state.account_name,
           account_no: this.state.account_no,
           account_type: this.state.account_type,
@@ -231,11 +230,12 @@ class ChartOfAccounts extends React.Component {
           uid: this.state.uid,
           id: this.state.id
         }
+         itemsRef.set(data);
       }    
       else {
         itemsRef = firebase.database().ref('chart_of_accounts/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
 
-        data = {
+        const data = {
           account_name: this.state.account_name,
           account_no: this.state.account_no,
           account_type: this.state.account_type,
@@ -249,13 +249,8 @@ class ChartOfAccounts extends React.Component {
           system_account: false,
           uid: this.state.uid
         }
-
-      }
-
-      if(this.state.isExists)
-        itemsRef.set(data);
-      else
         itemsRef.push(data);
+      }
       
       this.setState({
         displayPane: 'list',
