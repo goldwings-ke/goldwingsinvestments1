@@ -4,6 +4,7 @@ import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
 import TaxSettings from './TaxSettings';
 import Currency from './Currency';
+import ChartOfAccounts from './ChartOfAccounts';
 
 class Settings extends React.Component {
   constructor(){
@@ -142,7 +143,7 @@ class Settings extends React.Component {
       else{
         return(
         <div>  
-        <h1>Settings</h1>
+        <h1>Settings (Click to select)</h1>
         <div class="w3-row-padding">
           <div class="w3-col s4">
             <h3 style={{width: "100%"}} >Chart of Accounts<br/>
