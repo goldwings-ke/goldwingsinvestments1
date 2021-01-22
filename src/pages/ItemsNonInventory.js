@@ -310,32 +310,44 @@ class ItemsNonInventory extends React.Component {
       if(this.state.isExists){
         itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
         saved = "Updated!";
+        const item = {
+          barCode: this.state.barCode, 
+          businessKeyId:  this.state.businessKeyId,
+          category: category,
+          costPrice:  mCostPrice,
+          depth:   mDepth,
+          description: this.state.description,
+          id: this.state.id,
+          itemName: itemName,
+          log: n,
+          mainAccount:  mMainAccount, 
+          ref:  mRef,
+          salePrice:  mSalePrice,
+          taxType:  taxtype,
+          uid:  this.state.uid
+        }
+        itemsRef.set(item);
       }    
       else {
         itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
-      }
-
-      const item = {
-        barCode: this.state.barCode, 
-        businessKeyId:  this.state.businessKeyId,
-        category: category,
-        costPrice:  mCostPrice,
-        depth:   mDepth,
-        description: this.state.description,
-        itemName: itemName,
-        log: n,
-        mainAccount:  mMainAccount, 
-        ref:  mRef,
-        salePrice:  mSalePrice,
-        taxType:  taxtype,
-        uid:  this.state.uid
-      }
-
-      if(this.state.isExists)
-        itemsRef.set(item);
-      else
+        const item = {
+          barCode: this.state.barCode, 
+          businessKeyId:  this.state.businessKeyId,
+          category: category,
+          costPrice:  mCostPrice,
+          depth:   mDepth,
+          description: this.state.description,
+          itemName: itemName,
+          log: n,
+          mainAccount:  mMainAccount, 
+          ref:  mRef,
+          salePrice:  mSalePrice,
+          taxType:  taxtype,
+          uid:  this.state.uid
+        }
         itemsRef.push(item);
-      
+      }
+
       this.setState({
         displayPane: 'list',
         items: this.state.itemsOrig,

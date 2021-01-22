@@ -188,7 +188,7 @@ class Currency extends React.Component {
     var saved = "Saved!"; 
     var itemsRef = null;
        if(this.state.isExists){
-        itemsRef = firebase.database().ref('currencies/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('currencies/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
           country: this.state.country,
@@ -197,19 +197,19 @@ class Currency extends React.Component {
           symbol : this.state.symbol,
           uid: this.state.uid,
           id: this.state.id,
-          businessKeyId: this.state.businessKeyId
+          businessKeyId: businessKeyId
         }
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('currencies/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('currencies/'+uid+'/'+businessKeyId);
           const item = {
             country: this.state.country,
             log: n,
             name: this.state.name,
             symbol : this.state.symbol,
             uid: this.state.uid,
-            businessKeyId: this.state.businessKeyId
+            businessKeyId: businessKeyId
         }
         itemsRef.push(item);
       }

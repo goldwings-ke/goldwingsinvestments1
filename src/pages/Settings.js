@@ -87,7 +87,10 @@ class Settings extends React.Component {
           displayPane: "settings"
         })
     
-
+    if(index === 2)
+        this.setState({
+          displayPane: "chartofaccounts"
+        })
     if(index === 3)
       this.setState({
         displayPane: "tax"
@@ -140,12 +143,16 @@ class Settings extends React.Component {
       return(
         <Currency/>
       );
+      else if(this.state.displayPane === "chartofaccounts")
+      return(
+        <ChartOfAccounts/>
+      );
       else{
-        return(
-        <div>  
+       return(
+       <div>  
         <h1>Settings (Click to select)</h1>
         <div class="w3-row-padding">
-          <div class="w3-col s4">
+          <div class="w3-col s4" onClick={() => this.handleClick(2)}>
             <h3 style={{width: "100%"}} >Chart of Accounts<br/>
             <i class="fas fa-book"></i></h3>
           </div>
@@ -158,7 +165,20 @@ class Settings extends React.Component {
             <i className="fa fa-usd"></i></h3>
           </div>
         </div>
-        </div>
+        <div class="w3-row-padding">
+          <div class="w3-col s4" onClick={() => this.handleClick(5)}>
+            <h3 style={{width: "100%"}} >Payment Methods<br/>💰</h3>
+          </div>
+          <div class="w3-col s4" onClick={() => this.handleClick(6)}>
+            <h3 style={{width: "100%"}} >Group By Class<br/></h3>
+          </div> 
+          <div class="w3-col s4" onClick={() => this.handleClick(7)}>
+            <h3 style={{width: "100%"}} >Inventory Warehouse<br/>
+            🏪</h3>
+          </div>  
+        </div>  
+       </div>
+ 
         );
       }
     }
