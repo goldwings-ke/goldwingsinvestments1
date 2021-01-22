@@ -170,7 +170,7 @@ class Settings extends React.Component {
             <h3 style={{width: "100%"}} >Payment Methods<br/>💰</h3>
           </div>
           <div class="w3-col s4" onClick={() => this.handleClick(6)}>
-            <h3 style={{width: "100%"}} >Group By Class<br/></h3>
+            <h3 style={{width: "100%"}} >Group By Class<br/>📋</h3>
           </div> 
           <div class="w3-col s4" onClick={() => this.handleClick(7)}>
             <h3 style={{width: "100%"}} >Inventory Warehouse<br/>

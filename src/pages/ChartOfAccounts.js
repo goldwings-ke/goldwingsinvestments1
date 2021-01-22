@@ -502,6 +502,7 @@ class ChartOfAccounts extends React.Component {
                   var rfbSubAccountNo = item.sub_account_of;
                   var myTxt ="";
                   var gap = '⬜';
+                  var gap2 =<span>nbsp;</span>
                     for(let i=0;i<rfbDepth;i++)
                       myTxt = myTxt.concat(gap);
                       myTxt = myTxt.concat(rfbAccountName);
