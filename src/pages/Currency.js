@@ -25,6 +25,7 @@ class Currency extends React.Component {
       uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
       id: '',
       businessKeyId: '',
+      base_currency: false,
       search: false,
       initialized: false,
       isExists: false,
@@ -117,7 +118,8 @@ class Currency extends React.Component {
             symbol : items[item].symbol,
             uid: items[item].uid,
             id: item,
-            businessKeyId: businessKeyId
+            businessKeyId: businessKeyId,
+            base_currency: items[item].base_currency
           });
         }// end for loop
         this.setState({
@@ -151,7 +153,8 @@ class Currency extends React.Component {
             symbol : filteredItem.symbol,
             uid: filteredItem.uid,
             id: filteredItem.id,
-            businessKeyId: filteredItem.businessKeyId
+            businessKeyId: filteredItem.businessKeyId,
+            base_currency: filteredItem.base_currency
           })
         ))}
 
@@ -272,7 +275,8 @@ class Currency extends React.Component {
             symbol : item.symbol,
             uid: item.uid,
             id: itemId,
-            businessKeyId: item.businessKeyId
+            businessKeyId: item.businessKeyId,
+            base_currency: item.base_currency
         })
       }
   });
@@ -329,7 +333,7 @@ class Currency extends React.Component {
              </li>
               );
               return(
-              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Tax Code Name.." onChange={this.handleChange}/>
+              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Currency Name.." onChange={this.handleChange}/>
               <ul>{listItems}</ul></div>
               );    
             }
@@ -342,6 +346,7 @@ class Currency extends React.Component {
                     <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
                     <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
                     <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
+                    <input type="checkbox" checked={this.state.base_currency} ref="complete" onChange={this.handleChange} value={this.state.base_currency}/>
                     <button type="submit" name="save" style={{width: "20%"}}>Save</button>
                   </form>
                  </div>
