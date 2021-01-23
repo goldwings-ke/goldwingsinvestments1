@@ -146,7 +146,7 @@ class Inventory extends React.Component {
             stock_No: items[item].stock_No,
             taxType: items[item].taxType,
             tax_Rate: items[item].tax_Rate,
-            uid: items[item].uid,
+            uid: uid,
             warehouse: items[item].warehouse
           })
         }// end for loop
@@ -234,20 +234,27 @@ class Inventory extends React.Component {
        {this.state.items.filter(item => item.stock_Name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({
-          id: filteredItem.id,
-          barCode: filteredItem.barCode, 
-          businessKeyId:  filteredItem.businessKeyId,
-          category: filteredItem.category,
-          costPrice:  filteredItem.costPrice,
-          depth:   filteredItem.depth,
-          description:  filteredItem.description,
-          itemName: filteredItem.itemName,
-          log:  filteredItem.log,
-          mainAccount:  filteredItem.mainAccount, 
-          ref:  filteredItem.ref,
-          salePrice:  filteredItem.salePrice,
-          taxType:  filteredItem.taxType,
-          uid:  filteredItem.uid
+            businessKeyId: filteredItem.businessKeyId,
+            cost_Price: filteredItem.cost_Price,
+            depth: filteredItem.depth,
+            description: filteredItem.description,
+            id: filteredItem.id,
+            lead_Time_Days: filteredItem.lead_Time_Days,
+            location: filteredItem.location,
+            log: filteredItem.log,
+            main_Account: filteredItem.main_Account,
+            myIndex: filteredItem.myIndex,
+            ref: filteredItem.ref,
+            reorder_Level: filteredItem.reorder_Level,
+            reorder_Qty: filteredItem.reorder_Qty,
+            sale_Price: filteredItem.sale_Price,
+            stock_Issue_Method: filteredItem.stock_Issue_Method,
+            stock_Name: filteredItem.stock_Name,
+            stock_No: filteredItem.stock_No,
+            taxType: filteredItem.taxType,
+            tax_Rate: filteredItem.tax_rate,
+            uid: filteredItem.uid,
+            warehouse: filteredItem.warehouse
           })
         ))}
 
@@ -313,42 +320,56 @@ class Inventory extends React.Component {
     var itemsRef = null;
 
       if(this.state.isExists){
-        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('inventory/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
         saved = "Updated!";
         const item = {
-          barCode: this.state.barCode, 
-          businessKeyId:  this.state.businessKeyId,
-          category: category,
-          costPrice:  mCostPrice,
-          depth:   mDepth,
-          description: this.state.description,
+          businessKeyId: this.state.businessKeyId,
+          cost_Price: this.state.cost_Price,
+          depth: this.state.depth,
+          description: this.state.description,
           id: this.state.id,
-          itemName: itemName,
-          log: n,
-          mainAccount:  mMainAccount, 
-          ref:  mRef,
-          salePrice:  mSalePrice,
-          taxType:  taxtype,
-          uid:  this.state.uid
+          lead_Time_Days: this.state.lead_Time_Days,
+          location: this.state.location,
+          log: this.state.log,
+          main_Account: this.state.main_Account,
+          myIndex: this.state.myIndex,
+          ref: this.state.ref,
+          reorder_Level: this.state.reorder_Level,
+          reorder_Qty: this.state.reorder_Qty,
+          sale_Price: this.state.sale_Price,
+          stock_Issue_Method: this.state.stock_Issue_Method,
+          stock_Name: this.state.stock_Name,
+          stock_No: this.state.stock_No,
+          taxType: this.state.taxType,
+          tax_Rate: this.state.tax_Rate,
+          uid: this.state.uid,
+          warehouse: this.state.warehouse
         }
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('inventory/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
         const item = {
-          barCode: this.state.barCode, 
-          businessKeyId:  this.state.businessKeyId,
-          category: category,
-          costPrice:  mCostPrice,
-          depth:   mDepth,
-          description: this.state.description,
-          itemName: itemName,
-          log: n,
-          mainAccount:  mMainAccount, 
-          ref:  mRef,
-          salePrice:  mSalePrice,
-          taxType:  taxtype,
-          uid:  this.state.uid
+          businessKeyId: this.state.businessKeyId,
+          cost_Price: this.state.cost_Price,
+          depth: this.state.depth,
+          description: this.state.description,
+          lead_Time_Days: this.state.lead_Time_Days,
+          location: this.state.location,
+          log: this.state.log,
+          main_Account: this.state.main_Account,
+          myIndex: this.state.myIndex,
+          ref: this.state.ref,
+          reorder_Level: this.state.reorder_Level,
+          reorder_Qty: this.state.reorder_Qty,
+          sale_Price: this.state.sale_Price,
+          stock_Issue_Method: this.state.stock_Issue_Method,
+          stock_Name: this.state.stock_Name,
+          stock_No: this.state.stock_No,
+          taxType: this.state.taxType,
+          tax_Rate: this.state.tax_Rate,
+          uid: this.state.uid,
+          warehouse: this.state.warehouse
         }
         itemsRef.push(item);
       }
@@ -399,21 +420,28 @@ class Inventory extends React.Component {
       //  this.menu3.value = item.ref;
       //  this.menu.value = item.category;
         this.setState({
-            id: itemId,
-            barCode: item.barCode, 
-            businessKeyId:  item.businessKeyId,
-            category: item.category,
-            costPrice:  item.costPrice,
-            depth:   item.depth,
-            description:  item.description,
-            itemName: item.itemName,
-            log:  item.log,
-            mainAccount:  item.mainAccount, 
-            ref:  item.ref,
-            salePrice:  item.salePrice,
-            taxType:  item.taxType,
-            uid:  item.uid,
-            isExists: true
+           businessKeyId: item.businessKeyId,
+          cost_Price: item.cost_Price,
+          depth: item.depth,
+          description: this.state.description,
+          id: itemId,
+          lead_Time_Days: item.lead_Time_Days,
+          location: item.location,
+          log: item.log,
+          main_Account: item.main_Account,
+          myIndex: item.myIndex,
+          ref: item.ref,
+          reorder_Level: item.reorder_Level,
+          reorder_Qty: item.reorder_Qty,
+          sale_Price: item.sale_Price,
+          stock_Issue_Method: item.stock_Issue_Method,
+          stock_Name: item.stock_Name,
+          stock_No: item.stock_No,
+          taxType: item.taxType,
+          tax_Rate: item.tax_Rate,
+          uid: item.uid,
+          warehouse: this.state.warehouse,
+          isExists: true
         })
 
       }
@@ -524,10 +552,15 @@ class Inventory extends React.Component {
             else{
               /* display form */
               return(
+
+    //  ref: '',
+    //  stock_Issue_Method: '',
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
-                <input class="w3-input" type="text" name="itemName" placeholder="Item Name" onChange={this.handleChange} value={this.state.itemName} />
+                <input class="w3-input" type="text" name="stock_Name" placeholder="Stock Name" onChange={this.handleChange} value={this.state.stock_Name} />
+                <input class="w3-input" type="text" name="stock_No" placeholder="Stock No" onChange={this.handleChange} value={this.state.stock_No} />
+                <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
                 <label>Sub Item Of:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu3 = input}>
                   {this.state.items.map((item,index) => {
@@ -542,7 +575,7 @@ class Inventory extends React.Component {
                       )
                   })}
                 </select><br/>
-                <label>Category:</label><br/>
+                <label>Stock Issue Method:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu = input} >
                   {this.state.optionsOne.map((cat,index) => {
                     return (
@@ -550,22 +583,27 @@ class Inventory extends React.Component {
                     )
                   })}
                 </select><br/>
-                <input class="w3-input" type="text" name="category" placeholder="New Category" onChange={this.handleChange} value={this.state.category} />                
-                <input class="w3-input" type="text" name="barCode" placeholder="Bar Code" onChange={this.handleChange} value={this.state.barCode} />
-                <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
+                <label>Re-order Level:</label><br/>
+                <input class="w3-input" type="number" name="reorder_Level" placeholder="0.0" onChange={this.handleChange} value={this.state.reorder_Level} />      
+                <label>Re-order Qty:</label><br/>          
+                <input class="w3-input" type="number" name="reorder_Qty" placeholder="0.0" onChange={this.handleChange} value={this.state.reorder_Qty} />
+                <label>Lead Time (Days):</label><br/>
+                <input class="w3-input" type="number" name="lead_Time_Days" placeholder="0.0" onChange={this.handleChange} value={this.state.lead_Time_Days} />
+                <input class="w3-input" type="text" name="location" placeholder="Location" onChange={this.handleChange} value={this.state.location} />
                 <label>Cost Price: </label>
-                <input class="w3-input" type="number" name="costPrice" placeholder="0.0" onChange={this.handleChange} value={this.state.costPrice} />   
+                <input class="w3-input" type="number" name="cost_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.cost_Price} />   
                 <label>Sale Price:</label>   
-                <input class="w3-input" type="number" name="salePrice" placeholder="0.0" onChange={this.handleChange} value={this.state.salePrice} />
+                <input class="w3-input" type="number" name="sale_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.sale_Price} />
                 <label>Tax Type:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu2 = input}>
-                  {this.state.optionsTwo.map((tax,index) => {
+                  {this.state.taxOptions.map((tax,index) => {
                     return (
                       <option value ={tax.value}>{tax.label}</option>
                     )
                   })}
                </select>
-                  <input class="w3-input" type="text" name="taxType" placeholder="Tax Type" onChange={this.handleChange} value={this.state.taxType} />
+                <p>Tax Rate: {this.state.tax_Rate}</p>
+                <input class="w3-input" type="text" name="warehouse" placeholder="Store Name" onChange={this.handleChange} value={this.state.warehouse} />
                   <button type="submit" name="save" style={{maxWidth: "20%"}}>Save</button>
                 </form>
                 </div>
