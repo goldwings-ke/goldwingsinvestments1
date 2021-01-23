@@ -122,10 +122,10 @@ class Currency extends React.Component {
             base_currency: items[item].base_currency
           });
         }// end for loop
-        this.setState({
-          items: newState,
-          itemsOrig: newState,
-          isExists: true
+          this.setState({
+            items: newState,
+            itemsOrig: newState,
+            isExists: true
         });
       }); 
 

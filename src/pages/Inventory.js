@@ -14,9 +14,9 @@ class Inventory extends React.Component {
       items: [],
       itemsOrig: [],// immutable
       taxItems: [],
-      taxOptions: [], 
+      taxOptions: [],
       user: null,
-      stockIssueOptions: [],
+      stockIssueOptions: ['FIFO','LIFO','Weighted Average'],
       bizinfo: [],
       businessKeyId: '',
       cost_Price: 0,
@@ -124,6 +124,31 @@ class Inventory extends React.Component {
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let newState = [];
+
+          newState.push({
+            businessKeyId: businessKeyId,
+            cost_Price: 0,
+            depth: 0,
+            description: '',
+            id: '',
+            lead_Time_Days: 0,
+            location: '',
+            log: 0,
+            main_Account: 'NONE',
+            myIndex: 0,
+            ref: 'NONE',
+            reorder_Level: 0,
+            reorder_Qty: 0,
+            sale_Price: 0,
+            stock_Issue_Method: 'NONE',
+            stock_Name: 'NONE',
+            stock_No: '',
+            taxType: 'NONE',
+            tax_Rate: 0,
+            uid: uid,
+            warehouse: ''
+          })
+
         for (let item in items) {
 
           newState.push({
@@ -214,6 +239,22 @@ class Inventory extends React.Component {
           taxOptions: taxOption
         });
       }
+
+      //Base base_currency
+       const itemsRef = firebase.database().ref('currencies/'+
+       uid+'/'+businessKeyId)
+       .orderByChild('country');
+        itemsRef.on('value', (snapshot) => {
+        let items = snapshot.val();
+        let mBaseCurrency = '';
+        for (let item in items) {
+          if(items[item].base_currency === true)
+            base_currency = items[item].name;
+        }// end for loop
+        this.setState({
+          base_currency: mBaseCurrency,
+        });
+      }); 
   }
   
 
@@ -553,8 +594,7 @@ class Inventory extends React.Component {
               /* display form */
               return(
 
-    //  ref: '',
-    //  stock_Issue_Method: '',
+    //  ref: ''
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
@@ -577,9 +617,9 @@ class Inventory extends React.Component {
                 </select><br/>
                 <label>Stock Issue Method:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu = input} >
-                  {this.state.optionsOne.map((cat,index) => {
+                  {this.state.stockIssueOptions.map((stock) => {
                     return (
-                      <option value ={cat.value}>{cat.label}</option>
+                      <option value ={stock}>{stock}</option>
                     )
                   })}
                 </select><br/>

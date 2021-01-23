@@ -6,6 +6,7 @@ import Invoices from "./pages/Invoices";
 import Suppliers from "./pages/Suppliers";
 import Employees from "./pages/Employees";
 import ItemsNonInventory from "./pages/ItemsNonInventory";
+import Inventory from "./pages/Inventory";
 import Settings from "./pages/Settings"
 import Sidebar from "./components/Sidebar";
 import "./App.css";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/suppliers" component={Suppliers} />
           <Route path="/employees" component={Employees} />
           <Route path="/itemsnoninventory" component={ItemsNonInventory} />
+          <Route path="/inventory" component={Inventory} />
           <Route path="/settings" component={Settings} />
         </Switch>
       </Router>

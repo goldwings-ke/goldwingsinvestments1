@@ -16,6 +16,7 @@ function Sidebar() {
         <li style={{backgroundColor: "orange"}}><Link to="/invoices">Invoices</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/suppliers">Suppliers</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/employees">Employees</Link></li>
+         <li style={{backgroundColor: "orange"}}><Link to="/inventory">Inventory</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/itemsnoninventory">Items Non-Inventory</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/settings">Settings</Link></li>
       </ul>
