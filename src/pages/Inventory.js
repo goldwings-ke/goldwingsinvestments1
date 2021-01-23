@@ -7,30 +7,38 @@ class Inventory extends React.Component {
   constructor(){
     super();
         this.state = {
-      path: 'non_inventory_items',
+      path: 'inventory',
+      base_currency: '',
       currentItem: '',
       username: '',
       items: [],
       itemsOrig: [],// immutable
+      taxItems: [],
+      taxOptions: [], 
       user: null,
-      optionsOne: [],
+      stockIssueOptions: [],
       bizinfo: [],
-      currencyItems: [],
-      id: '',
-      barCode: '', 
       businessKeyId: '',
-      category: '',
-      costPrice:  0.0,
-      depth:   0,
-      description: '',
-      itemName:'',
-      log: 0,
-      mainAccount:  '', 
-      ref:  '',
-      salePrice:  0.0,
+      cost_Price: 0,
+      depth: 0,
+      description: '',
+      id: '',
+      lead_Time_Days: 0,
+      location: '',
+      log: 0,
+      main_Account: '',
+      myIndex: 0,
+      ref: '',
+      reorder_Level: 0,
+      reorder_Qty: 0,
+      sale_Price: 0,
+      stock_Issue_Method: '',
+      stock_Name: '',
+      stock_No: '',
       taxType: '',
-      tax_rate: 0.0,
-      uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
+      tax_Rate: 0,
+      uid: '',
+      warehouse: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -110,51 +118,43 @@ class Inventory extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('non_inventory_items/'+
+      const itemsRef = firebase.database().ref('inventory/'+
        uid+'/'+businessKeyId)
-       .orderByChild('category');
+       .orderByChild('main_Account');
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let newState = [];
-        let categoryOption = [];
-        let categoryUnique = [];
         for (let item in items) {
-          let cat = items[item].category;
-          var n = categoryUnique.indexOf(cat);
-            if(n === -1 ) {//false
-              categoryOption.push({
-                value: cat,
-                label: cat
-              });
-              categoryUnique.push(cat);
-            }
 
           newState.push({
+            businessKeyId: businessKeyId,
+            cost_Price: items[item].cost_Price,
+            depth: items[item].depth,
+            description: items[item].description,
             id: item,
-            barCode: items[item].barCode, 
-            businessKeyId:  items[item].businessKeyId,
-            category: items[item].category,
-            costPrice:  items[item].costPrice,
-            depth:   items[item].depth,
-            description:  items[item].description,
-            itemName: items[item].itemName,
-            log:  items[item].log,
-            mainAccount:  items[item].mainAccount, 
-            ref:  items[item].ref,
-            salePrice:  items[item].salePrice,
-            taxType:  items[item].taxType,
-            uid:  items[item].uid
-          });
-              
+            lead_Time_Days: items[item].lead_Time_Days,
+            location: items[item].location,
+            log: items[item].log,
+            main_Account: items[item].main_Account,
+            myIndex: items[item].myIndex,
+            ref: items[item].ref,
+            reorder_Level: items[item].reorder_Level,
+            reorder_Qty: items[item].reorder_Qty,
+            sale_Price: items[item].sale_Price,
+            stock_Issue_Method: items[item].stock_Issue_Method,
+            stock_Name: items[item].stock_Name,
+            stock_No: items[item].stock_No,
+            taxType: items[item].taxType,
+            tax_Rate: items[item].tax_Rate,
+            uid: items[item].uid,
+            warehouse: items[item].warehouse
+          })
         }// end for loop
         
         this.setState({
           items: newState,
-          itemsOrig: newState,
-          optionsOne: categoryOption
+          itemsOrig: newState
         });
-          
-
       }); 
 // populate Tax codes
   var count = 0;
@@ -199,7 +199,7 @@ class Inventory extends React.Component {
             }
             this.setState({
               taxItems: newTaxState,
-              optionsTwo: taxOption
+              taxOptions: taxOption
             });
         });
       if(count === 0){
@@ -211,7 +211,7 @@ class Inventory extends React.Component {
         });
 
         this.setState({
-          optionsTwo: taxOption
+          taxOptions: taxOption
         });
       }
   }
@@ -231,7 +231,7 @@ class Inventory extends React.Component {
         var remainingLetters = searchTerm.slice(1);
         searchTerm=firstLetter+remainingLetters;
         
-       {this.state.items.filter(item => item.itemName.
+       {this.state.items.filter(item => item.stock_Name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({
           id: filteredItem.id,
@@ -424,19 +424,25 @@ class Inventory extends React.Component {
 
   clear(){
     this.setState({
+      cost_Price: 0,
+      depth: 0,
+      description: '',
       id: '',
-      barCode: '', 
-      businessKeyId:  '',
-      category: '',
-      costPrice:  0.0,
-      depth:   '',
-      description:  '',
-      itemName: '',
-      log:  0,
-      mainAccount:  '', 
-      ref:  '',
-      salePrice:  0.0,
-      taxType:  '',
+      lead_Time_Days: 0,
+      location: '',
+      log: 0,
+      main_Account: '',
+      myIndex: 0,
+      ref: '',
+      reorder_Level: 0,
+      reorder_Qty: 0,
+      sale_Price: 0,
+      stock_Issue_Method: '',
+      stock_Name: '',
+      stock_No: '',
+      taxType: '',
+      tax_Rate: 0,
+      warehouse: '',
       isExists: false
     })
 
@@ -451,7 +457,7 @@ class Inventory extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/non_inventory_items/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/inventory/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
@@ -503,8 +509,8 @@ class Inventory extends React.Component {
             if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
-               <h3>{item.itemName} sh{item.salePrice}</h3>
-               <p>Category: <strong>{item.category}</strong></p>
+               <h3>{item.stock_Name} {this.state.base_currency}{item.cost_Price}</h3>
+               <p>Category: <strong>{item.main_Account}</strong></p>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
@@ -574,7 +580,7 @@ class Inventory extends React.Component {
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }
-    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Non-Inventory Items List</button>
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Inventory Items List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
 
