@@ -57,6 +57,7 @@ class ChartOfAccounts extends React.Component {
       optionsOne: ["Fixed_Assets","Current_Assets","Current_Liability",
                 "Long_Term_Liability","Equity","Income","Expenses"],
       optionsTwo: [],
+      optionsThree: [],
       bizinfo: [],
       account_name: '',
       account_no: 0,
@@ -82,6 +83,7 @@ class ChartOfAccounts extends React.Component {
     this.logout = this.logout.bind(this); 
     this.initialize = this.initialize.bind(this); 
     this.initialize2 = this.initialize2.bind(this); 
+    this.setSpinners = this.setSpinners.bind(this); 
     this.uiConfig = {
       signInFlow: "popup",
       signInOptions: [
@@ -195,21 +197,77 @@ class ChartOfAccounts extends React.Component {
         });
       }); 
 
+
+       let newState = [];
+       {this.state.items.filter(item => item.account_type.
+        includes(this.state.account_type)).map(filteredItem => (
+          newState.push({            
+            account_name: filteredItem.account_name,
+            account_no: filteredItem.account_no,
+            account_type: filteredItem.account_type,
+            businessKeyId: filteredItem.businessKeyId,
+            custom_account_no: filteredItem.custom_account_no,
+            depth: filteredItem.depth,
+            log: filteredItem.log,
+            main_account_no: filteredItem.main_account_no,
+            position: filteredItem.position,
+            sub_account_of: filteredItem.sub_account_of,
+            system_account: filteredItem.system_account,
+            uid: filteredItem.uid,
+            id: filteredItem.id
+          })
+        ))}
+
+          this.setState({
+            optionsThree: newState
+          })
+          
+    
   }
 
   handleChange(e){
-      if(e.target.name === "sub_account_of"){
-        this.setState({
-          sub_account_of: e.target.value
-        })
-      } else if(e.target.name === "searchbar"){
+    if(e.target.name === "searchbar"){
       if(e.target.value === ""){
-          this.setState({
-          items: this.state.itemsOrig
-        })
+            this.setState({
+            items: this.state.itemsOrig
+          })
       } else{
         let newState = [];
-       {this.state.items.filter(item => item.account_no.
+        var searchTerm = e.target.value;
+        var firstLetter = searchTerm.slice(0,1).toUpperCase();
+        var remainingLetters = searchTerm.slice(1);
+        searchTerm=firstLetter+remainingLetters;
+
+       {this.state.items.filter(item => item.account_name.
+        includes(searchTerm)).map(filteredItem => (
+          newState.push({            
+            account_name: filteredItem.account_name,
+            account_no: filteredItem.account_no,
+            account_type: filteredItem.account_type,
+            businessKeyId: filteredItem.businessKeyId,
+            custom_account_no: filteredItem.custom_account_no,
+            depth: filteredItem.depth,
+            log: filteredItem.log,
+            main_account_no: filteredItem.main_account_no,
+            position: filteredItem.position,
+            sub_account_of: filteredItem.sub_account_of,
+            system_account: filteredItem.system_account,
+            uid: filteredItem.uid,
+            id: filteredItem.id
+          })
+        ))}
+
+          this.setState({
+            items: newState
+          })
+        }
+    } else
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    if(e.target.name === 'account_type'){
+      let newState = [];
+       {this.state.items.filter(item => item.account_type.
         includes(e.target.value)).map(filteredItem => (
           newState.push({            
             account_name: filteredItem.account_name,
@@ -228,14 +286,10 @@ class ChartOfAccounts extends React.Component {
           })
         ))}
 
-        this.setState({
-          items: newState
-        })
-      }
-    } else
-      this.setState({
-        [e.target.name]: e.target.value
-      })
+          this.setState({
+            items: newState
+          })
+    }
   }
 
   handleSubmit(e){
@@ -410,39 +464,40 @@ class ChartOfAccounts extends React.Component {
       
   }
 
+  setSpinners(){
+    const accountsArray = this.state.items.slice();
+      let newState = [];
+      let accountType = this.state.account_type;
+      accountsArray.map((item) =>{
+      let myaccounttype = item.account_type;
+    
+      if(myaccounttype === accountType)
+        newState.push({
+            account_name: item.account_name,
+            account_no: item.account_no,
+            account_type: item.account_type,
+            businessKeyId: item.businessKeyId,
+            custom_account_no: item.custom_account_no,
+            depth: item.depth,
+            log: item.log,
+            main_account_no: item.main_account_no,
+            position: item.position,
+            sub_account_of: item.sub_account_of,
+            system_account:item.system_account,
+            uid: item.uid,
+            id: itemId
+        })
+      });      
+      
+ 
+      this.setState({
+       optionsThree: newState 
+      })
+
+  }
+
   render(){
-    var address ="";
-    var businessName = "";
-    var emailHome = "";
-    var emailOffice = "";
-    var locationCountry = "";
-    var taxIdentifier = "";
-    var telephoneHome = "";
-    var telephoneOffice = "";
-    var mBizInfo = [];
-    const footer = () => {
-      if(this.state.user){
-        mBizInfo = this.state.bizinfo.slice();
-          for(let x of mBizInfo){
-            businessName = x.name;
-            address = x.address ;
-            emailHome = x.emailHome;
-            emailOffice = x.emailOffice ;
-            locationCountry = x.locationCountry;
-            taxIdentifier = x.taxIdentifier;
-            telephoneHome = x.telephoneHome;
-            telephoneOffice = x.telephoneOffice;
-        }
-        var mFooter = address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
-        taxIdentifier;
-        return(
-          <div>{mFooter}</div>
-        );
-      }
-      return(
-        <div>Welcome!</div>
-      )
-    }
+
     const renderAuthButton = () => {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
@@ -467,12 +522,13 @@ class ChartOfAccounts extends React.Component {
              </li>
               );
               return(
-              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Tax Code Name.." onChange={this.handleChange}/>
+              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Account Name" onChange={this.handleChange}/>
               <ul>{listItems}</ul></div>
               );    
             }
             else{
               /* display form */
+
               return(
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
@@ -480,7 +536,7 @@ class ChartOfAccounts extends React.Component {
                     <input class="w3-input" type="text" name="account_name" placeholder="Account Name" onChange={this.handleChange} value={this.state.account_name} />
                     <p>Account No: {this.state.account_no}</p>
                     <label>Account Type:</label><br/>
-                    <select id = "dropdown" ref = {(input)=> this.menu = input}>
+                    <select id = "dropdown" ref = {(input)=> this.menu = input} onChange={this.handleChange} name="account_type">
                       {this.state.optionsOne.map((type,index) => {
                         if(this.state.account_type  === type)
                         return (
@@ -495,7 +551,8 @@ class ChartOfAccounts extends React.Component {
  
                 <label>SubAccount Of:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu2 = input} onChange={this.handleChange} name="sub_account_of">
-                  {this.state.items.map((item,index) => {
+                  {this.state.optionsThree.map((item) => {
+                    
                   var rfbDepth = item.depth;
                   var rfbAccountName = item.account_name;
                   var rfbAccountNo = item.account_no;
@@ -506,7 +563,7 @@ class ChartOfAccounts extends React.Component {
                     for(let i=0;i<rfbDepth;i++)
                       myTxt = myTxt.concat(gap);
                       myTxt = myTxt.concat(rfbAccountName);
-                      if({rfbAccountNo} === this.state.sub_account_of)
+                      if(rfbAccountNo === this.state.sub_account_of)
                         return (
                           <option value ={rfbSubAccountNo} selected>{myTxt}</option>
                         )
@@ -514,6 +571,7 @@ class ChartOfAccounts extends React.Component {
                         return (
                           <option value ={rfbSubAccountNo}>{myTxt}</option>
                         )
+                    
                   })}
                 </select>
                 <p>Sub Account of No: {this.state.sub_account_of}</p>
@@ -538,5 +596,31 @@ class ChartOfAccounts extends React.Component {
   );
  }
 }
+
+const SubAccount = ({myitems}) =>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input} onChange={this.handleChange} name="sub_account_of">
+                  {myitems.map((item) => {
+                    if(this.state.account_type === item.account_type){
+                  var rfbDepth = item.depth;
+                  var rfbAccountName = item.account_name;
+                  var rfbAccountNo = item.account_no;
+                  var rfbSubAccountNo = item.sub_account_of;
+                  var myTxt ="";
+                  var gap = '⬜';
+                  var gap2 =<span>nbsp;</span>
+                    for(let i=0;i<rfbDepth;i++)
+                      myTxt = myTxt.concat(gap);
+                      myTxt = myTxt.concat(rfbAccountName);
+                      if(rfbAccountNo === this.state.sub_account_of)
+                        return (
+                          <option value ={rfbSubAccountNo} selected>{myTxt}</option>
+                        )
+                      else
+                        return (
+                          <option value ={rfbSubAccountNo}>{myTxt}</option>
+                        )
+                    }
+                  })}
+                </select>
 
 export default ChartOfAccounts;

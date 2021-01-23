@@ -10,7 +10,6 @@ class PaymentType extends React.Component {
   constructor(){
     super();
       this.state = {
-      path: 'currencies',
       currentItem: '',
       username: '',
       items: [],
@@ -23,6 +22,7 @@ class PaymentType extends React.Component {
       log: 0,
       name: '',
       id: '',
+      uid: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -58,7 +58,8 @@ class PaymentType extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = this.state.uid;//m_user.uid;
+   var uid = this.state.uid;//m_user.uid; 
+   uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
   
@@ -112,7 +113,8 @@ class PaymentType extends React.Component {
             businessKeyId: businessKeyId,
             log: items[item].log,
             name: items[item].name,
-            id: item
+            id: item,
+            uid: uid
           });
         }// end for loop
         this.setState({
@@ -132,13 +134,19 @@ class PaymentType extends React.Component {
         })
       } else{
         let newState = [];
+        var searchTerm = e.target.value;
+        var firstLetter = searchTerm.slice(0,1).toUpperCase();
+        var remainingLetters = searchTerm.slice(1);
+        searchTerm=firstLetter+remainingLetters;
+        
        {this.state.items.filter(item => item.name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({   
             businessKeyId: filteredItem.businessKeyId,
             log: filteredItem.log,
             name: filteredItem.name,
-            id: filteredItem.id
+            id: filteredItem.id,
+            uid: filteredItem.uid
           })
         ))}
 
@@ -179,25 +187,23 @@ class PaymentType extends React.Component {
         itemsRef = firebase.database().ref('payment_type/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
+          businessKeyId: businessKeyId,
           log: n,
           name: this.state.name,
-          symbol : this.state.symbol,
-          uid: this.state.uid,
           id: this.state.id,
-          businessKeyId: businessKeyId
+          uid: uid
+
         }
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('currencies/'+uid+'/'+businessKeyId);
+        itemsRef = firebase.database().ref('payment_type/'+uid+'/'+businessKeyId);
           const item = {
-            country: this.state.country,
+            businessKeyId: businessKeyId,
             log: n,
             name: this.state.name,
-            symbol : this.state.symbol,
-            uid: this.state.uid,
-            businessKeyId: businessKeyId
-        }
+            uid: uid
+          }
         itemsRef.push(item);
       }
 
@@ -242,19 +248,17 @@ class PaymentType extends React.Component {
     this.setState({
       displayPane: 'form'
     })
-  var m_user = firebase.auth().currentUser;
-  var uid = m_user.uid; 
+
   var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
         this.setState({
-            country: item.country,
+            businessKeyId: item.businessKeyId,
             log: item.log,
             name: item.name,
-            symbol : item.symbol,
-            uid: item.uid,
             id: itemId,
-            businessKeyId: item.businessKeyId
+            uid: item.uid
+            
         })
       }
   });
@@ -266,9 +270,8 @@ class PaymentType extends React.Component {
       country: '',
       log: 0,
       name: '',
-      symbol : '',
       id: '',
-      isExists: false,
+      isExists: false
     })
 
   }
@@ -282,44 +285,13 @@ class PaymentType extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/currencies/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/payment_type/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
 
   render(){
-    var address ="";
-    var businessName = "";
-    var emailHome = "";
-    var emailOffice = "";
-    var locationCountry = "";
-    var taxIdentifier = "";
-    var telephoneHome = "";
-    var telephoneOffice = "";
-    var mBizInfo = [];
-    const footer = () => {
-      if(this.state.user){
-        mBizInfo = this.state.bizinfo.slice();
-          for(let x of mBizInfo){
-            businessName = x.name;
-            address = x.address ;
-            emailHome = x.emailHome;
-            emailOffice = x.emailOffice ;
-            locationCountry = x.locationCountry;
-            taxIdentifier = x.taxIdentifier;
-            telephoneHome = x.telephoneHome;
-            telephoneOffice = x.telephoneOffice;
-        }
-        var mFooter = address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
-        taxIdentifier;
-        return(
-          <div>{mFooter}</div>
-        );
-      }
-      return(
-        <div>Welcome!</div>
-      )
-    }
+
     const renderAuthButton = () => {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
@@ -334,15 +306,14 @@ class PaymentType extends React.Component {
             if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
-               <h3>{item.name} {item.symbol} </h3>
-               <p><strong>{item.country}</strong></p>
+               <h3>{item.name}</h3>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
              </li>
               );
               return(
-              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Tax Code Name.." onChange={this.handleChange}/>
+              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Payment Type.." onChange={this.handleChange}/>
               <ul>{listItems}</ul></div>
               );    
             }
@@ -352,9 +323,7 @@ class PaymentType extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                   <form class="w3-container" onSubmit={this.handleSubmit} >
-                    <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
-                    <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
-                    <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
+                    <input class="w3-input" type="text" name="name" placeholder="Name" onChange={this.handleChange} value={this.state.name} />
                     <button type="submit" name="save" style={{width: "20%"}}>Save</button>
                   </form>
                  </div>
@@ -365,7 +334,7 @@ class PaymentType extends React.Component {
     return (
  <div className="w3-container" style={{width: "80%"}}>
  <div className="w3-container" >
-    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Currency List</button>
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Payment List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
  

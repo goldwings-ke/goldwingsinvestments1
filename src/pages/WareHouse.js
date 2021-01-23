@@ -1,15 +1,14 @@
 import React from "react";
-
+import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
 
-class Currency extends React.Component {
+class WareHouse extends React.Component {
   constructor(){
     super();
       this.state = {
-      path: 'currencies',
       currentItem: '',
       username: '',
       items: [],
@@ -18,13 +17,11 @@ class Currency extends React.Component {
       user: null,
       optionsOne: [],
       bizinfo: [],
-      country: '',
+      businessKeyId: '',
       log: 0,
       name: '',
-      symbol : '',
-      uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
       id: '',
-      businessKeyId: '',
+      uid: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -60,7 +57,8 @@ class Currency extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = this.state.uid;//m_user.uid;
+   var uid = this.state.uid;//m_user.uid; 
+   uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
   
@@ -103,21 +101,19 @@ class Currency extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('currencies/'+
+      const itemsRef = firebase.database().ref('location/'+
        uid+'/'+businessKeyId)
-       .orderByChild('country');
+       .orderByChild('name');
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let newState = [];
         for (let item in items) {
           newState.push({
-            country: items[item].country,
+            businessKeyId: businessKeyId,
             log: items[item].log,
             name: items[item].name,
-            symbol : items[item].symbol,
-            uid: items[item].uid,
             id: item,
-            businessKeyId: businessKeyId
+            uid: uid
           });
         }// end for loop
         this.setState({
@@ -141,17 +137,15 @@ class Currency extends React.Component {
         var firstLetter = searchTerm.slice(0,1).toUpperCase();
         var remainingLetters = searchTerm.slice(1);
         searchTerm=firstLetter+remainingLetters;
+       {this.state.items.filter(item => item.name.
+        includes(searchTerm)).map(filteredItem => (
 
-       {this.state.items.filter(item => item.country.
-        includes(e.target.value)).map(filteredItem => (
-          newState.push({            
-            country: filteredItem.country,
+          newState.push({   
+            businessKeyId: filteredItem.businessKeyId,
             log: filteredItem.log,
             name: filteredItem.name,
-            symbol : filteredItem.symbol,
-            uid: filteredItem.uid,
             id: filteredItem.id,
-            businessKeyId: filteredItem.businessKeyId
+            uid: filteredItem.uid
           })
         ))}
 
@@ -173,11 +167,7 @@ class Currency extends React.Component {
       }
     var d = new Date();
     var n = d.getTime();
-    var country = this.state.country;
-      if(country === '' || country === null){
-        alert("Please Enter Country!");
-        return;
-      }
+ 
     var name = this.state.name;
       if(name === '' || name === null){
         alert("Please Enter Name!");
@@ -193,29 +183,26 @@ class Currency extends React.Component {
     var saved = "Saved!"; 
     var itemsRef = null;
        if(this.state.isExists){
-        itemsRef = firebase.database().ref('currencies/'+uid+'/'+businessKeyId+'/'+this.state.id);
+        itemsRef = firebase.database().ref('location/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
-          country: this.state.country,
+          businessKeyId: businessKeyId,
           log: n,
           name: this.state.name,
-          symbol : this.state.symbol,
-          uid: this.state.uid,
           id: this.state.id,
-          businessKeyId: businessKeyId
+          uid: uid
+
         }
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('currencies/'+uid+'/'+businessKeyId);
+        itemsRef = firebase.database().ref('location/'+uid+'/'+businessKeyId);
           const item = {
-            country: this.state.country,
+            businessKeyId: businessKeyId,
             log: n,
             name: this.state.name,
-            symbol : this.state.symbol,
-            uid: this.state.uid,
-            businessKeyId: businessKeyId
-        }
+            uid: uid
+          }
         itemsRef.push(item);
       }
 
@@ -260,19 +247,17 @@ class Currency extends React.Component {
     this.setState({
       displayPane: 'form'
     })
-  var m_user = firebase.auth().currentUser;
-  var uid = m_user.uid; 
+
   var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
         this.setState({
-            country: item.country,
+            businessKeyId: item.businessKeyId,
             log: item.log,
             name: item.name,
-            symbol : item.symbol,
-            uid: item.uid,
             id: itemId,
-            businessKeyId: item.businessKeyId
+            uid: item.uid
+            
         })
       }
   });
@@ -284,9 +269,8 @@ class Currency extends React.Component {
       country: '',
       log: 0,
       name: '',
-      symbol : '',
       id: '',
-      isExists: false,
+      isExists: false
     })
 
   }
@@ -300,7 +284,7 @@ class Currency extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/currencies/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/location/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
@@ -321,15 +305,14 @@ class Currency extends React.Component {
             if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
-               <h3>{item.name} {item.symbol} </h3>
-               <p><strong>{item.country}</strong></p>
+               <h3>{item.name}</h3>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
              </li>
               );
               return(
-              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Tax Code Name.." onChange={this.handleChange}/>
+              <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Warehouse .." onChange={this.handleChange}/>
               <ul>{listItems}</ul></div>
               );    
             }
@@ -339,9 +322,7 @@ class Currency extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                   <form class="w3-container" onSubmit={this.handleSubmit} >
-                    <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
-                    <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
-                    <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
+                    <input class="w3-input" type="text" name="name" placeholder="Name" onChange={this.handleChange} value={this.state.name} />
                     <button type="submit" name="save" style={{width: "20%"}}>Save</button>
                   </form>
                  </div>
@@ -352,7 +333,7 @@ class Currency extends React.Component {
     return (
  <div className="w3-container" style={{width: "80%"}}>
  <div className="w3-container" >
-    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Currency List</button>
+    <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Warehouse Location List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
  
@@ -363,4 +344,4 @@ class Currency extends React.Component {
  }
 }
 
-export default Currency;
+export default WareHouse;

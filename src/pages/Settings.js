@@ -5,6 +5,9 @@ import '../style.css'
 import TaxSettings from './TaxSettings';
 import Currency from './Currency';
 import ChartOfAccounts from './ChartOfAccounts';
+import PaymentType from './PaymentType';
+import ClassGroup from './ClassGroup';
+import WareHouse from './WareHouse';
 
 class Settings extends React.Component {
   constructor(){
@@ -98,6 +101,18 @@ class Settings extends React.Component {
     if(index === 4)
       this.setState({
         displayPane: "currency"
+      })
+    if(index === 5)
+      this.setState({
+        displayPane: "paymenttype"
+      })
+    if(index === 6)
+      this.setState({
+        displayPane: "classgroup"
+      })
+    if(index === 7)
+      this.setState({
+        displayPane: "warehouse"
       })    
   }
 
@@ -147,6 +162,18 @@ class Settings extends React.Component {
       return(
         <ChartOfAccounts/>
       );
+      else if(this.state.displayPane === "paymenttype")
+      return(
+        <PaymentType/>
+      );
+      else if(this.state.displayPane === "classgroup")
+      return(
+        <ClassGroup/>
+      );
+      else if(this.state.displayPane === "warehouse")
+      return(
+        <WareHouse/>
+      );
       else{
        return(
        <div>  
@@ -167,7 +194,7 @@ class Settings extends React.Component {
         </div>
         <div class="w3-row-padding">
           <div class="w3-col s4" onClick={() => this.handleClick(5)}>
-            <h3 style={{width: "100%"}} >Payment Methods<br/>💰</h3>
+            <h3 style={{width: "100%"}} >Payment Type<br/>💰</h3>
           </div>
           <div class="w3-col s4" onClick={() => this.handleClick(6)}>
             <h3 style={{width: "100%"}} >Group By Class<br/>📋</h3>

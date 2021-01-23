@@ -135,6 +135,11 @@ class TaxSettings extends React.Component {
         })
       } else{
         let newState = [];
+        var searchTerm = e.target.value;
+        var firstLetter = searchTerm.slice(0,1).toUpperCase();
+        var remainingLetters = searchTerm.slice(1);
+        searchTerm=firstLetter+remainingLetters;
+
        {this.state.items.filter(item => item.tax_code.
         includes(e.target.value)).map(filteredItem => (
           newState.push({            
@@ -284,38 +289,7 @@ class TaxSettings extends React.Component {
   }
 
   render(){
-    var address ="";
-    var businessName = "";
-    var emailHome = "";
-    var emailOffice = "";
-    var locationCountry = "";
-    var taxIdentifier = "";
-    var telephoneHome = "";
-    var telephoneOffice = "";
-    var mBizInfo = [];
-    const footer = () => {
-      if(this.state.user){
-        mBizInfo = this.state.bizinfo.slice();
-          for(let x of mBizInfo){
-            businessName = x.name;
-            address = x.address ;
-            emailHome = x.emailHome;
-            emailOffice = x.emailOffice ;
-            locationCountry = x.locationCountry;
-            taxIdentifier = x.taxIdentifier;
-            telephoneHome = x.telephoneHome;
-            telephoneOffice = x.telephoneOffice;
-        }
-        var mFooter = address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
-        taxIdentifier;
-        return(
-          <div>{mFooter}</div>
-        );
-      }
-      return(
-        <div>Welcome!</div>
-      )
-    }
+
     const renderAuthButton = () => {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;

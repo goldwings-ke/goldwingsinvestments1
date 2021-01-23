@@ -109,6 +109,11 @@ class Invoices extends Component {
       } else
       {
         let newState = [];
+        var searchTerm = e.target.value;
+        var firstLetter = searchTerm.slice(0,1).toUpperCase();
+        var remainingLetters = searchTerm.slice(1);
+        searchTerm=firstLetter+remainingLetters;
+        
         {this.state.items.filter(item => item.NAME.
           includes(e.target.value)).map(filteredItem => (
             newState.push({

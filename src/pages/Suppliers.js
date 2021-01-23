@@ -191,8 +191,6 @@ class Suppliers extends React.Component {
       }
 
   }
-  
-
 
   handleChange(e){
     if(e.target.name === "searchbar"){
@@ -202,8 +200,12 @@ class Suppliers extends React.Component {
         })
       } else{
         let newState = [];
+        var searchTerm = e.target.value;
+        var firstLetter = searchTerm.slice(0,1).toUpperCase();
+        var remainingLetters = searchTerm.slice(1);
+        searchTerm=firstLetter+remainingLetters;
        {this.state.items.filter(item => item.name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({
             id: filteredItem.id,
             currency: filteredItem.currency, 
