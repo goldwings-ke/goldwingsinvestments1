@@ -361,7 +361,7 @@ class Inventory extends React.Component {
           for (let item of myitemsOrig) {
             if(item.stock_Name === mRef){
               mMainAccount = item.main_Account;
-              mDepth = item.depth ;
+              mDepth = item.depth + 1;
             }
           }   
       }

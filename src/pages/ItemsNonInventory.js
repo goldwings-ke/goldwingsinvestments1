@@ -290,9 +290,9 @@ class ItemsNonInventory extends React.Component {
       } else{
         var myitemsOrig = this.state.itemsOrig.slice(); 
           for (let item of myitemsOrig) {
-            if(item.ref === mRef){
+            if(item.itemName === mRef){
               mMainAccount = item.mainAccount;
-              mDepth = item.depth ;
+              mDepth = item.depth + 1;
             }
           }   
       }
