@@ -7,7 +7,6 @@ class Inventory extends React.Component {
   constructor(){
     super();
         this.state = {
-      path: 'inventory',
       base_currency: '',
       currentItem: '',
       username: '',
@@ -75,7 +74,7 @@ class Inventory extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = this.state.uid;//m_user.uid;
+   var uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
   
@@ -241,19 +240,19 @@ class Inventory extends React.Component {
       }
 
       //Base base_currency
-       const itemsRef = firebase.database().ref('currencies/'+
+       const currencyRef = firebase.database().ref('currencies/'+
        uid+'/'+businessKeyId)
        .orderByChild('country');
-        itemsRef.on('value', (snapshot) => {
+        currencyRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let mBaseCurrency = '';
         for (let item in items) {
           if(items[item].base_currency === true)
-            base_currency = items[item].name;
+            mBaseCurrency = items[item].symbol;
         }// end for loop
         this.setState({
-          base_currency: mBaseCurrency,
-        });
+          base_currency: mBaseCurrency
+        })
       }); 
   }
   

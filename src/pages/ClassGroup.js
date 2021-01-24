@@ -58,8 +58,8 @@ class ClassGroup extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = this.state.uid;//m_user.uid; 
-   uid = m_user.uid;
+   //var uid = this.state.uid;//m_user.uid; 
+   var uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
   
@@ -304,7 +304,8 @@ class ClassGroup extends React.Component {
                 return (<div>Loading..</div>);
               }
             if(this.state.displayPane === 'list'){
-              const listItems = this.state.items.map((item) => 
+              const mylist = this.state.items.slice(1);
+              const listItems = mylist.map((item) => 
               <li key={item.id}>
                <h3>{item.name}</h3>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
