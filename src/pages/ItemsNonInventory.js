@@ -286,13 +286,13 @@ class ItemsNonInventory extends React.Component {
     var mMainAccount = "";
       if(mRef === "NONE" ){
         mMainAccount = "NONE";
-        mDepth = 0;
+        mDepth = 1;
       } else{
         var myitemsOrig = this.state.itemsOrig.slice(); 
           for (let item of myitemsOrig) {
             if(item.ref === mRef){
               mMainAccount = item.mainAccount;
-              mDepth = item.depth + 1;
+              mDepth = item.depth ;
             }
           }   
       }

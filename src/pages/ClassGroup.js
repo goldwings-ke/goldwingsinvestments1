@@ -304,8 +304,8 @@ class ClassGroup extends React.Component {
                 return (<div>Loading..</div>);
               }
             if(this.state.displayPane === 'list'){
-              const mylist = this.state.items.slice(1);
-              const listItems = mylist.map((item) => 
+             
+              const listItems = this.state.items.map((item) => 
               <li key={item.id}>
                <h3>{item.name}</h3>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>

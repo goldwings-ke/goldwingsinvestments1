@@ -74,9 +74,10 @@ class Inventory extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = m_user.uid;
+   var mUid = m_user.uid;//"QK4rcq2YhZf5BoNsXklZShBTwHw1";
+
    const companyRef = firebase.database().ref('business_info/'+
-    uid+'/').orderByChild('id');   
+    mUid+'/').orderByChild('id');   
   
     companyRef.on('value',  snapshot => {
       var items = snapshot.val();
@@ -111,7 +112,7 @@ class Inventory extends React.Component {
   initialize2(){
    var m_user = firebase.auth().currentUser;
    var uid = m_user.uid;
-
+  uid = "QK4rcq2YhZf5BoNsXklZShBTwHw1";
    var businessKeyId ="";
    var mBizInfo = this.state.bizinfo.slice();
     for(let x of mBizInfo){
@@ -203,7 +204,7 @@ class Inventory extends React.Component {
                   log: tax_items[mTaxItem].log,
                   taxType: "NONE",
                   tax_rate: 0,
-                  uid: tax_items[mTaxItem].uid,
+                  uid: tax_items[mTaxItem].uid
                 });
               }
               
@@ -217,7 +218,7 @@ class Inventory extends React.Component {
                 log: tax_items[mTaxItem].log,
                 taxType: tax_items[mTaxItem].tax_code,
                 tax_rate: tax_items[mTaxItem].tax_rate,
-                uid: tax_items[mTaxItem].uid,
+                uid: tax_items[mTaxItem].uid
               });
               count++;
             }
@@ -228,6 +229,7 @@ class Inventory extends React.Component {
         });
       if(count === 0){
        let type = "NONE";
+       let rate = 0;
        let taxOption = [];
         taxOption.push({
           value: type,
@@ -302,7 +304,22 @@ class Inventory extends React.Component {
           items: newState
         })
       }
-    } else
+    } else if(e.target.name === 'taxType'){
+       
+        var taxOrig = this.state.taxItems.slice();
+        var mTaxType = this.menu2.value;
+          for (let item of taxOrig) {
+            if(item.taxType === mTaxType){
+              var tax_rate = item.tax_rate;
+              if(item.taxType === 'NONE')
+                tax_rate = 0;
+              this.setState({
+                [e.target.name]: e.target.value.trim(),
+                tax_Rate: tax_rate
+              })
+            }
+          }   
+      } else
       this.setState({
         [e.target.name]: e.target.value.trim()
       })
@@ -315,10 +332,16 @@ class Inventory extends React.Component {
       alert("Please Log in!");
       return;
     }
+    
+    var businessKeyId ="";
+    var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
     var d = new Date();
     var n = d.getTime();
     var mDepth = 2;
-    var itemName = this.state.itemName;
+    var itemName = this.state.stock_Name;
       if(itemName === ''){
         alert("Please Enter Item name!");
         return;
@@ -326,61 +349,67 @@ class Inventory extends React.Component {
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
 
-    var itemName = this.state.itemName;
-    var mRef = this.menu3.value.trim();
+    var mRef = this.menu.value.trim();
       if(mRef === "" )
         mRef = "NONE";
-    var mMainAccount = "";
+    var mMainAccount = this.state.main_Account;
       if(mRef === "NONE" ){
         mMainAccount = "NONE";
-        mDepth = 0;
+        mDepth = 1;
       } else{
         var myitemsOrig = this.state.itemsOrig.slice(); 
           for (let item of myitemsOrig) {
-            if(item.ref === mRef){
-              mMainAccount = item.mainAccount;
-              mDepth = item.depth + 1;
+            if(item.stock_Name === mRef){
+              mMainAccount = item.main_Account;
+              mDepth = item.depth ;
             }
           }   
       }
 
-    var mCostPrice = this.state.costPrice;
-    var mSalePrice = this.state.salePrice;
-    var category = this.menu.value;
-    var taxtype = this.menu2.value;
-      if(taxtype === null || taxtype === '')
-        taxtype = "NONE";
-      if(this.state.category !== '')
-        category = this.state.category;
+    var mCostPrice = this.state.cost_Price;
+    var mSalePrice = this.state.sale_Price;
+    var mTaxtype = this.menu2.value;
+      if(mTaxtype === null || mTaxtype === '')
+        mTaxtype = "NONE";
+
       if(mCostPrice < 0)
         mCostPrice = 0.0;
       if(mSalePrice < 0)
         mSalePrice = 0.0;
+        var txt="Cost "+mCostPrice + "\nSale "+mSalePrice+
+        "\nName "+itemName + "\nSubAcc"+mRef+
+        "\nMain Acc "+mMainAccount + "\nDepth "+mDepth+
+        "\nTax Type "+mTaxtype;
+     var a = 10;
+     if(a<100){
+       alert(txt);
+       return
+     }   
     var saved = "Saved!";    
     var itemsRef = null;
 
       if(this.state.isExists){
-        itemsRef = firebase.database().ref('inventory/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('inventory/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
           businessKeyId: this.state.businessKeyId,
-          cost_Price: this.state.cost_Price,
-          depth: this.state.depth,
+          cost_Price: mCostPrice,
+          depth: mDepth,
           description: this.state.description,
           id: this.state.id,
           lead_Time_Days: this.state.lead_Time_Days,
           location: this.state.location,
           log: this.state.log,
-          main_Account: this.state.main_Account,
+          main_Account: mMmainAccount,
           myIndex: this.state.myIndex,
-          ref: this.state.ref,
+          ref: mRef,
           reorder_Level: this.state.reorder_Level,
           reorder_Qty: this.state.reorder_Qty,
-          sale_Price: this.state.sale_Price,
+          sale_Price: mSalePrice,
           stock_Issue_Method: this.state.stock_Issue_Method,
-          stock_Name: this.state.stock_Name,
+          stock_Name: itemName,
           stock_No: this.state.stock_No,
-          taxType: this.state.taxType,
+          taxType: mTaxType,
           tax_Rate: this.state.tax_Rate,
           uid: this.state.uid,
           warehouse: this.state.warehouse
@@ -388,25 +417,25 @@ class Inventory extends React.Component {
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('inventory/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('inventory/'+uid+'/'+businessKeyId);
         const item = {
           businessKeyId: this.state.businessKeyId,
-          cost_Price: this.state.cost_Price,
-          depth: this.state.depth,
+          cost_Price: mCostPrice,
+          depth: mDepth,
           description: this.state.description,
           lead_Time_Days: this.state.lead_Time_Days,
           location: this.state.location,
           log: this.state.log,
-          main_Account: this.state.main_Account,
+          main_Account: mMainAccount,
           myIndex: this.state.myIndex,
-          ref: this.state.ref,
+          ref: mRef,
           reorder_Level: this.state.reorder_Level,
           reorder_Qty: this.state.reorder_Qty,
-          sale_Price: this.state.sale_Price,
+          sale_Price: mSalePrice,
           stock_Issue_Method: this.state.stock_Issue_Method,
-          stock_Name: this.state.stock_Name,
+          stock_Name: itemName,
           stock_No: this.state.stock_No,
-          taxType: this.state.taxType,
+          taxType: mTaxType,
           tax_Rate: this.state.tax_Rate,
           uid: this.state.uid,
           warehouse: this.state.warehouse
@@ -457,8 +486,8 @@ class Inventory extends React.Component {
   var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
-      //  this.menu3.value = item.ref;
-      //  this.menu.value = item.category;
+      //  this.menu.value = item.ref;
+      //  this.menu2.value = item.taxType;
         this.setState({
            businessKeyId: item.businessKeyId,
           cost_Price: item.cost_Price,
@@ -575,7 +604,8 @@ class Inventory extends React.Component {
                 return (<div>Loading..</div>);
               }
             if(this.state.displayPane === 'list'){
-              const listItems = this.state.items.map((item) => 
+              const mylist = this.state.items.slice(1);
+              const listItems = mylist.map((item) => 
               <li key={item.id}>
                <h3>{item.stock_Name} {this.state.base_currency}{item.cost_Price}</h3>
                <p>Category: <strong>{item.main_Account}</strong></p>
@@ -601,25 +631,26 @@ class Inventory extends React.Component {
                 <input class="w3-input" type="text" name="stock_No" placeholder="Stock No" onChange={this.handleChange} value={this.state.stock_No} />
                 <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
                 <label>Sub Item Of:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu3 = input}>
-                  {this.state.items.map((item,index) => {
+                <select id = "dropdown" ref = {(input)=> this.menu = input} onChange={this.handleChange} name="ref">
+                  {this.state.items.map((item) => {
+                    
                   var rfbDepth = item.depth;
-                  var rfbItemName = item.itemName;
+                  var rfbAccountName = item.stock_Name;
+                  var rfbAccountNo = item.stock_No;
                   var myTxt ="";
+                  var gap = '⬜';
+                  var gap2 =<span>nbsp;</span>
                     for(let i=0;i<rfbDepth;i++)
-                      myTxt += " ";
-                      myTxt +=rfbItemName;
-                      return (
-                        <option value ={myTxt}>{rfbItemName}</option>
-                      )
-                  })}
-                </select><br/>
-                <label>Stock Issue Method:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu = input} >
-                  {this.state.stockIssueOptions.map((stock) => {
-                    return (
-                      <option value ={stock}>{stock}</option>
-                    )
+                      myTxt = myTxt.concat(gap);
+                      myTxt = myTxt.concat(rfbAccountName);
+                      if(rfbAccountName === this.state.ref)
+                        return (
+                          <option value ={rfbAccountName} selected>{myTxt}</option>
+                        )
+                      else
+                        return (
+                          <option value ={rfbAccountName}>{myTxt}</option>
+                        )
                   })}
                 </select><br/>
                 <label>Re-order Level:</label><br/>
@@ -634,7 +665,7 @@ class Inventory extends React.Component {
                 <label>Sale Price:</label>   
                 <input class="w3-input" type="number" name="sale_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.sale_Price} />
                 <label>Tax Type:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu2 = input}>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="taxType" onChange={this.handleChange}>
                   {this.state.taxOptions.map((tax,index) => {
                     return (
                       <option value ={tax.value}>{tax.label}</option>
