@@ -376,7 +376,7 @@ class Inventory extends React.Component {
         mCostPrice = 0.0;
       if(mSalePrice < 0)
         mSalePrice = 0.0;
-
+    var mStockIssueMethod = this.menu3.value;
 /*
         var txt="Cost "+mCostPrice + "\nSale "+mSalePrice+
         "\nName "+itemName + "\nSubAcc"+mRef+
@@ -404,13 +404,13 @@ class Inventory extends React.Component {
           lead_Time_Days: this.state.lead_Time_Days,
           location: this.state.location,
           log: this.state.log,
-          main_Account: mMmainAccount,
+          main_Account: mMainAccount,
           myIndex: this.state.myIndex,
           ref: mRef,
           reorder_Level: this.state.reorder_Level,
           reorder_Qty: this.state.reorder_Qty,
           sale_Price: mSalePrice,
-          stock_Issue_Method: this.state.stock_Issue_Method,
+          stock_Issue_Method: mStockIssueMethod,
           stock_Name: itemName,
           stock_No: this.state.stock_No,
           taxType: mTaxType,
@@ -436,7 +436,7 @@ class Inventory extends React.Component {
           reorder_Level: this.state.reorder_Level,
           reorder_Qty: this.state.reorder_Qty,
           sale_Price: mSalePrice,
-          stock_Issue_Method: this.state.stock_Issue_Method,
+          stock_Issue_Method: mStockIssueMethod,
           stock_Name: itemName,
           stock_No: this.state.stock_No,
           taxType: mTaxType,
@@ -454,6 +454,8 @@ class Inventory extends React.Component {
       })
       
       alert(saved);
+      this.clear();
+      this.initialize2();
   }
 
   handleClick(index) {
@@ -669,23 +671,32 @@ class Inventory extends React.Component {
                 <label>Sale Price:</label>   
                 <input class="w3-input" type="number" name="sale_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.sale_Price} />
                 <label>Tax Type:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="" onChange={this.handleChange}>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="taxType" onChange={this.handleChange}>
                   {this.state.taxOptions.map((tax,index) => {
+                    if(this.state.taxType === tax.value)
                     return (
+                      <option value ={tax.value} selected>{tax.label}</option>
+                    )
+                    else return (
                       <option value ={tax.value}>{tax.label}</option>
                     )
                   })}
-               </select><br/>
+               </select>
+                <p>Tax Rate: {this.state.tax_Rate}</p>
                 <label>Stock Issue Method:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="taxType" onChange={this.handleChange}>
+                <select id = "dropdown" ref = {(input)=> this.menu3 = input} name="stock_Issue_Method" onChange={this.handleChange}>
                   {this.state.stockIssueOptions.map((issueoption) => {
+                    if(issueoption === this.state.stock_Issue_Method)
                     return (
+                      <option value ={issueoption} selected>{issueoption}</option>
+                    ) 
+                    else return (
                       <option value ={issueoption}>{issueoption}</option>
                     )
                   })}
                </select>
 
-                <p>Tax Rate: {this.state.tax_Rate}</p>
+
                 <input class="w3-input" type="text" name="warehouse" placeholder="Store Name" onChange={this.handleChange} value={this.state.warehouse} />
                   <button type="submit" name="save" style={{maxWidth: "20%"}}>Save</button>
                 </form>
