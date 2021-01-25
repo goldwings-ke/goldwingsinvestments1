@@ -112,7 +112,7 @@ class Inventory extends React.Component {
   initialize2(){
    var m_user = firebase.auth().currentUser;
    var uid = m_user.uid;
-  uid = "QK4rcq2YhZf5BoNsXklZShBTwHw1";
+ // uid = "QK4rcq2YhZf5BoNsXklZShBTwHw1";
    var businessKeyId ="";
    var mBizInfo = this.state.bizinfo.slice();
     for(let x of mBizInfo){
@@ -368,23 +368,27 @@ class Inventory extends React.Component {
 
     var mCostPrice = this.state.cost_Price;
     var mSalePrice = this.state.sale_Price;
-    var mTaxtype = this.menu2.value;
-      if(mTaxtype === null || mTaxtype === '')
-        mTaxtype = "NONE";
+    var mTaxType = this.menu2.value;
+      if(mTaxType === null || mTaxType === '')
+        mTaxType = "NONE";
 
       if(mCostPrice < 0)
         mCostPrice = 0.0;
       if(mSalePrice < 0)
         mSalePrice = 0.0;
+
+/*
         var txt="Cost "+mCostPrice + "\nSale "+mSalePrice+
         "\nName "+itemName + "\nSubAcc"+mRef+
         "\nMain Acc "+mMainAccount + "\nDepth "+mDepth+
-        "\nTax Type "+mTaxtype;
+        "\nTax Type "+mTaxType+" Desc: "+this.state.description;
+        
      var a = 10;
      if(a<100){
        alert(txt);
        return
-     }   
+     }
+*/        
     var saved = "Saved!";    
     var itemsRef = null;
 
@@ -392,7 +396,7 @@ class Inventory extends React.Component {
         itemsRef = firebase.database().ref('inventory/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
-          businessKeyId: this.state.businessKeyId,
+          businessKeyId: businessKeyId,
           cost_Price: mCostPrice,
           depth: mDepth,
           description: this.state.description,
@@ -411,7 +415,7 @@ class Inventory extends React.Component {
           stock_No: this.state.stock_No,
           taxType: mTaxType,
           tax_Rate: this.state.tax_Rate,
-          uid: this.state.uid,
+          uid: uid,
           warehouse: this.state.warehouse
         }
         itemsRef.set(item);
@@ -419,7 +423,7 @@ class Inventory extends React.Component {
       else {
         itemsRef = firebase.database().ref('inventory/'+uid+'/'+businessKeyId);
         const item = {
-          businessKeyId: this.state.businessKeyId,
+          businessKeyId: businessKeyId,
           cost_Price: mCostPrice,
           depth: mDepth,
           description: this.state.description,
@@ -437,7 +441,7 @@ class Inventory extends React.Component {
           stock_No: this.state.stock_No,
           taxType: mTaxType,
           tax_Rate: this.state.tax_Rate,
-          uid: this.state.uid,
+          uid: uid,
           warehouse: this.state.warehouse
         }
         itemsRef.push(item);
@@ -623,7 +627,6 @@ class Inventory extends React.Component {
               /* display form */
               return(
 
-    //  ref: ''
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
@@ -660,18 +663,28 @@ class Inventory extends React.Component {
                 <label>Lead Time (Days):</label><br/>
                 <input class="w3-input" type="number" name="lead_Time_Days" placeholder="0.0" onChange={this.handleChange} value={this.state.lead_Time_Days} />
                 <input class="w3-input" type="text" name="location" placeholder="Location" onChange={this.handleChange} value={this.state.location} />
+
                 <label>Cost Price: </label>
                 <input class="w3-input" type="number" name="cost_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.cost_Price} />   
                 <label>Sale Price:</label>   
                 <input class="w3-input" type="number" name="sale_Price" placeholder="0.0" onChange={this.handleChange} value={this.state.sale_Price} />
                 <label>Tax Type:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="taxType" onChange={this.handleChange}>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="" onChange={this.handleChange}>
                   {this.state.taxOptions.map((tax,index) => {
                     return (
                       <option value ={tax.value}>{tax.label}</option>
                     )
                   })}
+               </select><br/>
+                <label>Stock Issue Method:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu2 = input} name="taxType" onChange={this.handleChange}>
+                  {this.state.stockIssueOptions.map((issueoption) => {
+                    return (
+                      <option value ={issueoption}>{issueoption}</option>
+                    )
+                  })}
                </select>
+
                 <p>Tax Rate: {this.state.tax_Rate}</p>
                 <input class="w3-input" type="text" name="warehouse" placeholder="Store Name" onChange={this.handleChange} value={this.state.warehouse} />
                   <button type="submit" name="save" style={{maxWidth: "20%"}}>Save</button>
