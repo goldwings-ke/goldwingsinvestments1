@@ -10,7 +10,7 @@ function Sidebar() {
       <button className="hamburger" type="button" onClick={showSidebar}>
         <div></div>
       </button>
-      <ul onClick={showSidebar} style={{display: "block"}}>
+      <ul onClick={showSidebar} >
         <li style={{backgroundColor: "orange"}}><Link to="/">Home</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/customers">Customers</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/invoices">Invoices</Link></li>
