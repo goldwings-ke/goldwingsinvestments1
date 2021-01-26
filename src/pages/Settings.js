@@ -8,6 +8,7 @@ import ChartOfAccounts from './ChartOfAccounts';
 import PaymentType from './PaymentType';
 import ClassGroup from './ClassGroup';
 import WareHouse from './WareHouse';
+import FixedAssets from './FixedAssets';
 
 class Settings extends React.Component {
   constructor(){
@@ -114,6 +115,10 @@ class Settings extends React.Component {
       this.setState({
         displayPane: "warehouse"
       })    
+    if(index === 8)
+      this.setState({
+        displayPane: "assets"
+      })    
   }
 
   render(){
@@ -174,6 +179,10 @@ class Settings extends React.Component {
       return(
         <WareHouse/>
       );
+     else if(this.state.displayPane === "assets")
+      return(
+        <FixedAssets/>
+      );
       else{
        return(
        <div>  
@@ -203,7 +212,13 @@ class Settings extends React.Component {
             <h3 style={{width: "100%"}} >Inventory Warehouse<br/>
             🏪</h3>
           </div>  
-        </div>  
+        </div>
+        <div class="w3-row-padding">
+          <div class="w3-col s4" onClick={() => this.handleClick(8)}>
+            <h3 style={{width: "100%"}} >Fixed Assets🏠<br/>
+</h3>
+          </div>
+         </div>  
        </div>
  
         );
