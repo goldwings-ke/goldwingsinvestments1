@@ -4,8 +4,7 @@ import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css'
-import mclassNameOption from './Constants';
+import '../style.css';
 
 class FixedAssets extends React.Component {
   constructor(){
@@ -130,8 +129,29 @@ class FixedAssets extends React.Component {
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
         let newState = [];
-
+        const classNameUnique = this.state.classNameUnique.slice();
+        const classNoMaped = this.state.classNoMaped.slice();
+        const depreciationRatesMaped = this.state.depreciationRatesMaped.slice();
+        const classNoUnique = this.state.classNoUnique.slice();
+        const depreciationRatesUnique = this.state.depreciationRatesUnique.slice();
         for (let item in items) {
+          let classname = items[item].asset_Class_Name;
+          var n = classNameUnique.indexOf(classname);
+            if(n === -1 ) {//false
+              classNameUnique.push(classname);
+              classNoMaped.push(items[item].asset_Class_No);
+              depreciationRatesMaped.push(items[item].depreciation_Rate);
+            }
+          let classno = items[item].asset_Class_No;
+          var n = classNoUnique.indexOf(classno);
+            if(n === -1 ) {//false
+              classNoUnique.push(classno);
+            }
+          let depreciation_Rate = items[item].depreciation_Rate;
+          var n = depreciationRatesUnique.indexOf(depreciation_Rate);
+            if(n === -1 ) {//false
+              depreciationRatesUnique.push(depreciation_Rate);
+            }
           newState.push({
             asset_Class_Name: items[item].asset_Class_Name,
             asset_Class_No: items[item].asset_Class_No,
@@ -150,6 +170,14 @@ class FixedAssets extends React.Component {
             useful_Life: items[item].useful_Life
           });
         }// end for loop
+            
+        this.setState({
+          classNameUnique: classNameUnique,
+          classNoMaped: classNoMaped,
+          depreciationRatesMaped: depreciationRatesMaped,
+          classNoUnique: classNoUnique,
+          depreciationRatesUnique: depreciationRatesUnique
+        })
         this.setState({
           items: newState,
           itemsOrig: newState,
@@ -173,14 +201,24 @@ class FixedAssets extends React.Component {
         var remainingLetters = searchTerm.slice(1);
         searchTerm=firstLetter+remainingLetters;
         
-       {this.state.items.filter(item => item.name.
+       {this.state.items.filter(item => item.asset_Name.
         includes(e.target.value)).map(filteredItem => (
           newState.push({   
+            asset_Class_Name: filteredItem.asset_Class_Name,
+            asset_Class_No: filteredItem.asset_Class_No,
+            asset_Name: filteredItem.asset_Name,
+            asset_No: filteredItem.asset_No,
             businessKeyId: filteredItem.businessKeyId,
-            log: filteredItem.log,
-            name: filteredItem.name,
+            cost: filteredItem.cost,
+            depreciation_Method: filteredItem.depreciation_Method,
+            depreciation_Rate: filteredItem.depreciation_Rate,
+            description: filteredItem.description,
+            group: filteredItem.group,
             id: filteredItem.id,
-            uid: filteredItem.uid
+            log: filteredItem.log,
+            logedInUserId: filteredItem.logedInUserId,
+            residual_Value: filteredItem.residual_Value,
+            useful_Life: filteredItem.useful_Life
           })
         ))}
 
@@ -438,7 +476,7 @@ class FixedAssets extends React.Component {
                       <option value ={depr} selected>{depr}</option>
                     ) 
                     else return (
-                      <option value ={depr.depreciation_rate}>{depr.depreciation_rate}</option>
+                      <option value ={depr}>{depr}</option>
                     )
                   })}
                </select><br/>

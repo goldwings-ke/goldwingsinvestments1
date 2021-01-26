@@ -553,7 +553,9 @@ class Employees extends React.Component {
 
   {/*<img src={Dome} alt="Dome Tent" />*/}
   <h1>⛺</h1>
-
+  <div className="w3-container w3-teal" >
+        <p>EMPLOYEES</p>
+  </div>
   <div className="w3-container w3-pink" >
     <p>Wedding Tents, Dome Tents, Chairs, Tables, Seat Covers, Table Cloths, Lights.. services etc </p>
   </div>

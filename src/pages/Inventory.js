@@ -274,7 +274,7 @@ class Inventory extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.stock_Name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({
             businessKeyId: filteredItem.businessKeyId,
             cost_Price: filteredItem.cost_Price,
@@ -718,7 +718,9 @@ class Inventory extends React.Component {
 
   {/*<img src={Dome} alt="Dome Tent" />*/}
   <h1>⛺</h1>
-
+  <div className="w3-container w3-teal" >
+        <p>INVENTORY</p>
+  </div>
   <div className="w3-container w3-pink" >
     <p>Wedding Tents, Dome Tents, Chairs, Tables, Seat Covers, Table Cloths, Lights.. services etc </p>
   </div>

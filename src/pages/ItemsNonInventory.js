@@ -232,7 +232,7 @@ class ItemsNonInventory extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.itemName.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({
           id: filteredItem.id,
           barCode: filteredItem.barCode, 
@@ -580,7 +580,9 @@ class ItemsNonInventory extends React.Component {
 
   {/*<img src={Dome} alt="Dome Tent" />*/}
   <h1>⛺</h1>
-
+  <div className="w3-container w3-teal" >
+        <p>NON-INVENTORY ITEMS</p>
+  </div>
   <div className="w3-container w3-pink" >
     <p>Wedding Tents, Dome Tents, Chairs, Tables, Seat Covers, Table Cloths, Lights.. services etc </p>
   </div>
