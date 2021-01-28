@@ -4,7 +4,7 @@ import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css'
+import '../styl.css'
 
 class PaymentType extends React.Component {
   constructor(){

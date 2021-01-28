@@ -3,6 +3,7 @@ import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
 import '../style.css'
 
+
 class Customers extends React.Component {
   constructor(){
     super();

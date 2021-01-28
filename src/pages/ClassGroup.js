@@ -1,10 +1,8 @@
 import React from "react";
-import React from "react";
-
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css'
+import '../mystyle.css';
 
 class ClassGroup extends React.Component {
   constructor(){
@@ -315,7 +313,7 @@ class ClassGroup extends React.Component {
               );
               return(
               <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Class Group.." onChange={this.handleChange}/>
-              <ul>{listItems}</ul></div>
+              <ul style={{listStyle: "NONE"}}>{listItems}</ul></div>
               );    
             }
             else{
