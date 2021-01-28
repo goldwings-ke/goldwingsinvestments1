@@ -11,7 +11,7 @@ function Sidebar() {
         <div></div>
       </button> 
       <ul onClick={showSidebar} style={{columns: "2"}}>
-        <li style={{backgroundColor: "orange"}}><Link to="/">Home</Link></li>
+        <li style={{backgroundColor: "orange"}}><Link to="/">Home👑</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/customers">Customers</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/invoices">Invoices</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/suppliers">Suppliers</Link></li>

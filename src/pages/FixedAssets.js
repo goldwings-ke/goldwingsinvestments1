@@ -465,7 +465,7 @@ class FixedAssets extends React.Component {
                       <option value ={group.value}>{group.label}</option>
                     )  
                   })}
-                </select><br/
+                </select><br/>
                   <label>New  Group:</label><br/>
                     <input class="w3-input" type="text" name="group" placeholder="New Group" onChange={this.handleChange} ref = {(input)=> this.menu9 = input} />
                 <label>Asset Class No:</label><br/>
@@ -538,7 +538,7 @@ class FixedAssets extends React.Component {
  <div className="w3-container" style={{width: "80%"}}>
  <div className="w3-container" >
     <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Fixed Assets List</button>
-    <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
+    <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New👑</button>
   </div>
  
   {renderAuthButton()}
