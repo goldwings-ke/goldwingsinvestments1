@@ -457,7 +457,7 @@ class FixedAssets extends React.Component {
                 <label>Group:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu8 = input} >
                   {this.state.groupOptions.map((group) => {
-                  if(group.value === this.state.asset_Class_No)
+                  if(group.value === this.state.group)
                     return (
                       <option value ={group.value} selected>{group.label}</option>
                     )
