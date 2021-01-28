@@ -4,7 +4,7 @@ import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../styl.css'
+import '../mystyle.css'
 
 class PaymentType extends React.Component {
   constructor(){
@@ -314,7 +314,7 @@ class PaymentType extends React.Component {
               );
               return(
               <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Payment Type.." onChange={this.handleChange}/>
-              <ul>{listItems}</ul></div>
+              <ul style={{listStyleType: "none"}}>{listItems}</ul></div>
               );    
             }
             else{

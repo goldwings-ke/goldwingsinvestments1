@@ -9,7 +9,7 @@ import ItemsNonInventory from "./pages/ItemsNonInventory";
 import Inventory from "./pages/Inventory";
 import Settings from "./pages/Settings"
 import Sidebar from "./components/Sidebar";
-import "./App.css";
+import "./mystyle.css";
 
 function App() {
   return (

@@ -4,7 +4,7 @@ import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css';
+import '../mystyle.css';
 
 class FixedAssets extends React.Component {
   constructor(){
@@ -25,8 +25,8 @@ class FixedAssets extends React.Component {
       classNoMaped: ["I","II","III","III","III","IV"],
       depreciationRatesUnique: [25,12.5],
       depreciationRatesMaped: [25,12.5,12.5,12.5,12.5,12.5],
-
       depreciationMethodOptions: ["Straight Line","Reducing Balance"],
+      groupOptions: [],
       depreciationOptions:[],
       bizinfo: [],
       asset_Class_Name: '',
@@ -134,7 +134,19 @@ class FixedAssets extends React.Component {
         const depreciationRatesMaped = this.state.depreciationRatesMaped.slice();
         const classNoUnique = this.state.classNoUnique.slice();
         const depreciationRatesUnique = this.state.depreciationRatesUnique.slice();
+        let mgroupOption = [];
+        let groupUnique = [];
         for (let item in items) {
+          let group = items[item].group;
+          var n = groupUnique.indexOf(group);
+            if(n === -1 ) {//false
+              mgroupOption.push({
+                value: group,
+                label: group
+              });
+              groupUnique.push(group);
+            }
+
           let classname = items[item].asset_Class_Name;
           var n = classNameUnique.indexOf(classname);
             if(n === -1 ) {//false
@@ -176,7 +188,8 @@ class FixedAssets extends React.Component {
           classNoMaped: classNoMaped,
           depreciationRatesMaped: depreciationRatesMaped,
           classNoUnique: classNoUnique,
-          depreciationRatesUnique: depreciationRatesUnique
+          depreciationRatesUnique: depreciationRatesUnique,
+          groupOptions: mgroupOption
         })
         this.setState({
           items: newState,
@@ -441,7 +454,20 @@ class FixedAssets extends React.Component {
                     <input class="w3-input" type="text" name="asset_Name" placeholder="Asset Name" onChange={this.handleChange} value={this.state.asset_Name} />
                     <input class="w3-input" type="text" name="asset_No" placeholder="Asset No" onChange={this.handleChange} value={this.state.asset_No} />
                     <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
-                    <input class="w3-input" type="text" name="group" placeholder="Group by" onChange={this.handleChange} value={this.state.group} />
+                <label>Group:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu8 = input} >
+                  {this.state.groupOptions.map((group) => {
+                  if(group.value === this.state.asset_Class_No)
+                    return (
+                      <option value ={group.value} selected>{group.label}</option>
+                    )
+                  else return (
+                      <option value ={group.value}>{group.label}</option>
+                    )  
+                  })}
+                </select>
+                  <label>New  Group:</label><br/>
+                    <input class="w3-input" type="text" name="group" placeholder="New Group" onChange={this.handleChange} ref = {(input)=> this.menu9 = input} />
                 <label>Asset Class No:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu = input} name="asset_Class_No" onChange={this.handleChange}>
                   {this.state.classNoUnique.map((depr) => {

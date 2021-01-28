@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../style.css';
+import '../mystyle.css';
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase';
 import ReactTable from "react-table"; 

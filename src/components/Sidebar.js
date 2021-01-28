@@ -9,8 +9,8 @@ function Sidebar() {
     <nav className={sidebar ? "sidebar active" : "sidebar"}>
       <button className="hamburger" type="button" onClick={showSidebar}>
         <div></div>
-      </button>
-      <ul onClick={showSidebar} >
+      </button> 
+      <ul onClick={showSidebar} style={{columns: "2"}}>
         <li style={{backgroundColor: "orange"}}><Link to="/">Home</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/customers">Customers</Link></li>
         <li style={{backgroundColor: "orange"}}><Link to="/invoices">Invoices</Link></li>
