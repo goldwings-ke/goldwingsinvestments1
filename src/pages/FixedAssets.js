@@ -465,7 +465,7 @@ class FixedAssets extends React.Component {
                       <option value ={group.value}>{group.label}</option>
                     )  
                   })}
-                </select>
+                </select><br/
                   <label>New  Group:</label><br/>
                     <input class="w3-input" type="text" name="group" placeholder="New Group" onChange={this.handleChange} ref = {(input)=> this.menu9 = input} />
                 <label>Asset Class No:</label><br/>
