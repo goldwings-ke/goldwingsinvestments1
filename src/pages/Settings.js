@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css'
+import '../mystyle.css'
 import TaxSettings from './TaxSettings';
 import Currency from './Currency';
 import ChartOfAccounts from './ChartOfAccounts';

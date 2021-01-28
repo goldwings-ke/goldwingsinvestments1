@@ -3,7 +3,7 @@ import React from "react";
 import React, {Component} from "react";
 import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase.js';
-import '../style.css'
+import '../mystyle.css'
 
 const systemAccountsArray = [
             ["100","Fixed_Assets","Fixed Assets","0","1","100","true"],
