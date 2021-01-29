@@ -493,7 +493,7 @@ class Customers extends React.Component {
           }
     }  
     return (
- <div className="w3-container" style={{width: "80%"}}>
+ <div className="w3-container" >
   <div className="w3-container w3-teal" >
     <h1>Goldwings Investments Limited</h1>
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
