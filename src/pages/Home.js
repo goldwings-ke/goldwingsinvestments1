@@ -157,7 +157,7 @@ class Home extends React.Component {
         return;
       }
     var m_user = firebase.auth().currentUser;
-    var uid = m_user.uid;
+    var uid = m_user.uid; 
 
     var saved = "Saved!"; 
     var itemsRef = null;
@@ -203,7 +203,6 @@ class Home extends React.Component {
         }
          itemsRef.push(item);
       }
-
       
       this.setState({
         displayPane: 'list',
