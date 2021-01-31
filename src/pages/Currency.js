@@ -145,7 +145,7 @@ class Currency extends React.Component {
         searchTerm=firstLetter+remainingLetters;
 
        {this.state.items.filter(item => item.country.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({            
             country: filteredItem.country,
             log: filteredItem.log,
@@ -358,7 +358,7 @@ class Currency extends React.Component {
           }
     }  
     return (
- <div className="w3-container" style={{width: "80%"}}>
+ <div className="w3-container" >
  <div className="w3-container" >
     <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Currency List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>

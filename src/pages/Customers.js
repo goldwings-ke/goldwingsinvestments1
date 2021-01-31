@@ -207,7 +207,7 @@ class Customers extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({
             id: filteredItem.id,
             currency: filteredItem.currency, 
@@ -264,34 +264,51 @@ class Customers extends React.Component {
     var saved = "Saved!"; 
     var itemsRef = null;
        if(this.state.isExists){
-        itemsRef = firebase.database().ref('customers/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('customers/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
+        const item = {
+          id: this.state.id,
+          balance: '0',
+          billing_address: this.state.billing_address,
+          business_identifier: this.state.business_identifier,
+          code: this.state.code,
+          credit_limit: this.state.credit_limit,
+          currency: this.state.currency,
+          delivery_address: this.state.delivery_address,
+          email_address: this.state.email_address,
+          invoices: '0',
+          log: n,
+          name: this.state.name,
+          phone_contact1: this.state.phone_contact1,
+          phone_contact2: this.state.phone_contact2,
+          tax_no: this.state.tax_no,
+          uid: uid,
+          businessKeyId: businessKeyId
+        }
+        itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('customers/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
-      }
-      const item = {
-        balance: '0',
-        billing_address: this.state.billing_address,
-        business_identifier: this.state.business_identifier,
-        code: this.state.code,
-        credit_limit: this.state.credit_limit,
-        currency: this.state.currency,
-        delivery_address: this.state.delivery_address,
-        email_address: this.state.email_address,
-        invoices: '0',
-        log: n,
-        name: this.state.name,
-        phone_contact1: this.state.phone_contact1,
-        phone_contact2: this.state.phone_contact2,
-        tax_no: this.state.tax_no,
-        uid: uid,
-        businessKeyId: businessKeyId
-      }
-      if(this.state.isExists)
-        itemsRef.set(item);
-      else
+        itemsRef = firebase.database().ref('customers/'+uid+'/'+businessKeyId);
+        const item = {
+          balance: '0',
+          billing_address: this.state.billing_address,
+          business_identifier: this.state.business_identifier,
+          code: this.state.code,
+          credit_limit: this.state.credit_limit,
+          currency: this.state.currency,
+          delivery_address: this.state.delivery_address,
+          email_address: this.state.email_address,
+          invoices: '0',
+          log: n,
+          name: this.state.name,
+          phone_contact1: this.state.phone_contact1,
+          phone_contact2: this.state.phone_contact2,
+          tax_no: this.state.tax_no,
+          uid: uid,
+          businessKeyId: businessKeyId
+        }
         itemsRef.push(item);
+      }
       
       this.setState({
         displayPane: 'list',
@@ -495,7 +512,7 @@ class Customers extends React.Component {
     return (
  <div className="w3-container" >
   <div className="w3-container w3-teal" >
-    <h1>Goldwings Investments Limited</h1>
+    <h1>{businessName}</h1>
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }
