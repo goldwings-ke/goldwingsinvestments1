@@ -560,7 +560,7 @@ class ItemsNonInventory extends React.Component {
                   })}
                </select>
                   <input class="w3-input" type="text" name="taxType" placeholder="Tax Type" onChange={this.handleChange} value={this.state.taxType} />
-                  <button type="submit" name="save" style={{maxWidth: "20%"}}>Save</button>
+                  <button type="submit" name="save" >Save</button>
                 </form>
                 </div>
               );
@@ -568,9 +568,9 @@ class ItemsNonInventory extends React.Component {
           }
     }  
     return (
- <div className="w3-container" style={{width: "80%"}}>
+ <div className="w3-container" >
   <div className="w3-container w3-teal" >
-    <h1>Goldwings Investments Limited</h1>
+    <h1>{businessName}</h1>
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }
