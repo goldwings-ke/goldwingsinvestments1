@@ -11,8 +11,8 @@ class Home extends React.Component {
       viewItems :[],
       user: null,
       optionsOne: [],
-      bizinfo: [],
-      bizinfoOrig: [],
+      items: [],
+      itemsOrig: [],
       address: '',
       allowClientQuotations: false,
       businessName: '',
@@ -88,8 +88,9 @@ class Home extends React.Component {
         })
         }
           this.setState({
-            bizinfo: newState,
-            bizinfoOrig: newState
+            items: newState,
+            itemsOrig: newState,
+            isExists: true
           })
     });
    
@@ -110,7 +111,7 @@ class Home extends React.Component {
         var remainingLetters = searchTerm.slice(1);
         searchTerm=firstLetter+remainingLetters;
         
-       {this.state.bizinfo.filter(item => item.businessName.
+       {this.state.items.filter(item => item.businessName.
         includes(searchTerm)).map(filteredItem => (
           newState.push({
             address: filteredItem.address,
@@ -132,7 +133,7 @@ class Home extends React.Component {
         ))}
 
         this.setState({
-          bizinfo: newState
+          items: newState
         })
       }
     } else
@@ -161,6 +162,7 @@ class Home extends React.Component {
 
     var saved = "Saved!"; 
     var itemsRef = null;
+ 
        if(this.state.isExists){
         itemsRef = firebase.database().ref('business_info/'+uid+'/'+this.state.id);
         saved = "Updated!";
@@ -204,11 +206,7 @@ class Home extends React.Component {
          itemsRef.push(item);
       }
       
-      this.setState({
-        displayPane: 'list',
-        items: this.state.bizinfoOrig,
-        isExists: true
-      })
+      this.handleClick(1);
       
       alert(saved);
   }
@@ -217,7 +215,7 @@ class Home extends React.Component {
     if(index === 1)
       this.setState({
         displayPane: 'list',
-        items: this.state.bizinfoOrig,
+        items: this.state.itemsOrig,
         isExists: true
     })
     if(index === 2){
@@ -244,7 +242,7 @@ class Home extends React.Component {
     })
   var m_user = firebase.auth().currentUser;
   var uid = m_user.uid; 
-  var myvalue = this.state.bizinfo.map((item) =>{
+  var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
         this.setState({
@@ -255,13 +253,13 @@ class Home extends React.Component {
             emailOffice: item.emailOffice,
             id: itemId,
             imageName: item.imageName,
-            imgURL: items.imgURL,
+            imgURL: item.imgURL,
             locationCountry: item.locationCountry,
             log: item.log,
             system_set: item.system_set,
             taxIdentifier: item.taxIdentifier,
             telephoneHome: item.telephoneHome,
-            telephoneOffice: itemtelephoneOffice,
+            telephoneOffice: item.telephoneOffice,
             uid: uid
         })
       }
@@ -272,7 +270,7 @@ class Home extends React.Component {
   clear(){
     this.setState({
       address: '',
-      allowClientQuotations: flase,
+      allowClientQuotations: false,
       businessName: '',
       emailHome: '',
       emailOffice: '',
@@ -294,7 +292,7 @@ class Home extends React.Component {
    var m_user = firebase.auth().currentUser;
    var uid = m_user.uid;
    var businessKeyId ="";
-   var mBizInfo = this.state.bizinfo.slice();
+   var mBizInfo = this.state.items.slice();
     for(let x of mBizInfo){
        businessKeyId = x.id;
     }
@@ -317,7 +315,7 @@ class Home extends React.Component {
     var bizinfoSet = false;
     const footer = () => {
       if(this.state.user){
-        mBizInfo = this.state.bizinfo.slice();
+        mBizInfo = this.state.items.slice();
           for(let x of mBizInfo){
             businessName = x.businessName;
             address = x.address ;
@@ -343,7 +341,7 @@ class Home extends React.Component {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
        else{
-               if(this.state.initialized == false){
+               if(this.state.initialized === false){
                 this.setState({
                   initialized: true
                 })
@@ -351,7 +349,7 @@ class Home extends React.Component {
                 return (<div>Loading..</div>);
               }
             if(this.state.displayPane === 'list'){
-              const listItems = this.state.bizinfo.map((item) => 
+              const listItems = this.state.items.map((item) => 
               <li key={item.id}>
                <h3>{item.businessName} </h3>
                <p>Contact: <strong>{item.telephoneHome} {item.telephoneOffice}</strong></p>
@@ -371,31 +369,17 @@ class Home extends React.Component {
                 <div>
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                 <form class="w3-container" onSubmit={this.handleSubmit} >
-                <input class="w3-input" type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} value={this.state.firstName} />
-                <input class="w3-input" type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} value={this.state.middleName} />
-                <input class="w3-input" type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} value={this.state.lastName} />
-                <label>Full Name:</label>
-                <p class="w3-input" >{this.state.fullName}</p>
-                <input class="w3-input" type="text" name="code" placeholder="Code No" onChange={this.handleChange} value={this.state.code} />                
-                <input class="w3-input" type="text" name="phone_contact1" placeholder="Phone Contact 1" onChange={this.handleChange} value={this.state.phone_contact1} />
-                <input class="w3-input" type="text" name="phone_contact2" placeholder="Phone Contact 2" onChange={this.handleChange} value={this.state.phone_contact2} />                                            
-                <input class="w3-input" type="text" name="tax_no" placeholder="Tax No." onChange={this.handleChange} value={this.state.tax_no} />                                                
-                <input class="w3-input" type="text" name="email_address" placeholder="Email Address" onChange={this.handleChange} value={this.state.email_address} />
-                <input class="w3-input" type="text" name="billing_address" placeholder="Billing Address" onChange={this.handleChange} value={this.state.billing_address} />
-                <input class="w3-input" type="text" name="business_identifier" placeholder="Business Identifier" onChange={this.handleChange} value={this.state.business_identifier}/>
-                <input class="w3-input" type="text" name="credit_limit" placeholder="Credit Limit" onChange={this.handleChange} value={this.state.credit_limit} />
-                <input class="w3-input" type="text" name="delivery_address" placeholder="Delivery Address" onChange={this.handleChange} value={this.state.delivery_address} />
-                      
-                 <div class="w3-dropdown-hover">
-                  <button class="w3-button">Select Currency!</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border">
-                   <span class="w3-bar-item w3-button" onClick={this.handleChange} value="">Link 1</span>
-                   <span class="w3-bar-item w3-button">Link 2</span>
-                   <span class="w3-bar-item w3-button">Link 3</span>
-                  </div>
-                 </div>
-                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.currency} />
-                  <button type="submit" name="save" style={{width: "20%"}}>Save</button>
+                <input class="w3-input" type="text" name="businessName" placeholder="Business Name" onChange={this.handleChange} value={this.state.businessName} />
+                <input class="w3-input" type="text" name="address" placeholder="Address" onChange={this.handleChange} value={this.state.address} />
+                <input class="w3-input" type="text" name="locationCountry" placeholder="Country" onChange={this.handleChange} value={this.state.locationCountry} />
+                <input class="w3-input" type="text" name="taxIdentifier" placeholder="Tax Identifier" onChange={this.handleChange} value={this.state.taxIdentifier} />
+                <input class="w3-input" type="text" name="telephoneHome" placeholder="Telephone Home" onChange={this.handleChange} value={this.state.telephoneHome} />
+                <input class="w3-input" type="text" name="telephoneOffice" placeholder="Telephone Office" onChange={this.handleChange} value={this.state.telephoneOffice} />                
+                <input class="w3-input" type="text" name="emailHome" placeholder="Email Home" onChange={this.handleChange} value={this.state.emailHome} />
+                <input class="w3-input" type="text" name="emailOffice" placeholder="Email Office" onChange={this.handleChange} value={this.state.emailOffice} />
+                <label>Allow Client Quotations</label>
+                <input class="w3-input" type="checkbox" name="allowClientQuotations" placeholder="Allow Client Quotations" checked={this.state.allowClientQuotations} value={this.state.allowClientQuotations} onChange={this.handleChange} value={this.state.allowClientQuotations}/>
+                  <button type="submit" name="save" >Save</button>
                 </form>
                 </div>
               );

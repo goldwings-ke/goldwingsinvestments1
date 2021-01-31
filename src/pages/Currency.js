@@ -205,7 +205,8 @@ class Currency extends React.Component {
           symbol : this.state.symbol,
           uid: this.state.uid,
           id: this.state.id,
-          businessKeyId: businessKeyId
+          businessKeyId: businessKeyId,
+          base_currency: this.state.base_currency
         }
         itemsRef.set(item);
       }    
@@ -217,7 +218,8 @@ class Currency extends React.Component {
             name: this.state.name,
             symbol : this.state.symbol,
             uid: this.state.uid,
-            businessKeyId: businessKeyId
+            businessKeyId: businessKeyId,
+            base_currency: this.state.base_currency
         }
         itemsRef.push(item);
       }
@@ -346,8 +348,9 @@ class Currency extends React.Component {
                     <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
                     <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
                     <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
+                    <label>Base Currency:</label>
                     <input type="checkbox" checked={this.state.base_currency} ref="complete" onChange={this.handleChange} value={this.state.base_currency}/>
-                    <button type="submit" name="save" style={{width: "20%"}}>Save</button>
+                    <button type="submit" name="save" >Save</button>
                   </form>
                  </div>
               );
