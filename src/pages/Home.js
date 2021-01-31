@@ -28,6 +28,7 @@ class Home extends React.Component {
       telephoneHome: '',
       telephoneOffice: '',
       uid: '',
+      logedInBusinessId: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -136,6 +137,11 @@ class Home extends React.Component {
           items: newState
         })
       }
+    } else if(e.target.name==='logedInBusinessId'){
+      this.setState({
+        [e.target.name]: e.target.checked
+      })
+      
     } else
       this.setState({
         [e.target.name]: e.target.value
@@ -354,7 +360,13 @@ class Home extends React.Component {
                <h3>{item.businessName} </h3>
                <p>Contact: <strong>{item.telephoneHome} {item.telephoneOffice}</strong></p>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
+                {item.id !== '-M7sDl_6e3H4iUPEEyuI' ? 
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
+                :
+                null
+                }
+                <label> Loged In: </label>
+                <input type="checkbox" name="logedInBusinessId" checked={this.state.logedInBusinessId} onChange={this.handleChange}/>
                </p>
              </li>
               );
