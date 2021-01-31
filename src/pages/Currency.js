@@ -22,7 +22,7 @@ class Currency extends React.Component {
       log: 0,
       name: '',
       symbol : '',
-      uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
+      uid: '',
       id: '',
       businessKeyId: '',
       base_currency: false,

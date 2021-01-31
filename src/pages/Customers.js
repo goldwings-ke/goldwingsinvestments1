@@ -161,7 +161,7 @@ class Customers extends React.Component {
               let symbol = currency_items[mCurrencyItem].symbol;
               count++;
               currencyOption.push({
-                value: name,
+                value: symbol,
                 label: symbol
               });
               newCurrencyState.push({
@@ -233,8 +233,6 @@ class Customers extends React.Component {
           items: newState
         })
       }
-    } else if(e.target === 'currency'){
-
     } else
       this.setState({
         [e.target.name]: e.target.value
@@ -493,15 +491,18 @@ class Customers extends React.Component {
                 <input class="w3-input" type="text" name="credit_limit" placeholder="Credit Limit" onChange={this.handleChange} value={this.state.credit_limit} />
                 <input class="w3-input" type="text" name="delivery_address" placeholder="Delivery Address" onChange={this.handleChange} value={this.state.delivery_address} />
                       
-                 <div class="w3-dropdown-hover">
-                  <button class="w3-button">Select Currency!</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border">
-                   <span class="w3-bar-item w3-button" onClick={this.handleChange} value="">Link 1</span>
-                   <span class="w3-bar-item w3-button">Link 2</span>
-                   <span class="w3-bar-item w3-button">Link 3</span>
-                  </div>
-                 </div>
-                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.currency} />
+               <label>Currency:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu = input} name="currency" onChange={this.handleChange}>
+                  {this.state.optionsOne.map((cur) => {
+                    if(cur === this.state.currency)
+                    return (
+                      <option value ={cur.value} selected>{cur.label}</option>
+                    ) 
+                    else return (
+                      <option value ={cur.value}>{cur.label}</option>
+                    )
+                  })}
+               </select>
                   <button type="submit" name="save" >Save</button>
                 </form>
                 </div>

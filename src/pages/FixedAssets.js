@@ -44,6 +44,7 @@ class FixedAssets extends React.Component {
       logedInUserId: '',
       residual_Value: 0,
       useful_Life: 0,
+      newgroup: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -215,7 +216,7 @@ class FixedAssets extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.asset_Name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({   
             asset_Class_Name: filteredItem.asset_Class_Name,
             asset_Class_No: filteredItem.asset_Class_No,
@@ -239,10 +240,23 @@ class FixedAssets extends React.Component {
           items: newState
         })
       }
+    } else if(e.target.name === 'group' || e.target.name === 'newgroup') {
+      var group = "";
+      var newgroup = "";
+        if(e.target.name === 'group'){
+            group = e.target.value;
+        } else {
+           group = e.target.value;
+           newgroup = e.target.value;
+        }
+        this.setState({
+             group: group,
+          newgroup: group
+        })
     } else
-      this.setState({
+        this.setState({
         [e.target.name]: e.target.value
-      })
+        })
   }
 
   handleSubmit(e){
@@ -455,7 +469,7 @@ class FixedAssets extends React.Component {
                     <input class="w3-input" type="text" name="asset_No" placeholder="Asset No" onChange={this.handleChange} value={this.state.asset_No} />
                     <input class="w3-input" type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} />
                 <label>Group:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu8 = input} >
+                <select id = "dropdown" ref = {(input)=> this.menu8 = input} name="group" onChange={this.handleChange}>
                   {this.state.groupOptions.map((group) => {
                   if(group.value === this.state.group)
                     return (
@@ -467,7 +481,7 @@ class FixedAssets extends React.Component {
                   })}
                 </select><br/>
                   <label>New  Group:</label><br/>
-                    <input class="w3-input" type="text" name="group" placeholder="New Group" onChange={this.handleChange} ref = {(input)=> this.menu9 = input} />
+                    <input class="w3-input" type="text" name="newgroup" placeholder="New Group" onChange={this.handleChange} ref = {(input)=> this.menu9 = input} value={this.state.newgroup} />
                 <label>Asset Class No:</label><br/>
                 <select id = "dropdown" ref = {(input)=> this.menu = input} name="asset_Class_No" onChange={this.handleChange}>
                   {this.state.classNoUnique.map((depr) => {
@@ -527,7 +541,7 @@ class FixedAssets extends React.Component {
                <input class="w3-input" type="number" name="useful_Life" placeholder="0.0" onChange={this.handleChange} value={this.state.useful_Life} />
                <label>Residual Value</label>
                <input class="w3-input" type="number" name="residual_Value" placeholder="0.0" onChange={this.handleChange} value={this.state.residual_Value} />
-                    <button type="submit" name="save" style={{width: "20%"}}>Save</button>
+                    <button type="submit" name="save" >Save</button>
                   </form>
                  </div>
               );
@@ -535,7 +549,7 @@ class FixedAssets extends React.Component {
           }
     }  
     return (
- <div className="w3-container" style={{width: "80%"}}>
+ <div className="w3-container" >
  <div className="w3-container" >
     <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Fixed Assets List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New👑</button>
