@@ -138,7 +138,7 @@ class ClassGroup extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({   
             businessKeyId: filteredItem.businessKeyId,
             log: filteredItem.log,
@@ -323,7 +323,7 @@ class ClassGroup extends React.Component {
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                   <form class="w3-container" onSubmit={this.handleSubmit} >
                     <input class="w3-input" type="text" name="name" placeholder="Name" onChange={this.handleChange} value={this.state.name} />
-                    <button type="submit" name="save" style={{width: "20%"}}>Save</button>
+                    <button type="submit" name="save" >Save</button>
                   </form>
                  </div>
               );
@@ -331,7 +331,7 @@ class ClassGroup extends React.Component {
           }
     }  
     return (
- <div className="w3-container" style={{width: "80%"}}>
+ <div className="w3-container" >
  <div className="w3-container" >
     <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Class | Group List</button>
     <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
