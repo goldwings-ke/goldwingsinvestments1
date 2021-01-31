@@ -168,7 +168,7 @@ class Employees extends React.Component {
               let symbol = currency_items[mCurrencyItem].symbol;
               count++;
               currencyOption.push({
-                value: name,
+                value: symbol,
                 label: symbol
               });
               newCurrencyState.push({
@@ -216,7 +216,7 @@ class Employees extends React.Component {
         searchTerm=firstLetter+remainingLetters;
         
        {this.state.items.filter(item => item.name.
-        includes(e.target.value)).map(filteredItem => (
+        includes(searchTerm)).map(filteredItem => (
           newState.push({
             id: filteredItem.id,
             currency: filteredItem.currency, 
@@ -302,38 +302,58 @@ class Employees extends React.Component {
     var saved = "Saved!"; 
     var itemsRef = null;
        if(this.state.isExists){
-        itemsRef = firebase.database().ref('employees/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('employees/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
+        const item = {
+          id: this.state.id,
+          balance: '0',
+          billing_address: this.state.billing_address,
+          business_identifier: this.state.business_identifier,
+          code: this.state.code,
+          credit_limit: this.state.credit_limit,
+          currency: this.state.currency,
+          delivery_address: this.state.delivery_address,
+          email_address: this.state.email_address,
+          invoices: '0',
+          log: n,
+          firstName: this.state.firstName,
+          middleName: this.state.middleName,
+          lastName: this.state.lastName,
+          fullName: this.state.fullName,
+          phone_contact1: this.state.phone_contact1,
+          phone_contact2: this.state.phone_contact2,
+          tax_no: this.state.tax_no,
+          uid: uid,
+          businessKeyId: businessKeyId
+        }
+        itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('employees/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
-      }
-      const item = {
-        balance: '0',
-        billing_address: this.state.billing_address,
-        business_identifier: this.state.business_identifier,
-        code: this.state.code,
-        credit_limit: this.state.credit_limit,
-        currency: this.state.currency,
-        delivery_address: this.state.delivery_address,
-        email_address: this.state.email_address,
-        invoices: '0',
-        log: n,
-        firstName: this.state.firstName,
-        middleName: this.state.middleName,
-        lastName: this.state.lastName,
-        fullName: this.state.fullName,
-        phone_contact1: this.state.phone_contact1,
-        phone_contact2: this.state.phone_contact2,
-        tax_no: this.state.tax_no,
-        uid: uid,
-        businessKeyId: businessKeyId
-      }
-      if(this.state.isExists)
-        itemsRef.set(item);
-      else
+        itemsRef = firebase.database().ref('employees/'+uid+'/'+businessKeyId);
         itemsRef.push(item);
-      
+        const item = {
+          balance: '0',
+          billing_address: this.state.billing_address,
+          business_identifier: this.state.business_identifier,
+          code: this.state.code,
+          credit_limit: this.state.credit_limit,
+          currency: this.state.currency,
+          delivery_address: this.state.delivery_address,
+          email_address: this.state.email_address,
+          invoices: '0',
+          log: n,
+          firstName: this.state.firstName,
+          middleName: this.state.middleName,
+          lastName: this.state.lastName,
+          fullName: this.state.fullName,
+          phone_contact1: this.state.phone_contact1,
+          phone_contact2: this.state.phone_contact2,
+          tax_no: this.state.tax_no,
+          uid: uid,
+          businessKeyId: businessKeyId
+        }
+      }
+
       this.setState({
         displayPane: 'list',
         items: this.state.itemsOrig,
@@ -377,7 +397,7 @@ class Employees extends React.Component {
   var myvalue = this.state.items.map((item) =>{
       let myid=item.id;
       if(myid === itemId){
-        /*this.menu.value = item.currency;*/
+        /* this.menu.value = item.currency; */
         this.setState({
             id: itemId,
             balance: item.balance,
@@ -524,15 +544,18 @@ class Employees extends React.Component {
                 <input class="w3-input" type="text" name="credit_limit" placeholder="Credit Limit" onChange={this.handleChange} value={this.state.credit_limit} />
                 <input class="w3-input" type="text" name="delivery_address" placeholder="Delivery Address" onChange={this.handleChange} value={this.state.delivery_address} />
                       
-                 <div class="w3-dropdown-hover">
-                  <button class="w3-button">Select Currency!</button>
-                  <div class="w3-dropdown-content w3-bar-block w3-border">
-                   <span class="w3-bar-item w3-button" onClick={this.handleChange} value="">Link 1</span>
-                   <span class="w3-bar-item w3-button">Link 2</span>
-                   <span class="w3-bar-item w3-button">Link 3</span>
-                  </div>
-                 </div>
-                  <input class="w3-input" type="text" name="currency" placeholder="Currency.." onChange={this.handleChange} value={this.state.currency} />
+               <label>Currency:</label><br/>
+                <select id = "dropdown" ref = {(input)=> this.menu = input} name="currency" onChange={this.handleChange}>
+                  {this.state.optionsOne.map((cur) => {
+                    if(cur === this.state.currency)
+                    return (
+                      <option value ={cur.value} selected>{cur.label}</option>
+                    ) 
+                    else return (
+                      <option value ={cur.value}>{cur.label}</option>
+                    )
+                  })}
+               </select>
                   <button type="submit" name="save" >Save</button>
                 </form>
                 </div>
