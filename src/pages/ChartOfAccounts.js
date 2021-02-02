@@ -587,7 +587,7 @@ class ChartOfAccounts extends React.Component {
             if(this.state.displayPane === 'list'){
               const accounts = this.state.items.slice(1);
               const listItems = accounts.map((item) =>
-              {item.account_name === '--EXPENSES--' ||  item.account_name === 'INCOME' ?
+ 
               <li key={item.id}>
                <h3>{item.account_name} {item.account_no} </h3>
                <p><strong>{item.account_type}<br/>
@@ -596,9 +596,6 @@ class ChartOfAccounts extends React.Component {
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
              </li>
-                : null
-
-               }
               );
               return(
               <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Account Name" onChange={this.handleChange}/>
