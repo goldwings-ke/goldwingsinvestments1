@@ -14,6 +14,7 @@ class Settings extends React.Component {
   constructor(){
   super();
     this.state = {
+      user: null,
       bizinfo: [],
       displayPane: "settings"
     }
@@ -43,7 +44,7 @@ class Settings extends React.Component {
 
   initialize(){
    var m_user = firebase.auth().currentUser;
-   var uid = this.state.uid;//m_user.uid;
+   var uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
   
@@ -135,7 +136,7 @@ class Settings extends React.Component {
       if(this.state.user){
         mBizInfo = this.state.bizinfo.slice();
           for(let x of mBizInfo){
-            businessName = x.name;
+            businessName = x.businessName;
             address = x.address ;
             emailHome = x.emailHome;
             emailOffice = x.emailOffice ;
@@ -144,7 +145,7 @@ class Settings extends React.Component {
             telephoneHome = x.telephoneHome;
             telephoneOffice = x.telephoneOffice;
           }
-        var mFooter = address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
+        var mFooter = businessName+" : "+ address+" "+locationCountry + " " +telephoneHome+ " "+ telephoneOffice+" " +emailHome + " " +emailOffice+ " "+
         taxIdentifier;
         return(
           <div>{mFooter}</div>
@@ -155,7 +156,9 @@ class Settings extends React.Component {
       )
     }
     const renderDefault = () =>{
-      if(this.state.displayPane === "tax")
+      if(this.state.user == null)
+       return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
+      else if(this.state.displayPane === "tax")
       return(
         <TaxSettings/>
       );
@@ -186,37 +189,38 @@ class Settings extends React.Component {
       else{
        return(
        <div>  
-        <h1>Settings (Click to select)</h1>
+        <h1>(Click to select)</h1>
         <div class="w3-row-padding">
-          <div class="w3-col s4" onClick={() => this.handleClick(2)}>
-            <h3 style={{width: "100%"}} >Chart of Accounts<br/>
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(2)}>
+            <h3 >Chart of Accounts &nbsp;
             <i class="fas fa-book"></i></h3>
           </div>
-          <div class="w3-col s4" onClick={() => this.handleClick(3)}>
-            <h3 style={{width: "100%"}} >Tax Settings<br/>
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(3)}>
+            <h3 >Tax Settings  &nbsp;
             <i class="fas fa-balance-scale"></i></h3>
           </div>
-          <div class="w3-col s4">
-            <h3 style={{width: "100%"}} onClick={() => this.handleClick(4)}>Currencies<br/>
+        </div>
+        <div class="w3-row-padding">
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(4)}>
+            <h3 >Currencies &nbsp;
             <i className="fa fa-usd"></i></h3>
           </div>
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(5)}>
+            <h3 >Payment Type &nbsp;💰</h3>
+          </div>
         </div>
         <div class="w3-row-padding">
-          <div class="w3-col s4" onClick={() => this.handleClick(5)}>
-            <h3 style={{width: "100%"}} >Payment Type<br/>💰</h3>
-          </div>
-          <div class="w3-col s4" onClick={() => this.handleClick(6)}>
-            <h3 style={{width: "100%"}} >Group By Class<br/>📋</h3>
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(6)}>
+            <h3>Group By Class &nbsp;📋</h3>
           </div> 
-          <div class="w3-col s4" onClick={() => this.handleClick(7)}>
-            <h3 style={{width: "100%"}} >Inventory Warehouse<br/>
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(7)}>
+            <h3>Inventory Warehouse &nbsp;
             🏪</h3>
           </div>  
-        </div>
-        <div class="w3-row-padding">
-          <div class="w3-col s4" onClick={() => this.handleClick(8)}>
-            <h3 style={{width: "100%"}} >Fixed Assets🏠<br/>
-</h3>
+        </div>  
+        <div class="w3-row-padding" >
+          <div class="w3-col s6 w3-center" onClick={() => this.handleClick(8)}>
+            <h3>Fixed Assets &nbsp;🏠</h3>
           </div>
          </div>  
        </div>
@@ -227,9 +231,9 @@ class Settings extends React.Component {
     return (
  
 
-    <div className="w3-container" style={{width: "80%"}}>
+    <div className="w3-container" >
       <div className="w3-container w3-teal" >
-        <h1>Goldwings Investments Limited</h1>
+        <h1>{businessName}</h1>
         {this.state.user ? <button onClick={this.logout}>Log Out</button>
         : null
         }

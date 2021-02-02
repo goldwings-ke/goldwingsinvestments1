@@ -59,6 +59,13 @@ class ChartOfAccounts extends React.Component {
       optionsTwo: [],
       optionsThree: [],
       bizinfo: [],
+      optionsFA: [],
+      optionsCA: [],
+      optionsLTL: [],
+      optionsCL: [],
+      optionsEquity: [],
+      optionsIncome: [],
+      optionsExpenses: [],
       account_name: '',
       account_no: 0,
       account_type: '',
@@ -156,7 +163,17 @@ class ChartOfAccounts extends React.Component {
        .orderByChild('account_no');
         itemsRef.on('value', (snapshot) => {
         let items = snapshot.val();
+
         let newState = [];
+        let count_fa = 0;
+        let count_ca = 0;
+        let count_cl = 0;
+        let count_ltl = 0;
+        let count_equity = 0;
+        let count_income = 0;
+        let count_expenses = 0;
+        let new_account_type = false;
+        let mAccountName = "";
           newState.push({
           account_name: "NONE",
           account_no: 0,
@@ -174,7 +191,63 @@ class ChartOfAccounts extends React.Component {
           });
 
         for (let item in items) {
-          newState.push({
+          if(items[item].account_type === 'Fixed_Assets' && count_fa === 0){
+            mAccountName = "--FIXED ASSETS--";
+            new_account_type = true;
+            count_fa = 1;
+          }        
+          if(items[item].account_type === 'Current_Assets' && count_ca === 0){
+            mAccountName = "--CURRENT ASSETS--";
+            new_account_type = true;
+            count_ca = 1;
+          }        
+          if(items[item].account_type === 'Current_Liability' && count_cl === 0){
+            mAccountName = "--CURRENT LIABILITY--";
+            new_account_type = true;
+            count_cl = 1;
+          }        
+          if(items[item].account_type === 'Long_Term_Liability' && count_ltl === 0){
+            mAccountName = "--LONG TERM LIABILITY--";
+            new_account_type = true;
+            count_ltl = 1;
+          }
+          if(items[item].account_type === 'Equity' && count_equity === 0){
+            mAccountName = "--EQUITY--";
+            new_account_type = true;
+            count_equity = 1;
+          }        
+          if(items[item].account_type === 'Income' && count_income === 0){
+            mAccountName = "--INCOME--";
+            new_account_type = true;
+            count_income = 1;
+          }
+          if(items[item].account_type === 'Expenses' && count_expenses === 0){
+            mAccountName = "--EXPENSES--";
+            new_account_type = true;
+            count_expenses = 1;
+          }
+          if(new_account_type)
+          {
+            count_expenses = 1;
+            newState.push({
+              account_name: mAccountName,
+              account_no: 0,
+              account_type: "NONE",
+              businessKeyId: businessKeyId,
+              custom_account_no: '',
+              depth: 0,
+              log: 0,
+              main_account_no: 0,
+              position: 0,
+              sub_account_of: -1,
+              system_account: true,
+              uid: uid,
+              id: "NONE"
+            });
+          }
+          new_account_type = false;
+
+          newState.push({ 
           account_name: items[item].account_name,
           account_no: items[item].account_no,
           account_type: items[item].account_type,
@@ -265,6 +338,7 @@ class ChartOfAccounts extends React.Component {
       this.setState({
         [e.target.name]: e.target.value
       })
+ /*    
     if(e.target.name === 'account_type'){
       let newState = [];
        {this.state.items.filter(item => item.account_type.
@@ -290,6 +364,7 @@ class ChartOfAccounts extends React.Component {
             items: newState
           })
     }
+  */  
   }
 
   handleSubmit(e){
@@ -497,7 +572,7 @@ class ChartOfAccounts extends React.Component {
   }
 
   render(){
-
+  
     const renderAuthButton = () => {
       if(this.state.user == null)
        return <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>;
@@ -511,7 +586,8 @@ class ChartOfAccounts extends React.Component {
               }
             if(this.state.displayPane === 'list'){
               const accounts = this.state.items.slice(1);
-              const listItems = accounts.map((item) => 
+              const listItems = accounts.map((item) =>
+              {item.account_name === '--EXPENSES--' ||  item.account_name === 'INCOME' ?
               <li key={item.id}>
                <h3>{item.account_name} {item.account_no} </h3>
                <p><strong>{item.account_type}<br/>
@@ -520,6 +596,9 @@ class ChartOfAccounts extends React.Component {
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
                </p>
              </li>
+                : null
+
+               }
               );
               return(
               <div><input class="w3-input" type="text" name="searchbar" placeholder="Search Account Name" onChange={this.handleChange}/>
@@ -550,20 +629,19 @@ class ChartOfAccounts extends React.Component {
                    </select><br/>
  
                 <label>SubAccount Of:</label><br/>
-                <select id = "dropdown" ref = {(input)=> this.menu2 = input} onChange={this.handleChange} name="sub_account_of">
-                  {this.state.optionsThree.map((item) => {
-                    
+       <select id = "dropdown" ref = {(input)=> this.menu2 = input} onChange={this.handleChange} name="sub_account_of">    
+                  {this.state.items.map((item) => {
                   var rfbDepth = item.depth;
                   var rfbAccountName = item.account_name;
                   var rfbAccountNo = item.account_no;
                   var rfbSubAccountNo = item.sub_account_of;
                   var myTxt ="";
                   var gap = '⬜';
-                  var gap2 =<span>nbsp;</span>
+                  var gap2 =<span>&nbsp;</span>
                     for(let i=0;i<rfbDepth;i++)
                       myTxt = myTxt.concat(gap);
                       myTxt = myTxt.concat(rfbAccountName);
-                      if(rfbAccountNo === this.state.sub_account_of)
+                      if(rfbAccountNo === this.state.sub_account_of && rfbAccountName !== '--FIXED ASSETS--' && rfbAccountName !== '--CURRENT ASSETS--' && rfbAccountName !== '--CURRENT LIABILITY--' && rfbAccountName !== '--LONG TERM LIABILITY--' && rfbAccountName !== '--EQUITY--' && rfbAccountName !== '--EXPENSES--' && rfbAccountName !== '--INCOME--')
                         return (
                           <option value ={rfbSubAccountNo} selected>{myTxt}</option>
                         )
@@ -571,8 +649,8 @@ class ChartOfAccounts extends React.Component {
                         return (
                           <option value ={rfbSubAccountNo}>{myTxt}</option>
                         )
-                    
                   })}
+                  
                 </select>
                 <p>Sub Account of No: {this.state.sub_account_of}</p>
                     <input class="w3-input" type="text" name="account_no" placeholder="Custom Account No" onChange={this.handleChange} value={this.state.custom_account_no} />

@@ -240,6 +240,32 @@ class FixedAssets extends React.Component {
           items: newState
         })
       }
+    }  else if(e.target.name === 'asset_Class_Name' || e.target.name === 'newasset_Class_Name') {
+      var  asset_Class_Name = "";
+      var newasset_Class_Name = "";
+        if(e.target.name === 'asset_Class_Name'){
+            asset_Class_Name = e.target.value;
+        } else {
+           asset_Class_Name = e.target.value;
+           newasset_Class_Name = e.target.value;
+        }
+        this.setState({
+             asset_Class_Name: asset_Class_Name,
+          newasset_Class_Name: asset_Class_Name
+        })
+    } else if(e.target.name === 'asset_Class_No' || e.target.name === 'newasset_Class_No') {
+      var  asset_Class_No = "";
+      var newasset_Class_No = "";
+        if(e.target.name === 'asset_Class_No'){
+            asset_Class_No = e.target.value;
+        } else {
+           asset_Class_No = e.target.value;
+           newasset_Class_No = e.target.value;
+        }
+        this.setState({
+             asset_Class_No: asset_Class_No,
+          newasset_Class_No: asset_Class_No
+        })
     } else if(e.target.name === 'group' || e.target.name === 'newgroup') {
       var group = "";
       var newgroup = "";
@@ -252,6 +278,19 @@ class FixedAssets extends React.Component {
         this.setState({
              group: group,
           newgroup: group
+        })
+    } else if(e.target.name === 'depreciation_Method' || e.target.name === 'newdepreciation_Method') {
+      var depreciation_Method = "";
+      var newdepreciation_Method = "";
+        if(e.target.name === 'depreciation_Method'){
+            depreciation_Method = e.target.value;
+        } else {
+           depreciation_Method = e.target.value;
+           newdepreciation_Method = e.target.value;
+        }
+        this.setState({
+             depreciation_Method: depreciation_Method,
+          newdepreciation_Method: depreciation_Method
         })
     } else
         this.setState({
@@ -333,7 +372,7 @@ class FixedAssets extends React.Component {
       
       
       alert(saved);
-      clear();
+      this.clear();
       this.initialize2();
       
   }

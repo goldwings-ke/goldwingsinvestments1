@@ -21,7 +21,7 @@ class Currency extends React.Component {
       country: '',
       log: 0,
       name: '',
-      symbol : '',
+      msymbol: '',
       uid: '',
       id: '',
       businessKeyId: '',
@@ -115,7 +115,7 @@ class Currency extends React.Component {
             country: items[item].country,
             log: items[item].log,
             name: items[item].name,
-            symbol : items[item].symbol,
+            msymbol: items[item].symbol,
             uid: items[item].uid,
             id: item,
             businessKeyId: businessKeyId,
@@ -150,7 +150,7 @@ class Currency extends React.Component {
             country: filteredItem.country,
             log: filteredItem.log,
             name: filteredItem.name,
-            symbol : filteredItem.symbol,
+            msymbol: filteredItem.msymbol,
             uid: filteredItem.uid,
             id: filteredItem.id,
             businessKeyId: filteredItem.businessKeyId,
@@ -202,7 +202,7 @@ class Currency extends React.Component {
           country: this.state.country,
           log: n,
           name: this.state.name,
-          symbol : this.state.symbol,
+          symbol: this.state.msymbol,
           uid: this.state.uid,
           id: this.state.id,
           businessKeyId: businessKeyId,
@@ -216,7 +216,7 @@ class Currency extends React.Component {
             country: this.state.country,
             log: n,
             name: this.state.name,
-            symbol : this.state.symbol,
+            symbol: this.state.msymbol,
             uid: this.state.uid,
             businessKeyId: businessKeyId,
             base_currency: this.state.base_currency
@@ -274,7 +274,7 @@ class Currency extends React.Component {
             country: item.country,
             log: item.log,
             name: item.name,
-            symbol : item.symbol,
+            msymbol: item.msymbol,
             uid: item.uid,
             id: itemId,
             businessKeyId: item.businessKeyId,
@@ -290,7 +290,7 @@ class Currency extends React.Component {
       country: '',
       log: 0,
       name: '',
-      symbol : '',
+      msymbol: '',
       id: '',
       isExists: false,
     })
@@ -327,7 +327,7 @@ class Currency extends React.Component {
             if(this.state.displayPane === 'list'){
               const listItems = this.state.items.map((item) => 
               <li key={item.id}>
-               <h3>{item.name} {item.symbol} </h3>
+               <h3>{item.name} {item.msymbol} </h3>
                <p><strong>{item.country}</strong></p>
                 <p><button onClick={() => this.viewItem(item.id)}>View</button>
                 <button onClick={() => this.removeItem(item.id)} style={{marginLeft: "10px"}}>Remove</button>
@@ -346,7 +346,7 @@ class Currency extends React.Component {
         <button class="w3-button w3-yellow" style={{float: "right"}} type = "submit" onClick={() => this.clear()}>Clear</button>
                   <form class="w3-container" onSubmit={this.handleSubmit} >
                     <input class="w3-input" type="text" name="name" placeholder="Currency Name" onChange={this.handleChange} value={this.state.name} />
-                    <input class="w3-input" type="text" name="symbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.symbol} />
+                    <input class="w3-input" type="text" name="msymbol" placeholder="Symbol" onChange={this.handleChange} value={this.state.msymbol} />
                     <input class="w3-input" type="text" name="country" placeholder="Country" onChange={this.handleChange} value={this.state.country} />
                     <label>Base Currency:</label>
                     <input type="checkbox" checked={this.state.base_currency} ref="complete" onChange={this.handleChange} value={this.state.base_currency}/>

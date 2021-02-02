@@ -555,7 +555,7 @@ class Employees extends React.Component {
                       <option value ={cur.value}>{cur.label}</option>
                     )
                   })}
-               </select>
+               </select><br/>
                   <button type="submit" name="save" >Save</button>
                 </form>
                 </div>
