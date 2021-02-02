@@ -317,6 +317,16 @@ class Home extends React.Component {
     var taxIdentifier = "";
     var telephoneHome = "";
     var telephoneOffice = "";
+    const renderBizName = () =>{ 
+      var mybizinfo = this.state.items.slice();
+      var mbusinessName = "";
+          for(let x of mybizinfo){
+            mbusinessName = x.businessName ;
+          }
+          return(
+            <span>{mbusinessName}</span>
+          )
+    }
     var mBizInfo = [];
     var bizinfoSet = false;
     const footer = () => {
@@ -401,7 +411,7 @@ class Home extends React.Component {
     return (
  <div className="w3-container" >
   <div className="w3-container w3-teal" >
-    <h1>Blue Lines</h1>
+    <h1>Blue Lines : {renderBizName()}</h1>
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }

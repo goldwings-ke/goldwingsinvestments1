@@ -332,11 +332,8 @@ class ChartOfAccounts extends React.Component {
         alert("Please Enter Account Name!");
         return;
       }
-    var account_no = this.state.account_no;
-      if(!account_no){
-        alert("Please Enter Account no!");
-        return;
-      }
+    var account_no = 0;
+ 
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
     var businessKeyId ="";
@@ -394,6 +391,8 @@ class ChartOfAccounts extends React.Component {
       })
       
       alert(saved);
+      this.clear();
+      this.initialize2();
       
   }
 

@@ -417,6 +417,16 @@ initialize(){
     var taxIdentifier = "";
     var telephoneHome = "";
     var telephoneOffice = "";
+    const renderBizName = () =>{ 
+      var mybizinfo = this.state.bizinfo.slice();
+      var mbusinessName = "";
+          for(let x of mybizinfo){
+            mbusinessName = x.businessName ;
+          }
+          return(
+            <span>{mbusinessName}</span>
+          )
+    }
     var mBizInfo = [];
     const footer = () => {
       if(this.state.user){
@@ -663,7 +673,7 @@ initialize(){
     return (
     <div className="w3-container" >
       <div className="w3-container w3-teal" >
-        <h1>{businessName}</h1>
+        <h1>{renderBizName()}</h1>
     {this.state.user ? <button onClick={this.logout}>Log Out</button>
       : null
     }

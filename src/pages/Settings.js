@@ -9,6 +9,7 @@ import PaymentType from './PaymentType';
 import ClassGroup from './ClassGroup';
 import WareHouse from './WareHouse';
 import FixedAssets from './FixedAssets';
+//import Dome from './Dome.jpg';
 
 class Settings extends React.Component {
   constructor(){
@@ -16,6 +17,7 @@ class Settings extends React.Component {
     this.state = {
       user: null,
       bizinfo: [],
+      businessName: '',
       displayPane: "settings"
     }
 
@@ -47,11 +49,12 @@ class Settings extends React.Component {
    var uid = m_user.uid;
    const companyRef = firebase.database().ref('business_info/'+
     uid+'/').orderByChild('id');   
-  
     companyRef.on('value',  snapshot => {
       var items = snapshot.val();
       var newState = [];
-        for (let item in items) {        
+      var businessName ="";
+        for (let item in items) {    
+          businessName: items[item].businessName;    
           newState.push({
          address:  items[item].address,
         //  allowClientQuotations: items[item].allowClientQuotations,
@@ -71,7 +74,8 @@ class Settings extends React.Component {
         })
         }
           this.setState({
-            bizinfo: newState
+            bizinfo: newState,
+            businessName: businessName
           })
     });
    
@@ -131,6 +135,17 @@ class Settings extends React.Component {
     var taxIdentifier = "";
     var telephoneHome = "";
     var telephoneOffice = "";
+ 
+    const renderBizName = () =>{ 
+      var mybizinfo = this.state.bizinfo.slice();
+      var mbusinessName = "";
+          for(let x of mybizinfo){
+            mbusinessName = x.businessName ;
+          }
+          return(
+            <span>{mbusinessName}</span>
+          )
+    }
     var mBizInfo = [];
     const footer = () => {
       if(this.state.user){
@@ -233,13 +248,13 @@ class Settings extends React.Component {
 
     <div className="w3-container" >
       <div className="w3-container w3-teal" >
-        <h1>{businessName}</h1>
+        <h1>{renderBizName()}</h1>
         {this.state.user ? <button onClick={this.logout}>Log Out</button>
         : null
         }
         <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Settings</button>
       </div>
-      <img src='/images/Dome.jpg' alt="Dome Tent" />
+      {/*<img src='/images/Dome.jpg' alt="Dome Tent" />*/}
       <h1>⛺</h1>
         <div className="w3-container w3-teal" >
         <p>SETTINGS</p>
