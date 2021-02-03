@@ -404,13 +404,17 @@ initialize(){
   removeItem(itemId) {
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
+    var businessKeyId ="";
+    var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
       const itemRef = firebase.database()
-      .ref(`/salesdaybook/${uid}/-M7sDl_6e3H4iUPEEyuI/${itemId}`);
+      .ref(`/salesdaybook/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
   }
 
   addRow(){
-    alert("ok here..")
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
     var mbusinessKeyId ="";
@@ -422,11 +426,8 @@ initialize(){
     var n = d.getTime();
     var newState =[];
     var mlineno = Math.max.apply(Math, myitemsInvoice.map(function(o) { return o.LINE_NO; }));
-    alert("line no: "+mlineno);
-    var a=10;
-    if(a < 100)
-    return;
-    
+  
+    mlineno = mlineno + 1;
       for(let x of mBizInfo){
         mbusinessKeyId = x.businessKeyId ;
       }
@@ -449,7 +450,7 @@ initialize(){
           INVOICE_NO: '',
           INVOICE_TYPE: '',
           ITEMS: '',
-          LINE_NO: 0,
+          LINE_NO: mlineno,
           MEMO: '',
           MYCLASS: '',
           NAME: '',

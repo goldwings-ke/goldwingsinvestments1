@@ -337,7 +337,6 @@ class ChartOfAccounts extends React.Component {
             depth: mdepth + 1
           })
       }else{
-        //alert(e.target.name+" : "+e.target.value);
       this.setState({
         [e.target.name]: e.target.value
       })
@@ -703,13 +702,16 @@ class ChartOfAccounts extends React.Component {
                   var rfbAccountName = item.account_name;
                   var rfbAccountNo = item.account_no;
                   var rfbSubAccountNo = item.sub_account_of;
+                  var divider = 0;
+                  if(rfbAccountName === '--FIXED ASSETS--' || rfbAccountName === '--CURRENT ASSETS--' || rfbAccountName === '--CURRENT LIABILITY--' || rfbAccountName === '--LONG TERM LIABILITY--' || rfbAccountName === '--EQUITY--' || rfbAccountName === '--INCOME--' || rfbAccountName === '--EXPENSES--')
+                  divider = 1;
                   var myTxt ="";
                   var gap = '⬜';
                   var gap2 =<span>&nbsp;</span>
                     for(let i=0;i<rfbDepth;i++)
                       myTxt = myTxt.concat(gap);
                       myTxt = myTxt.concat(rfbAccountName);
-                      if(rfbAccountNo === this.state.sub_account_of )
+                      if(rfbAccountNo === this.state.sub_account_of && divider === 0 )
                         return (
                           <option value ={rfbAccountName} selected>{myTxt}</option>
                         )
