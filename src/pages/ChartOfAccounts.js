@@ -351,19 +351,19 @@ class ChartOfAccounts extends React.Component {
         accountsMaxArray[6] = 799;//Expenses
     let accountType_orig = this.state.account_type;
     let index = 0;
-      if (accountType_orig.equals("Fixed_Assets"))
+      if (accountType_orig === "Fixed_Assets")
         index = 0;
-      if (accountType_orig.equals("Current_Assets"))
+      if (accountType_orig === "Current_Assets")
         index = 1;
-      if (accountType_orig.equals("Current_Liability"))
+      if (accountType_orig === "Current_Liability")
         index = 2;
-      if (accountType_orig.equals("Long_Term_Liability"))
+      if (accountType_orig === "Long_Term_Liability")
         index = 3;
-      if (accountType_orig.equals("Equity"))
+      if (accountType_orig === "Equity")
         index = 4;
-      if (accountType_orig.equals("Income"))
+      if (accountType_orig === "Income")
         index = 5;
-      if (accountType_orig.equals("Expenses"))
+      if (accountType_orig === "Expenses")
         index = 6;
     var accountIDValue =0;
     var depthValue = 0;
@@ -399,9 +399,8 @@ class ChartOfAccounts extends React.Component {
     } else 
     { // new sub account
       depthValue = 0;
-
      this.state.items.map((item) =>{
-        var accountNo = item.account_no();
+        var accountNo = item.account_no;
         var mysubaccountof = this.state.sub_account_of;
         if(accountNo === mysubaccountof){
           depthValue = item.depth;
@@ -410,7 +409,50 @@ class ChartOfAccounts extends React.Component {
           refValue = item.sub_account_of;
         }
       })
+
+            newaccountIDValue = 0;
+            newrefValue=accountIDValue;
+            newdepthValue=depthValue+1;
+            newmainAccountValue=mainAccountValue;
+            var incrementVal = 1;
+            var counter = 0;
+            for (let i = 0; i < depthValue; i++) {
+                incrementVal = incrementVal * 10;
+            }
+            incrementVal = 1 / incrementVal;
+            var c = accountIDValue + incrementVal;
+            var max = c + (incrementVal * 10);
+
+            for (let j = c; j < max; j = j + incrementVal) {
+                let taken = false;
+                this.state.items.map((item) =>{
+
+                    let mVal = item.account_no;
+                    if (mVal === j)
+                        taken = true;
+                })
+                if (taken === false && counter === 0) {
+                    counter = 1;
+                    newaccountIDValue = j;
+                }
+            }
+            if(newaccountIDValue == 0){
+                alert("This account Name already has reached the limit of 9 sub accounts!");
+                return;
+            }
+
     }// end else
+    var txt= "A/c No: "+newaccountIDValue+"\n"+
+    "A/c Name: "+account_name+"\n"+
+    "A/c Type: "+this.menu.value+"\n"+
+    "Main A/c: "+newmainAccountValue+" :" +this.state.main_account_no+"\n"+
+    "Depth: "+newdepthValue+"\n"+
+    "Ref: "+newrefValue;
+    var a = 10;
+    if(a < 100){
+      alert(txt);
+      return;
+    }
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
     var businessKeyId ="";
@@ -610,7 +652,7 @@ class ChartOfAccounts extends React.Component {
                     <input class="w3-input" type="text" name="account_name" placeholder="Account Name" onChange={this.handleChange} value={this.state.account_name} />
                     <p>Account No: {this.state.account_no}</p>
                     <label>Account Type:</label><br/>
-                    <select id = "dropdown" ref = {(input)=> this.menu = input} onChange={this.handleChange} name="account_type">
+                    <select id = "dropdown" ref = {(input)=> this.menu = input} onChange={this.handleChange} name="account_type" >
                       {this.state.optionsOne.map((type,index) => {
                         if(this.state.account_type  === type)
                         return (
