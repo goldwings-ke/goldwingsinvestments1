@@ -332,8 +332,85 @@ class ChartOfAccounts extends React.Component {
         alert("Please Enter Account Name!");
         return;
       }
-    var account_no = 0;
- 
+    var accountsStartArray = [];
+        accountsStartArray[0] = 100;
+        accountsStartArray[1] = 200;
+        accountsStartArray[2] = 300;
+        accountsStartArray[3] = 400;
+        accountsStartArray[4] = 500;
+        accountsStartArray[5] = 600;
+        accountsStartArray[6] = 700;
+
+    var accountsMaxArray = [];
+        accountsMaxArray[0] = 199;//FA
+        accountsMaxArray[1] = 299;//CA
+        accountsMaxArray[2] = 399;//LTL
+        accountsMaxArray[3] = 499;//CL
+        accountsMaxArray[4] = 599;//EQ
+        accountsMaxArray[5] = 699;//Income
+        accountsMaxArray[6] = 799;//Expenses
+    let accountType_orig = this.state.account_type;
+    let index = 0;
+      if (accountType_orig.equals("Fixed_Assets"))
+        index = 0;
+      if (accountType_orig.equals("Current_Assets"))
+        index = 1;
+      if (accountType_orig.equals("Current_Liability"))
+        index = 2;
+      if (accountType_orig.equals("Long_Term_Liability"))
+        index = 3;
+      if (accountType_orig.equals("Equity"))
+        index = 4;
+      if (accountType_orig.equals("Income"))
+        index = 5;
+      if (accountType_orig.equals("Expenses"))
+        index = 6;
+    var accountIDValue =0;
+    var depthValue = 0;
+    var mainAccountValue = 0;
+    var accountIDValue = 0;
+    var refValue = 0;
+
+    var newaccountIDValue =0;
+    var  newrefValue = 0;
+    var  newdepthValue = 1;
+    var  newmainAccountValue = 0;
+    var count_no =0;
+    if(this.state.sub_account_of === 0){ // new account
+      for(let j=accountsStartArray[index];j<accountsMaxArray[index];j++){
+        var taken =false;
+        this.state.items.map((item) =>{
+          let myaccountno=item.account_no;
+          if(myaccountno === j){
+              taken = true;
+          }
+        });
+        if(taken === false && count_no ===0) {
+          newaccountIDValue = j;
+          newmainAccountValue = j;
+          count_no = 1;
+        }
+      }
+      if(newaccountIDValue == 0){
+        alert("Error..Cannot create new account! You have exceeded "+
+          " the total number of accounts permitted!");
+        return;
+      }
+    } else 
+    { // new sub account
+      depthValue = 0;
+
+     this.state.items.map((item) =>{
+        var accountNo = item.account_no();
+        var mysubaccountof = this.state.sub_account_of;
+        if(accountNo === mysubaccountof){
+          depthValue = item.depth;
+          mainAccountValue = item.main_account_no;
+          accountIDValue = accountNo;
+          refValue = item.sub_account_of;
+        }
+      })
+    }// end else
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
     var businessKeyId ="";
