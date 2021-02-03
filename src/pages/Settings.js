@@ -254,7 +254,7 @@ class Settings extends React.Component {
         }
         <button onClick={() => this.handleClick(1)} style={{marginLeft: "10px"}}>Settings</button>
       </div>
-      {/*<img src='/images/Dome.jpg' alt="Dome Tent" />*/}
+      {/*<img src={require('./pages/Dome.jpg')} alt="Dome Tent" />*/}
       <h1>⛺</h1>
         <div className="w3-container w3-teal" >
         <p>SETTINGS</p>

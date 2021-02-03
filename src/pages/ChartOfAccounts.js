@@ -54,8 +54,7 @@ class ChartOfAccounts extends React.Component {
       itemsOrig: [],// immutable
       viewItems :[],
       user: null,
-      optionsOne: ["Fixed_Assets","Current_Assets","Current_Liability",
-                "Long_Term_Liability","Equity","Income","Expenses"],
+      optionsOne: ["Fixed_Assets","Current_Assets","Current_Liability","Long_Term_Liability","Equity","Income","Expenses"],
       optionsTwo: [],
       optionsThree: [],
       bizinfo: [],
@@ -267,7 +266,20 @@ class ChartOfAccounts extends React.Component {
           isExists: true
         });
       }); 
-    
+/*    
+    const moptionsOne = ["Fixed_Assets","Current_Assets","Current_Liability","Long_Term_Liability","Equity","Income","Expenses"];
+    let newAccountTypeState = [];
+      for(let i = 0; i< moptionsOne.length;i++)
+        newAccountTypeState.push({
+          label: moptionsOne[i],
+          value: moptionsOne[i]
+        })
+        this.setState({
+          optionsOne: newAccountTypeState
+        });
+*/
+
+
   }
 
   handleChange(e){
@@ -306,11 +318,30 @@ class ChartOfAccounts extends React.Component {
             items: newState
           })
         }
-    } else
+    } else if(e.target.name === 'sub_account_of'){
+        const accountName = this.menu2.value;
+        var accountNo = 0;
+        var mainAccountValue = 0;
+        var mdepth = 0;
+        this.state.items.map((item) => {
+          if(item.account_name === accountName){
+            accountNo = item.account_no;
+            mainAccountValue = item.main_account_no;
+            mdepth = item.depth;
+          }
+        })
+        alert("A/c No: "+accountNo+"\n Main A/c: "+mainAccountValue);
+          this.setState({
+            sub_account_of: accountNo,
+            main_account_no: mainAccountValue,
+            depth: mdepth + 1
+          })
+      }else{
+        //alert(e.target.name+" : "+e.target.value);
       this.setState({
         [e.target.name]: e.target.value
       })
- 
+    }
   }
 
   handleSubmit(e){
@@ -444,7 +475,7 @@ class ChartOfAccounts extends React.Component {
     }// end else
     var txt= "A/c No: "+newaccountIDValue+"\n"+
     "A/c Name: "+account_name+"\n"+
-    "A/c Type: "+this.menu.value+"\n"+
+    "A/c Type: "+this.menu.value+": "+this.state.account_type+"\n"+
     "Main A/c: "+newmainAccountValue+" :" +this.state.main_account_no+"\n"+
     "Depth: "+newdepthValue+"\n"+
     "Ref: "+newrefValue;
@@ -653,14 +684,14 @@ class ChartOfAccounts extends React.Component {
                     <p>Account No: {this.state.account_no}</p>
                     <label>Account Type:</label><br/>
                     <select id = "dropdown" ref = {(input)=> this.menu = input} onChange={this.handleChange} name="account_type" >
-                      {this.state.optionsOne.map((type,index) => {
+                      {this.state.optionsOne.map((type) => {
                         if(this.state.account_type  === type)
                         return (
-                          <option value ={index} selected>{type}</option>
+                          <option value ={type} selected>{type}</option>
                         ) 
                         else
                         return (
-                          <option value ={index}>{type}</option>
+                          <option value ={type}>{type}</option>
                         ) 
                     })}
                    </select><br/>
@@ -680,11 +711,11 @@ class ChartOfAccounts extends React.Component {
                       myTxt = myTxt.concat(rfbAccountName);
                       if(rfbAccountNo === this.state.sub_account_of )
                         return (
-                          <option value ={rfbSubAccountNo} selected>{myTxt}</option>
+                          <option value ={rfbAccountName} selected>{myTxt}</option>
                         )
                       else
                         return (
-                          <option value ={rfbSubAccountNo}>{myTxt}</option>
+                          <option value ={rfbAccountName}>{myTxt}</option>
                         )
                   })}
                   

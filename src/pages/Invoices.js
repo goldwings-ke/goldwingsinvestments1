@@ -408,6 +408,70 @@ initialize(){
       .ref(`/salesdaybook/${uid}/-M7sDl_6e3H4iUPEEyuI/${itemId}`);
       itemRef.remove();
   }
+
+  addRow(){
+    alert("ok here..")
+    var m_user = firebase.auth().currentUser;
+    var uid = m_user.uid;
+    var mbusinessKeyId ="";
+    var mBizInfo = this.state.bizinfo.slice();
+    var myitemsInvoice = this.state.itemsInvoice.slice();
+    var myitemsAll = this.state.itemsAll.slice();
+    var minvoiceNoPushId = "";
+    var d = new Date();
+    var n = d.getTime();
+    var newState =[];
+    var mlineno = 0;
+      for(let x of mBizInfo){
+        mbusinessKeyId = x.businessKeyId ;
+      }
+      myitemsInvoice.map((item) =>{
+        minvoiceNoPushId = item.invoiceNoPushId;
+      })
+          newState.push({
+          ACCOUNT_NAME: '',
+          ADDRESS: '',
+          AMOUNT: 0,
+          COMMENT: '',
+          CUSTOMER_ORDER_DATE: '',
+          DELIVERY_DATE: '',
+          DELIVERY_NO: '',
+          DESCRIPTION: '',
+          DISPATCHED_DATE: '',
+          DISPATCHED_THRU: '',
+          INVOICE_DATE: '',
+          INVOICE_DATE_TXT: '',
+          INVOICE_NO: '',
+          INVOICE_TYPE: '',
+          ITEMS: '',
+          LINE_NO: 0,
+          MEMO: '',
+          MYCLASS: '',
+          NAME: '',
+          PRICE: 0,
+          PROFORMA_DATE: '',
+          PROFORMA_NO: '',
+          QTY: 0,
+          TAX: 0,
+          TAX_RATE: 0,
+          TAX_TYPE: 'NONE',
+          TOTAL: 0,
+          UNITS: '',
+          USER_NAME: '',
+          businessKeyId: mbusinessKeyId,
+          debtorsledger_contra_id: '',
+          id: '',
+          invoiceNoPushId: minvoiceNoPushId,
+          log: n,
+          loged_in_user_id: uid,
+          posting_contra_id: '',
+          uniqueRowId: '',
+          unique_id: 0
+        })
+        this.setState({
+          itemsInvoice: myitemsInvoice.concat(newState)
+        })
+}
   render() {
       var address ="";
     var businessName = "";
@@ -648,9 +712,10 @@ initialize(){
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
                 <span style={{color: "blue"}}>  Date: {invoiceDate}</span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
                   <label>Memo:</label><br/> 
-                <span ><textarea name="MEMO" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange}  style={{width: "100%"}} value={memo} ></textarea></span>
+                <span ><textarea name="MEMO" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange}  style={{width: "100%"}} value={memo} ></textarea></span><br/>
+                <button onClick={() => this.addRow()}>+Add Row</button>
                 
-                <div class="w3-responsive">
+                <div class="w3-responsive"> 
                   <table class="w3-table-all w3-tiny" >
                   <TableHeaders headers={headers} />
                   <tbody>
