@@ -421,7 +421,12 @@ initialize(){
     var d = new Date();
     var n = d.getTime();
     var newState =[];
-    var mlineno = 0;
+    var mlineno = Math.max.apply(Math, myitemsInvoice.map(function(o) { return o.LINE_NO; }));
+    alert("line no: "+mlineno);
+    var a=10;
+    if(a < 100)
+    return;
+    
       for(let x of mBizInfo){
         mbusinessKeyId = x.businessKeyId ;
       }
