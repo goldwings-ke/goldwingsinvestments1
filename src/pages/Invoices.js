@@ -83,6 +83,7 @@ class Invoices extends Component {
     this.handleRefresh = this.handleRefresh.bind(this);
     this.initialize = this.initialize.bind(this);
     this.initialize2 = this.initialize2.bind(this);
+    this.removeEmptyRow = this.removeEmptyRow.bind(this);
         this.uiConfig = {
       signInFlow: "popup",
       signInOptions: [
@@ -414,7 +415,7 @@ initialize(){
       itemRef.remove();
   }
 
-  removeEmptRow(e) {
+  removeEmptyRow(e) {
     var array = this.state.itemsInvoice.slice(); // make a separate copy of the array
     var index = array.indexOf(e.target.value)
     if (index !== -1) {
