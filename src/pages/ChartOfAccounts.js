@@ -478,9 +478,9 @@ class ChartOfAccounts extends React.Component {
     "Main A/c: "+newmainAccountValue+" :" +this.state.main_account_no+"\n"+
     "Depth: "+newdepthValue+"\n"+
     "Ref: "+newrefValue;
-    var a = 10;
-    if(a < 100)
-      return;
+  var con = (window.confirm(txt+"\n"+'Confirm save?')) 
+  if(con === false)
+    return;
 
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
@@ -497,11 +497,11 @@ class ChartOfAccounts extends React.Component {
 
         const data = {
           account_name: this.state.account_name,
-          account_no: this.state.account_no,
+          account_no: newaccountIDValue,
           account_type: this.state.account_type,
           businessKeyId: this.state.businessKeyId,
           custom_account_no: this.state.custom_account_no,
-          depth: this.state.depth,
+          depth: newdepthValue,
           log: n,
           main_account_no: this.state.main_account_no,
           position: this.state.position,
@@ -517,11 +517,11 @@ class ChartOfAccounts extends React.Component {
 
         const data = {
           account_name: this.state.account_name,
-          account_no: this.state.account_no,
+          account_no: newaccountIDValue,
           account_type: this.state.account_type,
           businessKeyId: this.state.businessKeyId,
           custom_account_no: this.state.custom_account_no,
-          depth: this.state.depth,
+          depth: newdepthValue,
           log: n,
           main_account_no: this.state.main_account_no,
           position: this.state.position,
@@ -546,7 +546,7 @@ class ChartOfAccounts extends React.Component {
 
   handleClick(index) {
     if(index === 1){
-      this.initialize();
+      this.initialize2();
       this.setState({
         displayPane: 'list',
         items: this.state.itemsOrig,
@@ -631,7 +631,14 @@ class ChartOfAccounts extends React.Component {
       itemRef.remove();
       
   }
-
+removePeople(e) {
+  var array = [...this.state.people]; // make a separate copy of the array
+  var index = array.indexOf(e.target.value)
+  if (index !== -1) {
+    array.splice(index, 1);
+    this.setState({people: array});
+  }
+}
   render(){
     let filteredItems = this.state.items.filter( (currentElement) => {
   // the current value is an object, so you can check on its properties
@@ -721,8 +728,8 @@ class ChartOfAccounts extends React.Component {
                   })}
                   
                 </select>
-                <p>Sub Account of No: {this.state.sub_account_of}</p>
-                    <input class="w3-input" type="text" name="account_no" placeholder="Custom Account No" onChange={this.handleChange} value={this.state.custom_account_no} />
+                  <p>Sub Account of No: {this.state.sub_account_of}</p>
+                  <input class="w3-input" type="text" name="custom_account_no" placeholder="Custom Account No" onChange={this.handleChange} value={this.state.custom_account_no} />
                     <button type="submit" name="save" >Save</button>
                   </form>
                  </div>
