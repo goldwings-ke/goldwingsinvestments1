@@ -631,14 +631,7 @@ class ChartOfAccounts extends React.Component {
       itemRef.remove();
       
   }
-removePeople(e) {
-  var array = [...this.state.people]; // make a separate copy of the array
-  var index = array.indexOf(e.target.value)
-  if (index !== -1) {
-    array.splice(index, 1);
-    this.setState({people: array});
-  }
-}
+
   render(){
     let filteredItems = this.state.items.filter( (currentElement) => {
   // the current value is an object, so you can check on its properties

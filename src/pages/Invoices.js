@@ -414,6 +414,14 @@ initialize(){
       itemRef.remove();
   }
 
+  removeEmptRow(e) {
+    var array = this.state.itemsInvoice.slice(); // make a separate copy of the array
+    var index = array.indexOf(e.target.value)
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({itemsInvoice: array});
+    }
+  }
   addRow(){
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
