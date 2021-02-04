@@ -479,10 +479,9 @@ class ChartOfAccounts extends React.Component {
     "Depth: "+newdepthValue+"\n"+
     "Ref: "+newrefValue;
     var a = 10;
-    if(a < 100){
-      alert(txt);
+    if(a < 100)
       return;
-    }
+
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
     var businessKeyId ="";
