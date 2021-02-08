@@ -7,7 +7,7 @@ class ItemsNonInventory extends React.Component {
   constructor(){
     super();
         this.state = {
-      path: 'non_inventory_items',
+      path: 'noninventoryitems',
       currentItem: '',
       username: '',
       items: [],
@@ -110,7 +110,7 @@ class ItemsNonInventory extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('non_inventory_items/'+
+      const itemsRef = firebase.database().ref('noninventoryitems/'+
        uid+'/'+businessKeyId)
        .orderByChild('category');
         itemsRef.on('value', (snapshot) => {
@@ -313,7 +313,7 @@ class ItemsNonInventory extends React.Component {
     var itemsRef = null;
 
       if(this.state.isExists){
-        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('noninventoryitems/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
         saved = "Updated!";
         const item = {
           barCode: this.state.barCode, 
@@ -334,7 +334,7 @@ class ItemsNonInventory extends React.Component {
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('noninventoryitems/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
         const item = {
           barCode: this.state.barCode, 
           businessKeyId:  this.state.businessKeyId,
@@ -451,7 +451,7 @@ class ItemsNonInventory extends React.Component {
        businessKeyId = x.businessKeyId ;
     }
       const itemRef = firebase.database()
-      .ref(`/non_inventory_items/${uid}/${businessKeyId}/${itemId}`);
+      .ref(`/noninventoryitems/${uid}/${businessKeyId}/${itemId}`);
       itemRef.remove();
       
   }
