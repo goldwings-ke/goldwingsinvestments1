@@ -139,7 +139,7 @@ class Invoices extends Component {
         var my_id = e.target.id;
         var targetName = e.target.name;
         var newState = [];
-      var myvalue = this.state.itemsInvoice.map((item) =>{
+      var myvalue = this.state.itemsInvoice.map((item) => {
       let myid=item.id;
       var ACCOUNT_NAME = item.ACCOUNT_NAME;
       var ADDRESS = item.ADDRESS;
@@ -188,21 +188,15 @@ class Invoices extends Component {
         if(targetName === 'QTY'){
           QTY = Number(e.target.value);
           recalc = true;
+          alert(QTY)
         }
         if(targetName === 'PRICE'){
           PRICE = Number(e.target.value);
           recalc = true;
         }
-        if(targetName === 'AMOUNT'){
-          AMOUNT = Number(e.target.value);
-          recalc = true;
-        }
-        if(targetName === 'TAX'){
-          TAX = Number(e.target.value);
-          recalc = true;
-        }
-        if(targetName === 'TOTAL'){
-          PRICE = Number(e.target.value);
+
+        if(targetName === 'TAX_RATE'){
+          TAX_RATE = Number(e.target.value);
           recalc = true;
         }
         if(recalc){
@@ -210,50 +204,51 @@ class Invoices extends Component {
             TAX = TAX_RATE * AMOUNT;
             TOTAL = TAX + AMOUNT;
         }
-        newState.push({
-          ACCOUNT_NAME: item.ACCOUNT_NAME,
-          ADDRESS: item.ADDRESS,
-          AMOUNT: item.AMOUNT,
-          COMMENT: item.COMMENT,
-          CUSTOMER_ORDER_DATE: item.CUSTOMER_ORDER_DATE,
-          DELIVERY_DATE: item.DELIVERY_DATE,
-          DELIVERY_NO: item.DELIVERY_NO,
-          DESCRIPTION: item.DESCRIPTION,
-          DISPATCHED_DATE: item.DISPATCHED_DATE,
-          DISPATCHED_THRU: item.DISPATCHED_THRU,
-          INVOICE_DATE: item.INVOICE_DATE,
-          INVOICE_DATE_TXT: item.INVOICE_DATE_TXT,
-          INVOICE_NO: item.INVOICE_NO,
-          INVOICE_TYPE: item.INVOICE_TYPE,
-          ITEMS: item.ITEMS,
-          LINE_NO: item.LINE_NO,
-          MEMO: item.MEMO,
-          MYCLASS: item.MYCLASS,
-          NAME: item.NAME,
-          PRICE: item.PRICE,
-          PROFORMA_DATE: item.PROFORMA_DATE,
-          PROFORMA_NO: item.PROFORMA_NO,
-          QTY: item.QTY,
-          TAX: item.TAX,
-          TAX_RATE: item.TAX_RATE,
-          TAX_TYPE: item.TAX_TYPE,
-          TOTAL: item.TOTAL,
-          UNITS: item.UNITS,
-          USER_NAME: item.USER_NAME,
-          businessKeyId: item.businessKeyId,
-          debtorsledger_contra_id: item.debtorsledger_contra_id,
-          id: item.id,
-          invoiceNoPushId: item.invoiceNoPushId,
-          log: item.log,
-          loged_in_user_id: item.loged_in_user_id,
-          posting_contra_id: item.posting_contra_id,
-          uniqueRowId: item.uniqueRowId,
-          unique_id: item.unique_id
-        })
       }
+        newState.push({
+          ACCOUNT_NAME: ACCOUNT_NAME,
+          ADDRESS: ADDRESS,
+          AMOUNT: AMOUNT,
+          COMMENT: COMMENT,
+          CUSTOMER_ORDER_DATE: CUSTOMER_ORDER_DATE,
+          DELIVERY_DATE: DELIVERY_DATE,
+          DELIVERY_NO: DELIVERY_NO,
+          DESCRIPTION: DESCRIPTION,
+          DISPATCHED_DATE: DISPATCHED_DATE,
+          DISPATCHED_THRU: DISPATCHED_THRU,
+          INVOICE_DATE: INVOICE_DATE,
+          INVOICE_DATE_TXT: INVOICE_DATE_TXT,
+          INVOICE_NO: INVOICE_NO,
+          INVOICE_TYPE: INVOICE_TYPE,
+          ITEMS: ITEMS,
+          LINE_NO: LINE_NO,
+          MEMO: MEMO,
+          MYCLASS: MYCLASS,
+          NAME: NAME,
+          PRICE: PRICE,
+          PROFORMA_DATE: PROFORMA_DATE,
+          PROFORMA_NO: PROFORMA_NO,
+          QTY: QTY,
+          TAX: TAX,
+          TAX_RATE: TAX_RATE,
+          TAX_TYPE: TAX_TYPE,
+          TOTAL: TOTAL,
+          UNITS: UNITS,
+          USER_NAME: USER_NAME,
+          businessKeyId: businessKeyId,
+          debtorsledger_contra_id: debtorsledger_contra_id,
+          id: id,
+          invoiceNoPushId: invoiceNoPushId,
+          log: log,
+          loged_in_user_id: loged_in_user_id,
+          posting_contra_id:posting_contra_id,
+          uniqueRowId: uniqueRowId,
+          unique_id: unique_id
+        })
+      
   });
         this.setState({
-          [e.target.name]: e.target.value
+          itemsInvoice: newState
         });
     }
 
