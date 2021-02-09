@@ -154,7 +154,7 @@ class Invoices extends Component {
       }
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
-    businessKeyId = "";
+    var businessKeyId = "";
     var mBizInfo = this.state.bizinfo.slice();
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
@@ -169,7 +169,7 @@ class Invoices extends Component {
           address:  this.state.address,
           businessName: this.state.businessName,
           emailHome: this.state.emailHome,
-          emailOffice: this.state.emailOffice,
+          emailOffice: this.state.emailOffice, 
           locationCountry: this.state.locationCountry,
           taxIdentifier: this.state.taxIdentifier,
           telephoneHome: this.state.telephoneHome,
