@@ -195,8 +195,9 @@ class Invoices extends Component {
           recalc = true;
         }
 
-        if(targetName === 'TAX_RATE'){
+        if(targetName === 'TAX_TYPE'){
           TAX_RATE = Number(e.target.value);
+          TAX_TYPE  = this.menu2.value;
           recalc = true;
         }
         if(recalc){
@@ -245,8 +246,8 @@ class Invoices extends Component {
           uniqueRowId: uniqueRowId,
           unique_id: unique_id
         })
+      });
       
-  });
         this.setState({
           itemsInvoice: newState
         });
@@ -985,12 +986,12 @@ initialize(){
                     );
                 })}
               </select>                
-                <td style={{width: lenStr[2]}}><input type="number" name="QTY" id={item.id} onChange={this.handleChange} defaultValue={item.QTY} /></td>
-                <td style={{width: lenStr[3]}}><input type="number" name="PRICE" id={item.id} onChange={this.handleChange} defaultValue={item.PRICE} /></td>
-                <td style={{width: lenStr[4]}}><input type="number" name="AMOUNT" id={item.id} onChange={this.handleChange} defaultValue={item.AMOUNT} /></td>
-                <td style={{width: lenStr[5]}}><input type="number" name="TAX" id={item.id} onChange={this.handleChange} defaultValue={item.TAX} /></td>
+                <td style={{width: lenStr[2]}}><input type="number" name="QTY" id={item.id} onChange={this.handleChange}value={item.QTY} /></td>
+                <td style={{width: lenStr[3]}}><input type="number" name="PRICE" id={item.id} onChange={this.handleChange} value={item.PRICE} /></td>
+                <td style={{width: lenStr[4]}}><p> {item.AMOUNT} </p></td>
+                <td style={{width: lenStr[5]}}><p>{item.TAX} </p></td>
                 <td style={{width: lenStr[6]}}>
-                <select id = {item.id} name="TAX_TYPE" onChange={this.handleChange}>
+                <select id = {item.id} name="TAX_TYPE" onChange={this.handleChange} ref = {(input)=> this.menu2 = input}>
                   {this.state.optionsTwo.map((tax,index) => {
                     if(item.TAX_TYPE === tax.label){
                       return (
@@ -1005,7 +1006,7 @@ initialize(){
                   })}
                </select>
                 </td>
-                <td style={{width: lenStr[7]}}><input type="number" name="TOTAL"  id={item.id} onChange={this.handleChange} defaultValue={item.TOTAL} /></td>
+                <td style={{width: lenStr[7]}}><p>{item.TOTAL} </p></td>
                 <td><StyledButton onClick={() => this.removeItem(item.id)}>X</StyledButton></td>
                 <td><button onClick={() => this.handleSubmit(item.id)}> Save</button></td>
                 </tr>
