@@ -972,7 +972,7 @@ initialize(){
             var listItems =this.state.itemsInvoice.map((item,index) => 
                 <tr  >
                 <td style={{width: lenStr[0]}}><span name="LINE_NO"  >{item.LINE_NO}</span></td>
-              <select id={item.id} onChange={this.handleChange}>
+              <select id={item.id} name="ITEMS" onChange={this.handleChange}>
                 {myData.map((myitem,myindex) => {
                 var rfbDepth = myitem.depth;
                 var rfbItemName = myitem.itemName;
@@ -994,7 +994,22 @@ initialize(){
                 <td style={{width: lenStr[3]}}><input type="number" name="PRICE" id={item.id} onChange={this.handleChange} defaultValue={item.PRICE} /></td>
                 <td style={{width: lenStr[4]}}><input type="number" name="AMOUNT" id={item.id} onChange={this.handleChange} defaultValue={item.AMOUNT} /></td>
                 <td style={{width: lenStr[5]}}><input type="number" name="TAX" id={item.id} onChange={this.handleChange} defaultValue={item.TAX} /></td>
-                <td style={{width: lenStr[6]}}><input type="text" name="TAX_TYPE"  id={item.id} onChange={this.handleChange} defaultValue={item.TAX_TYPE} /></td>
+                <td style={{width: lenStr[6]}}>
+                <select id = {item.id} name="TAX_TYPE" onChange={this.handleChange}>
+                  {this.state.optionsTwo.map((tax,index) => {
+                    if(item.TAX_TYPE === tax.label){
+                      return (
+                        <option value ={tax.value} selected>{tax.label}</option>
+                      )
+                    } 
+                    else{
+                      return (
+                        <option value ={tax.value}>{tax.label}</option> 
+                      )            
+                    }
+                  })}
+               </select>
+                </td>
                 <td style={{width: lenStr[7]}}><input type="number" name="TOTAL"  id={item.id} onChange={this.handleChange} defaultValue={item.TOTAL} /></td>
                 <td><StyledButton onClick={() => this.removeItem(item.id)}>X</StyledButton></td>
                 <td><button onClick={() => this.handleSubmit(item.id)}> Save</button></td>
