@@ -24,6 +24,8 @@ class Invoices extends Component {
       itemsInvoice: [],
       itemsQuote: [],
       itemsStocks: [],
+      taxItems: [],
+      optionsTwo: [],
       user: null,
       displayPanel: 'invoiceList',
       id: '',
@@ -79,7 +81,7 @@ class Invoices extends Component {
     this.logout = this.logout.bind(this); 
     this.handleInvoice = this.handleInvoice.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
     this.initialize = this.initialize.bind(this);
     this.initialize2 = this.initialize2.bind(this);
@@ -102,6 +104,7 @@ class Invoices extends Component {
   }
 
   handleChange(e) {
+
     if(e.target.name === "searchbar"){
       if(e.target.value === ""){
        this.setState({
@@ -132,14 +135,130 @@ class Invoices extends Component {
           items: newState
         })
       }
-    } else 
+    } else {
+        var my_id = e.target.id;
+        var targetName = e.target.name;
+        var newState = [];
+      var myvalue = this.state.itemsInvoice.map((item) =>{
+      let myid=item.id;
+      var ACCOUNT_NAME = item.ACCOUNT_NAME;
+      var ADDRESS = item.ADDRESS;
+      var AMOUNT = item.AMOUNT;
+      var COMMENT = item.COMMENT;
+      var CUSTOMER_ORDER_DATE = item.CUSTOMER_ORDER_DATE;
+      var DELIVERY_DATE = item.DELIVERY_DATE;
+      var DELIVERY_NO = item.DELIVERY_NO;
+      var DESCRIPTION = item.DESCRIPTION;
+      var DISPATCHED_DATE = item.DISPATCHED_DATE;
+      var DISPATCHED_THRU = item.DISPATCHED_THRU;
+      var INVOICE_DATE = item.INVOICE_DATE;
+      var INVOICE_DATE_TXT = item.INVOICE_DATE_TXT;
+      var INVOICE_NO = item.INVOICE_NO;
+      var INVOICE_TYPE = item.INVOICE_TYPE;
+      var ITEMS = item.ITEMS;
+      var LINE_NO = item.LINE_NO;
+      var MEMO = item.MEMO;
+      var MYCLASS = item.MYCLASS;
+      var NAME = item.NAME;
+      var PRICE = item.PRICE;
+      var PROFORMA_DATE = item.PROFORMA_DATE;
+      var PROFORMA_NO = item.PROFORMA_NO;
+      var QTY = item.QTY;
+      var TAX = item.TAX;
+      var TAX_RATE = item.TAX_RATE;
+      var TAX_TYPE = item.TAX_TYPE;
+      var TOTAL = item.TOTAL;
+      var UNITS = item.UNITS;
+      var USER_NAME = item.USER_NAME;
+      var businessKeyId = item.businessKeyId;
+      var debtorsledger_contra_id = item.debtorsledger_contra_id;
+      var id = item.id;
+      var invoiceNoPushId = item.invoiceNoPushId;
+      var log = item.log;
+      var loged_in_user_id = item.loged_in_user_id;
+      var posting_contra_id = item.posting_contra_id;
+      var uniqueRowId = item.uniqueRowId;
+      var unique_id = item.unique_id;
+      
+      var recalc = false;
+      if(myid === my_id){
+        if(targetName === 'ITEMS'){
+          ITEMS = e.target.value;
+        }
+        if(targetName === 'QTY'){
+          QTY = Number(e.target.value);
+          recalc = true;
+        }
+        if(targetName === 'PRICE'){
+          PRICE = Number(e.target.value);
+          recalc = true;
+        }
+        if(targetName === 'AMOUNT'){
+          AMOUNT = Number(e.target.value);
+          recalc = true;
+        }
+        if(targetName === 'TAX'){
+          TAX = Number(e.target.value);
+          recalc = true;
+        }
+        if(targetName === 'TOTAL'){
+          PRICE = Number(e.target.value);
+          recalc = true;
+        }
+        if(recalc){
+            AMOUNT = QTY * PRICE;
+            TAX = TAX_RATE * AMOUNT;
+            TOTAL = TAX + AMOUNT;
+        }
+        newState.push({
+          ACCOUNT_NAME: item.ACCOUNT_NAME,
+          ADDRESS: item.ADDRESS,
+          AMOUNT: item.AMOUNT,
+          COMMENT: item.COMMENT,
+          CUSTOMER_ORDER_DATE: item.CUSTOMER_ORDER_DATE,
+          DELIVERY_DATE: item.DELIVERY_DATE,
+          DELIVERY_NO: item.DELIVERY_NO,
+          DESCRIPTION: item.DESCRIPTION,
+          DISPATCHED_DATE: item.DISPATCHED_DATE,
+          DISPATCHED_THRU: item.DISPATCHED_THRU,
+          INVOICE_DATE: item.INVOICE_DATE,
+          INVOICE_DATE_TXT: item.INVOICE_DATE_TXT,
+          INVOICE_NO: item.INVOICE_NO,
+          INVOICE_TYPE: item.INVOICE_TYPE,
+          ITEMS: item.ITEMS,
+          LINE_NO: item.LINE_NO,
+          MEMO: item.MEMO,
+          MYCLASS: item.MYCLASS,
+          NAME: item.NAME,
+          PRICE: item.PRICE,
+          PROFORMA_DATE: item.PROFORMA_DATE,
+          PROFORMA_NO: item.PROFORMA_NO,
+          QTY: item.QTY,
+          TAX: item.TAX,
+          TAX_RATE: item.TAX_RATE,
+          TAX_TYPE: item.TAX_TYPE,
+          TOTAL: item.TOTAL,
+          UNITS: item.UNITS,
+          USER_NAME: item.USER_NAME,
+          businessKeyId: item.businessKeyId,
+          debtorsledger_contra_id: item.debtorsledger_contra_id,
+          id: item.id,
+          invoiceNoPushId: item.invoiceNoPushId,
+          log: item.log,
+          loged_in_user_id: item.loged_in_user_id,
+          posting_contra_id: item.posting_contra_id,
+          uniqueRowId: item.uniqueRowId,
+          unique_id: item.unique_id
+        })
+      }
+  });
         this.setState({
           [e.target.name]: e.target.value
         });
+    }
 
   }
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit(itemId) {
     if(!this.state.user){
       alert("Please Log in!");
       return; 
@@ -427,6 +546,65 @@ initialize(){
         });
       }); 
 
+// populate Tax codes
+  var count = 0;
+    const taxRef = firebase.database().ref('tax_codes/'+
+       uid+'/'+businessKeyId);
+        taxRef.on('value', (snapshot) => {
+          let tax_items = snapshot.val();
+          let newTaxState = [];
+          let taxOption = [];
+            for (let mTaxItem in tax_items) {
+              let type = tax_items[mTaxItem].tax_code;
+              let rate = tax_items[mTaxItem].tax_rate;
+              if(count === 0){
+                taxOption.push({
+                  value: "NONE",
+                  label: "NONE"
+                });
+
+                newTaxState.push({
+                  id: "NONE",
+                  businessKeyId: tax_items[mTaxItem].businessKeyId,
+                  log: tax_items[mTaxItem].log,
+                  taxType: "NONE",
+                  tax_rate: 0,
+                  uid: tax_items[mTaxItem].uid,
+                });
+              }
+              
+              taxOption.push({
+                value: type,
+                label: type
+              });
+              newTaxState.push({
+                id: mTaxItem,
+                businessKeyId: tax_items[mTaxItem].businessKeyId,
+                log: tax_items[mTaxItem].log,
+                taxType: tax_items[mTaxItem].tax_code,
+                tax_rate: tax_items[mTaxItem].tax_rate,
+                uid: tax_items[mTaxItem].uid,
+              });
+              count++;
+            }
+            this.setState({
+              taxItems: newTaxState,
+              optionsTwo: taxOption
+            });
+        });
+      if(count === 0){
+       let type = "NONE";
+       let taxOption = [];
+        taxOption.push({
+          value: type,
+          label: type
+        });
+
+        this.setState({
+          optionsTwo: taxOption
+        });
+      }
+
   }
   showInvoice(invoicePushId) {
   var newState = [];
@@ -483,11 +661,7 @@ initialize(){
       })
     
   }
-  handleEdit(e){
-      this.setState({
-        displayPanel: 'edit'
-      })
-  }
+
   logout() { 
     auth.signOut()
     .then(() => {
@@ -503,8 +677,11 @@ initialize(){
         displayPanel: 'invoiceList'
       });
   }
-   handleSave(itemId){
-     alert("Do you want to Save!\n"+itemId);
+
+  handleEdit(e){
+      this.setState({
+        displayPanel: 'edit'
+      })
   }
 
   removeItem(itemId) {
@@ -795,7 +972,7 @@ initialize(){
             var listItems =this.state.itemsInvoice.map((item,index) => 
                 <tr  >
                 <td style={{width: lenStr[0]}}><span name="LINE_NO"  >{item.LINE_NO}</span></td>
-              <select id = "dropdown" ref = {(input)=> this.menu = input} >
+              <select id={item.id} onChange={this.handleChange}>
                 {myData.map((myitem,myindex) => {
                 var rfbDepth = myitem.depth;
                 var rfbItemName = myitem.itemName;
@@ -813,14 +990,14 @@ initialize(){
                     );
                 })}
               </select>                
-                <td style={{width: lenStr[2]}}><input type="number" name="QTY" onChange={this.handleChange} defaultValue={item.QTY} /></td>
-                <td style={{width: lenStr[3]}}><input type="number" name="PRICE" onChange={this.handleChange} defaultValue={item.PRICE} /></td>
-                <td style={{width: lenStr[4]}}><input type="number" name="AMOUNT" onChange={this.handleChange} defaultValue={item.AMOUNT} /></td>
-                <td style={{width: lenStr[5]}}><input type="number" name="TAX" onChange={this.handleChange} defaultValue={item.TAX} /></td>
-                <td style={{width: lenStr[6]}}><input type="text" name="TAX_TYPE" onChange={this.handleChange} defaultValue={item.TAX_TYPE} /></td>
-                <td style={{width: lenStr[7]}}><input type="number" name="TOTAL" onChange={this.handleChange} defaultValue={item.TOTAL} /></td>
-                <td><StyledButton>X</StyledButton></td>
-                <td><button onClick={() => this.handleSave(item.id)}> Save</button></td>
+                <td style={{width: lenStr[2]}}><input type="number" name="QTY" id={item.id} onChange={this.handleChange} defaultValue={item.QTY} /></td>
+                <td style={{width: lenStr[3]}}><input type="number" name="PRICE" id={item.id} onChange={this.handleChange} defaultValue={item.PRICE} /></td>
+                <td style={{width: lenStr[4]}}><input type="number" name="AMOUNT" id={item.id} onChange={this.handleChange} defaultValue={item.AMOUNT} /></td>
+                <td style={{width: lenStr[5]}}><input type="number" name="TAX" id={item.id} onChange={this.handleChange} defaultValue={item.TAX} /></td>
+                <td style={{width: lenStr[6]}}><input type="text" name="TAX_TYPE"  id={item.id} onChange={this.handleChange} defaultValue={item.TAX_TYPE} /></td>
+                <td style={{width: lenStr[7]}}><input type="number" name="TOTAL"  id={item.id} onChange={this.handleChange} defaultValue={item.TOTAL} /></td>
+                <td><StyledButton onClick={() => this.removeItem(item.id)}>X</StyledButton></td>
+                <td><button onClick={() => this.handleSubmit(item.id)}> Save</button></td>
                 </tr>
             );
             return (

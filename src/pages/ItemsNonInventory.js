@@ -7,7 +7,7 @@ class ItemsNonInventory extends React.Component {
   constructor(){
     super();
         this.state = {
-      path: 'noninventoryitems',
+      path: 'non_inventory_items',
       currentItem: '',
       username: '',
       items: [],
@@ -30,7 +30,7 @@ class ItemsNonInventory extends React.Component {
       salePrice:  0.0,
       taxType: '',
       tax_rate: 0.0,
-      uid: 'QK4rcq2YhZf5BoNsXklZShBTwHw1',
+      uid: '',
       search: false,
       initialized: false,
       isExists: false,
@@ -110,7 +110,7 @@ class ItemsNonInventory extends React.Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
-      const itemsRef = firebase.database().ref('noninventoryitems/'+
+      const itemsRef = firebase.database().ref('non_inventory_items/'+
        uid+'/'+businessKeyId)
        .orderByChild('category');
         itemsRef.on('value', (snapshot) => {
@@ -278,7 +278,11 @@ class ItemsNonInventory extends React.Component {
       }
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
-
+   var businessKeyId ="";
+   var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
     var itemName = this.state.itemName;
     var mRef = this.menu3.value.trim();
       if(mRef === "" )
@@ -313,7 +317,7 @@ class ItemsNonInventory extends React.Component {
     var itemsRef = null;
 
       if(this.state.isExists){
-        itemsRef = firebase.database().ref('noninventoryitems/'+uid+'/-M7sDl_6e3H4iUPEEyuI/'+this.state.id);
+        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/'+businessKeyId+'/'+this.state.id);
         saved = "Updated!";
         const item = {
           barCode: this.state.barCode, 
@@ -334,7 +338,7 @@ class ItemsNonInventory extends React.Component {
         itemsRef.set(item);
       }    
       else {
-        itemsRef = firebase.database().ref('noninventoryitems/'+uid+'/-M7sDl_6e3H4iUPEEyuI');
+        itemsRef = firebase.database().ref('non_inventory_items/'+uid+'/'+ businessKeyId);
         const item = {
           barCode: this.state.barCode, 
           businessKeyId:  this.state.businessKeyId,
