@@ -140,11 +140,77 @@ class Invoices extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    const itemsRef = firebase.database().ref('salesdaybook/'+
-       'QK4rcq2YhZf5BoNsXklZShBTwHw1/-M7sDl_6e3H4iUPEEyuI');
-    const item = {
-      title: this.state.currentItem,
-      user: this.state.username
+    if(!this.state.user){
+      alert("Please Log in!");
+      return;
+    }
+    var d = new Date();
+    var n = d.getTime();
+    var mDepth = 2;
+    var customername = this.state.NAME;
+      if(customername === ''){
+        alert("Please Enter Customer Name!");
+        return;
+      }
+    var m_user = firebase.auth().currentUser;
+    var uid = m_user.uid;
+    businessKeyId = "";
+    var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
+    if(this.state.isExists)
+    {
+      const insertRef = firebase.database().ref('salesdaybook/'+
+       uid+'/'+businessKeyId+'/'+this.state.id);     
+      const item = {
+          invoiceNoPushId: this.state.invoiceNoPushId,
+          businessKeyId: this.state.businessKeyId,
+          address:  this.state.address,
+          businessName: this.state.businessName,
+          emailHome: this.state.emailHome,
+          emailOffice: this.state.emailOffice,
+          locationCountry: this.state.locationCountry,
+          taxIdentifier: this.state.taxIdentifier,
+          telephoneHome: this.state.telephoneHome,
+          telephoneOffice: this.state.telephoneOffice,
+          ACCOUNT_NAME: this.state.ACCOUNT_NAME,
+          ADDRESS: this.state.ADDRESS,
+          AMOUNT: this.state.AMOUNT,
+          COMMENT: this.state.COMMENT,
+          CUSTOMER_ORDER_DATE: this.state.CUSTOMER_ORDER_DATE,
+          DELIVERY_DATE: this.state.DELIVERY_DATE,
+          DELIVERY_NO: this.state.DELIVERY_NO,
+          DESCRIPTION: this.state.DESCRIPTION,
+          DISPATCHED_DATE: this.state.DISPATCHED_DATE,
+          DISPATCHED_THRU: this.state.DISPATCHED_THRU,
+          INVOICE_DATE: this.state.INVOICE_DATE,
+          INVOICE_DATE_TXT: this.state.INVOICE_DATE_TXT,
+          INVOICE_NO: this.state.INVOICE_NO,
+          INVOICE_TYPE: this.state.INVOICE_TYPE,
+          ITEMS: this.state.ITEMS,
+          LINE_NO: this.state.LINE_NO,
+          MEMO: this.state.MEMO,
+          MYCLASS: this.state.MYCLASS,
+          NAME: this.state.NAME,
+          PRICE: this.state.PRICE,
+          PROFORMA_DATE: this.state.PROFORMA_DATE,
+          PROFORMA_NO: this.state.PROFORMA_NO,
+          QTY: this.state.QTY,
+          TAX: this.state.TAX,
+          TAX_RATE: this.state.TAX_RATE,
+          TAX_TYPE: this.state.TAX_TYPE,
+          TOTAL: this.state.TOTAL,
+          UNITS: this.state.UNITS,
+          USER_NAME: this.state.USER_NAME,
+          debtorsledger_contra_id: this.state.debtorsledger_contra_id,
+          log: this.state.log,
+          loged_in_user_id: this.state.loged_in_user_id,
+          posting_contra_id: this.state.posting_contra_id,
+          uniqueRowId: this.state.uniqueRowId,
+          unique_id: this.state.unique_id
+      }
+     insertRef.push(item);
     }
     itemsRef.push(item);
     this.setState({
