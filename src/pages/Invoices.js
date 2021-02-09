@@ -159,21 +159,13 @@ class Invoices extends Component {
     for(let x of mBizInfo){
        businessKeyId = x.businessKeyId ;
     }
+    var saved = "Saved!"; 
     if(this.state.isExists)
     {
       const insertRef = firebase.database().ref('salesdaybook/'+
-       uid+'/'+businessKeyId+'/'+this.state.id);     
+       uid+'/'+businessKeyId+'/'+this.state.id);
+      var saved = "Updated!";  
       const item = {
-          invoiceNoPushId: this.state.invoiceNoPushId,
-          businessKeyId: this.state.businessKeyId,
-          address:  this.state.address,
-          businessName: this.state.businessName,
-          emailHome: this.state.emailHome,
-          emailOffice: this.state.emailOffice, 
-          locationCountry: this.state.locationCountry,
-          taxIdentifier: this.state.taxIdentifier,
-          telephoneHome: this.state.telephoneHome,
-          telephoneOffice: this.state.telephoneOffice,
           ACCOUNT_NAME: this.state.ACCOUNT_NAME,
           ADDRESS: this.state.ADDRESS,
           AMOUNT: this.state.AMOUNT,
@@ -203,20 +195,67 @@ class Invoices extends Component {
           TOTAL: this.state.TOTAL,
           UNITS: this.state.UNITS,
           USER_NAME: this.state.USER_NAME,
+          businessKeyId: businessKeyId,
           debtorsledger_contra_id: this.state.debtorsledger_contra_id,
+          id: this.state.id,
+          invoiceNoPushId: this.state.invoiceNoPushId, 
           log: this.state.log,
-          loged_in_user_id: this.state.loged_in_user_id,
+          loged_in_user_id: uid,
+          posting_contra_id: this.state.posting_contra_id,
+          uniqueRowId: this.state.uniqueRowId,
+          unique_id: this.state.unique_id
+      }
+     insertRef.set(item);
+    }
+    else
+    {
+      const updateRef = firebase.database().ref('salesdaybook/'+
+       uid+'/'+businessKeyId);     
+      const item = {
+          ACCOUNT_NAME: this.state.ACCOUNT_NAME,
+          ADDRESS: this.state.ADDRESS,
+          AMOUNT: this.state.AMOUNT,
+          COMMENT: this.state.COMMENT,
+          CUSTOMER_ORDER_DATE: this.state.CUSTOMER_ORDER_DATE,
+          DELIVERY_DATE: this.state.DELIVERY_DATE,
+          DELIVERY_NO: this.state.DELIVERY_NO,
+          DESCRIPTION: this.state.DESCRIPTION,
+          DISPATCHED_DATE: this.state.DISPATCHED_DATE,
+          DISPATCHED_THRU: this.state.DISPATCHED_THRU,
+          INVOICE_DATE: this.state.INVOICE_DATE,
+          INVOICE_DATE_TXT: this.state.INVOICE_DATE_TXT,
+          INVOICE_NO: this.state.INVOICE_NO,
+          INVOICE_TYPE: this.state.INVOICE_TYPE,
+          ITEMS: this.state.ITEMS,
+          LINE_NO: this.state.LINE_NO,
+          MEMO: this.state.MEMO,
+          MYCLASS: this.state.MYCLASS,
+          NAME: this.state.NAME,
+          PRICE: this.state.PRICE,
+          PROFORMA_DATE: this.state.PROFORMA_DATE,
+          PROFORMA_NO: this.state.PROFORMA_NO,
+          QTY: this.state.QTY,
+          TAX: this.state.TAX,
+          TAX_RATE: this.state.TAX_RATE,
+          TAX_TYPE: this.state.TAX_TYPE,
+          TOTAL: this.state.TOTAL,
+          UNITS: this.state.UNITS,
+          USER_NAME: this.state.USER_NAME,
+          businessKeyId: businessKeyId,
+          debtorsledger_contra_id: this.state.debtorsledger_contra_id,
+          id: this.state.id,
+          invoiceNoPushId: this.state.invoiceNoPushId, 
+          log: this.state.log,
+          loged_in_user_id: uid,
           posting_contra_id: this.state.posting_contra_id,
           uniqueRowId: this.state.uniqueRowId,
           unique_id: this.state.unique_id
       }
      insertRef.push(item);
+     
     }
-    itemsRef.push(item);
-    this.setState({
-      currentItem: '',
-      username: ''
-    });
+  alert(saved)
+
   }
   componentDidMount() {
       firebase.auth().onAuthStateChanged(user => {

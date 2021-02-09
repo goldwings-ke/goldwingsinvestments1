@@ -330,7 +330,7 @@ class Employees extends React.Component {
       }    
       else {
         itemsRef = firebase.database().ref('employees/'+uid+'/'+businessKeyId);
-        itemsRef.push(item);
+        
         const item = {
           balance: '0',
           billing_address: this.state.billing_address,
@@ -352,6 +352,7 @@ class Employees extends React.Component {
           uid: uid,
           businessKeyId: businessKeyId
         }
+        itemsRef.push(item);
       }
 
       this.setState({
