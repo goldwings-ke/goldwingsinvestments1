@@ -142,7 +142,7 @@ class Invoices extends Component {
     e.preventDefault();
     if(!this.state.user){
       alert("Please Log in!");
-      return;
+      return; 
     }
     var d = new Date();
     var n = d.getTime();
@@ -254,7 +254,7 @@ class Invoices extends Component {
      insertRef.push(item);
      
     }
-  alert(saved)
+    alert(saved)
 
   }
   componentDidMount() {
