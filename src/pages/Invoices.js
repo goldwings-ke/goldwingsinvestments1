@@ -188,7 +188,7 @@ class Invoices extends Component {
         if(targetName === 'QTY'){
           QTY = Number(e.target.value);
           recalc = true;
-          alert(QTY)
+         
         }
         if(targetName === 'PRICE'){
           PRICE = Number(e.target.value);
@@ -196,8 +196,9 @@ class Invoices extends Component {
         }
 
         if(targetName === 'TAX_TYPE'){
-          TAX_RATE = Number(e.target.value);
-          TAX_TYPE  = this.menu2.value;
+          //TAX_RATE = Number(e.target.value);
+          TAX_TYPE = e.target.value;
+           alert(TAX_TYPE)
           recalc = true;
         }
         if(recalc){
@@ -247,7 +248,7 @@ class Invoices extends Component {
           unique_id: unique_id
         })
       });
-      
+
         this.setState({
           itemsInvoice: newState
         });
@@ -992,15 +993,15 @@ initialize(){
                 <td style={{width: lenStr[5]}}><p>{item.TAX} </p></td>
                 <td style={{width: lenStr[6]}}>
                 <select id = {item.id} name="TAX_TYPE" onChange={this.handleChange} ref = {(input)=> this.menu2 = input}>
-                  {this.state.optionsTwo.map((tax,index) => {
-                    if(item.TAX_TYPE === tax.label){
+                  {this.state.taxItems.map((tax,index) => {
+                    if(item.TAX_TYPE === tax.taxType){
                       return (
-                        <option value ={tax.value} selected>{tax.label}</option>
+                        <option value ={tax.taxType} selected>{tax.taxType}</option>
                       )
                     } 
                     else{
                       return (
-                        <option value ={tax.value}>{tax.label}</option> 
+                        <option value ={tax.taxType}>{tax.taxType}</option> 
                       )            
                     }
                   })}
