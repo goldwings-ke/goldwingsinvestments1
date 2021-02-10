@@ -25,7 +25,7 @@ class Invoices extends Component {
       itemsQuote: [],
       itemsStocks: [],
       taxItems: [],
-      optionsTwo: [],
+      classUnique: [],
       user: null,
       displayPanel: 'invoiceList',
       id: '',
@@ -196,14 +196,16 @@ class Invoices extends Component {
         }
 
         if(targetName === 'TAX_TYPE'){
-          //TAX_RATE = Number(e.target.value);
           TAX_TYPE = e.target.value;
-           alert(TAX_TYPE)
+          var mytaxrate = this.state.taxItems.map((item) =>{
+            if(item.taxType === TAX_TYPE)
+              TAX_RATE = item.tax_rate;
+          })
           recalc = true;
         }
         if(recalc){
             AMOUNT = QTY * PRICE;
-            TAX = TAX_RATE * AMOUNT;
+            TAX = (TAX_RATE * AMOUNT) / 100;
             TOTAL = TAX + AMOUNT;
         }
       }
@@ -428,7 +430,9 @@ initialize(){
        businessKeyId = x.businessKeyId ;
     }
  
- 
+ var classUnique = [];
+      classUnique.push("NONE");
+
   const itemsRef = firebase.database().ref('salesdaybook/'+
     uid+'/'+businessKeyId);
 //var keyId =""; 
@@ -439,7 +443,13 @@ initialize(){
       let DataCacheAll = [];
       let DataCacheInvoices = [];
       let inDB = 0;
-      for (let item in items) {        
+      for (let item in items) {
+          let mClass = items[item].MYCLASS;
+          var n = classUnique.indexOf(mClass);
+            if(n === -1 ) {//false
+              classUnique.push(mClass);
+            }
+
         var invoicePushId = items[item].invoiceNoPushId;
         for(let i=0;i<DataCacheInvoices.length;i++){
             let val= DataCacheInvoices[i];
@@ -505,7 +515,8 @@ initialize(){
       this.setState({
         items: DataCache,
         itemsAll: DataCacheAll,
-        itemsOrig: DataCache
+        itemsOrig: DataCache,
+          classUnique
       });
     });
 
@@ -545,35 +556,21 @@ initialize(){
 
 // populate Tax codes
   var count = 0;
+  var newTaxState = [];
+        newTaxState.push({
+          id: "NONE",
+          businessKeyId: businessKeyId,
+          log: 0,
+          taxType: "NONE",
+          tax_rate: 0,
+           uid: uid
+        });
+
     const taxRef = firebase.database().ref('tax_codes/'+
        uid+'/'+businessKeyId);
         taxRef.on('value', (snapshot) => {
-          let tax_items = snapshot.val();
-          let newTaxState = [];
-          let taxOption = [];
+          let tax_items = snapshot.val();    
             for (let mTaxItem in tax_items) {
-              let type = tax_items[mTaxItem].tax_code;
-              let rate = tax_items[mTaxItem].tax_rate;
-              if(count === 0){
-                taxOption.push({
-                  value: "NONE",
-                  label: "NONE"
-                });
-
-                newTaxState.push({
-                  id: "NONE",
-                  businessKeyId: tax_items[mTaxItem].businessKeyId,
-                  log: tax_items[mTaxItem].log,
-                  taxType: "NONE",
-                  tax_rate: 0,
-                  uid: tax_items[mTaxItem].uid,
-                });
-              }
-              
-              taxOption.push({
-                value: type,
-                label: type
-              });
               newTaxState.push({
                 id: mTaxItem,
                 businessKeyId: tax_items[mTaxItem].businessKeyId,
@@ -582,27 +579,14 @@ initialize(){
                 tax_rate: tax_items[mTaxItem].tax_rate,
                 uid: tax_items[mTaxItem].uid,
               });
-              count++;
             }
             this.setState({
-              taxItems: newTaxState,
-              optionsTwo: taxOption
+              taxItems: newTaxState
             });
         });
-      if(count === 0){
-       let type = "NONE";
-       let taxOption = [];
-        taxOption.push({
-          value: type,
-          label: type
-        });
-
-        this.setState({
-          optionsTwo: taxOption
-        });
-      }
 
   }
+
   showInvoice(invoicePushId) {
   var newState = [];
   var myvalue = this.state.itemsAll.map((item) =>{
@@ -841,7 +825,7 @@ initialize(){
             );
          } else if(this.state.displayPanel==='invoice'){
 
-            const headers = ["No","Item","Qty","Price","Amount","VAT","Type","Total"]
+            const headers = ["No","Item","Qty","Price","Amount","Tax","Type","Class","Total"]
             const rows = this.state.itemsInvoice.slice()
             
             var amount = 0;
@@ -877,6 +861,7 @@ initialize(){
                 <td>{item.AMOUNT}</td>
                 <td>{item.TAX}</td>
                 <td>{item.TAX_TYPE}</td>
+                <td>{item.MYCLASS}</td>
                 <td>{item.TOTAL}</td>
                 </tr>
             );
@@ -897,7 +882,7 @@ initialize(){
                     {listItems}
                     <tr>
                     <td></td><td></td><td></td><td>Total</td>
-                    <td>{amount}</td><td>{tax}</td><td></td><td>{total}</td>
+                    <td>{amount}</td><td>{tax}</td><td></td><td></td><td>{total}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -938,7 +923,7 @@ initialize(){
             }
             const myData = [].concat(this.state.itemsStocks)
               .sort((a, b) => a.category > b.category ? 1 : -1)
-            var len= [4,5,5,5,5,5,5,5];
+            var len= [4,5,5,5,5,5,5,5,5];
             var xitems = this.state.itemsInvoice.slice();
             var count = 1;
               for(let yitems of xitems){
@@ -957,8 +942,10 @@ initialize(){
                       if( a > len[5]) len[5] = a;
                     a = yitems.TAX_TYPE.length;
                       if( a > len[6]) len[6] = a; 
-                    a = yitems.TOTAL.toString().length;
+                    a = yitems.MYCLASS.length;
                       if( a > len[7]) len[7] = a;
+                    a = yitems.TOTAL.toString().length;
+                      if( a > len[8]) len[8] = a;
               }
               let lenStr =[];
               for(let i=0;i<len.length;i++){
@@ -1007,7 +994,23 @@ initialize(){
                   })}
                </select>
                 </td>
-                <td style={{width: lenStr[7]}}><p>{item.TOTAL} </p></td>
+                <td style={{width: lenStr[7]}}>
+                <select id = {item.id} name="MYCLASS" onChange={this.handleChange} ref = {(input)=> this.menu3 = input}>
+                  {this.state.classItems.map((myclass,index) => {
+                    if(item.TAX_TYPE === myclass){
+                      return (
+                        <option value ={myclass} selected>{myclass}</option>
+                      )
+                    } 
+                    else{
+                      return (
+                        <option value ={myclass}>{myclass}</option> 
+                      )            
+                    }
+                  })}
+               </select>
+                </td>
+                <td style={{width: lenStr[8]}}><p>{item.TOTAL} </p></td>
                 <td><StyledButton onClick={() => this.removeItem(item.id)}>X</StyledButton></td>
                 <td><button onClick={() => this.handleSubmit(item.id)}> Save</button></td>
                 </tr>
