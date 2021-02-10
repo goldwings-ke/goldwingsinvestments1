@@ -4,7 +4,6 @@ import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase';
 import ReactTable from "react-table"; 
 import styled from "styled-components";
-import DatePicker from 'react-date-picker';
 
 // Styled component named StyledButton
 const StyledButton = styled.button`
@@ -1094,7 +1093,7 @@ initialize(){
                <p style={{color: "blue"}}>Address: {this.state.address} {this.state.telephoneOffice} {this.state.telephoneHome} {this.state.emailHome} {this.state.emailOffice} </p>
                 <hr/>
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
-                <span style={{color: "blue"}}>  Date: <DatePicker  onChange={this.handleChange} value={this.state.INVOICE_DATE_TXT} /></span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
+                <span style={{color: "blue"}}>  Date: {invoiceDate} </span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
                 <label>MEMO:<br/> 
                 <textarea name="MEMO"  rows={4} wrap="soft" value={this.state.MEMO} onChange={this.handleChange} style={{width: "100%"}} />
                 </label>
