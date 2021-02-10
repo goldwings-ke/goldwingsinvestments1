@@ -182,6 +182,10 @@ class Invoices extends Component {
       
       var recalc = false;
       if(myid === my_id){
+        if(targetName === 'COMMENT'){
+          COMMENT = e.target.value;
+          alert(COMMENT);
+        }
         if(targetName === 'ITEMS'){
           ITEMS = e.target.value;
         }
