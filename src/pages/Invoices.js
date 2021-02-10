@@ -135,6 +135,10 @@ class Invoices extends Component {
           items: newState
         })
       }
+    } else if(e.target.name === 'MEMO'){
+          this.setState({[e.target.name]: e.target.value});   
+    } else if(e.target.name === 'COMMENT'){
+          this.setState({[e.target.name]: e.target.value});
     } else {
         var my_id = e.target.id;
         var targetName = e.target.name;
@@ -182,10 +186,7 @@ class Invoices extends Component {
       
       var recalc = false;
       if(myid === my_id){
-        if(targetName === 'COMMENT'){
-          COMMENT = e.target.value;
-          alert(COMMENT);
-        }
+
         if(targetName === 'ITEMS'){
           ITEMS = e.target.value;
         }
@@ -593,9 +594,10 @@ initialize(){
 
   showInvoice(invoicePushId) {
   var newState = [];
+  var comment = "";
   var myvalue = this.state.itemsAll.map((item) =>{
       let myid=item.invoiceNoPushId;
-      
+      comment = item.COMMENT;
       if(myid === invoicePushId){
         newState.push({
           ACCOUNT_NAME: item.ACCOUNT_NAME,
@@ -642,7 +644,8 @@ initialize(){
   });
       this.setState({
         itemsInvoice: newState,
-        displayPanel: 'invoice'
+        displayPanel: 'invoice',
+        COMMENT: comment
       })
     
   }
@@ -1027,8 +1030,9 @@ initialize(){
                 <hr/>
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
                 <span style={{color: "blue"}}>  Date: {invoiceDate}</span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
-                  <label>Memo:</label><br/> 
-                <span ><textarea name="MEMO" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange}  style={{width: "100%"}} >{memo}</textarea></span><br/>
+                <label>MEMO:<br/> 
+                <textarea name="MEMO"  wrap="soft" value={this.state.MEMO} onChange={this.handleChange} style={{width: "100%"}} />
+                </label>
                 <button onClick={() => this.addRow()}>+Add Row</button>
                 
                 <div class="w3-responsive"> 
@@ -1044,9 +1048,11 @@ initialize(){
                   </tbody>
                 </table>
                 </div>
-                <label>Comments:</label><br/> 
-                <span ><textarea name="COMMENT" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange} style={{width: "100%"}} >{comment}</textarea></span>
+                <label>Comments:<br/> 
+                <textarea name="COMMENT" wrap="soft" value={this.state.COMMENT} onChange={this.handleChange} style={{width: "100%"}} />
+                </label>
                 </div>
+                
             );
          }
     }
