@@ -22,6 +22,7 @@ class Invoices extends Component {
       itemsOrig: [],
       itemsAll: [],
       itemsInvoice: [],
+      itemsNewInvoice: [],
       itemsQuote: [],
       itemsStocks: [],
       taxItems: [],
@@ -761,7 +762,7 @@ initialize(){
           itemsInvoice: myitemsInvoice.concat(newState)
         })
   }
-  
+
   render() {
       var address ="";
     var businessName = "";
