@@ -25,7 +25,7 @@ class Invoices extends Component {
       itemsQuote: [],
       itemsStocks: [],
       taxItems: [],
-      classUnique: [],
+      classItems: [],
       user: null,
       displayPanel: 'invoiceList',
       id: '',
@@ -430,8 +430,8 @@ initialize(){
        businessKeyId = x.businessKeyId ;
     }
  
- var classUnique = [];
-      classUnique.push("NONE");
+ var classItems = [];
+      classItems.push("NONE");
 
   const itemsRef = firebase.database().ref('salesdaybook/'+
     uid+'/'+businessKeyId);
@@ -445,9 +445,9 @@ initialize(){
       let inDB = 0;
       for (let item in items) {
           let mClass = items[item].MYCLASS;
-          var n = classUnique.indexOf(mClass);
+          var n = classItems.indexOf(mClass);
             if(n === -1 ) {//false
-              classUnique.push(mClass);
+              classItems.push(mClass);
             }
 
         var invoicePushId = items[item].invoiceNoPushId;
@@ -516,7 +516,7 @@ initialize(){
         items: DataCache,
         itemsAll: DataCacheAll,
         itemsOrig: DataCache,
-          classUnique
+          classItems
       });
     });
 
@@ -997,7 +997,7 @@ initialize(){
                 <td style={{width: lenStr[7]}}>
                 <select id = {item.id} name="MYCLASS" onChange={this.handleChange} ref = {(input)=> this.menu3 = input}>
                   {this.state.classItems.map((myclass,index) => {
-                    if(item.TAX_TYPE === myclass){
+                    if(item.MYCLASS === myclass){
                       return (
                         <option value ={myclass} selected>{myclass}</option>
                       )
