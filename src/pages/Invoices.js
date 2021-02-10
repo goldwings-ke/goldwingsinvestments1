@@ -825,7 +825,7 @@ initialize(){
             );
          } else if(this.state.displayPanel==='invoice'){
 
-            const headers = ["No","Item","Qty","Price","Amount","Tax","Type","Class","Total"]
+            const headers = ["No","Item","Qty","Price","Amount","Tax","Tax Type","Class","Total"]
             const rows = this.state.itemsInvoice.slice()
             
             var amount = 0;
@@ -893,7 +893,7 @@ initialize(){
               </div>
             );
          }else {// edit invoice
-            const headers = ["No","Item","Qty","Price","Amount","VAT","Type","Total","",""]
+            const headers = ["No","Item","Qty","Price","Amount","Tax","Tax Type","Class","Total","",""]
             const rows = this.state.itemsInvoice.slice()
             var amount = 0;
             var tax = 0;
@@ -1024,7 +1024,7 @@ initialize(){
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
                 <span style={{color: "blue"}}>  Date: {invoiceDate}</span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
                   <label>Memo:</label><br/> 
-                <span ><textarea name="MEMO" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange}  style={{width: "100%"}} value={memo} ></textarea></span><br/>
+                <span ><textarea name="MEMO" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange}  style={{width: "100%"}} >{memo}</textarea></span><br/>
                 <button onClick={() => this.addRow()}>+Add Row</button>
                 
                 <div class="w3-responsive"> 
@@ -1041,7 +1041,7 @@ initialize(){
                 </table>
                 </div>
                 <label>Comments:</label><br/> 
-                <span ><textarea name="COMMENT" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange} style={{width: "100%"}} value={comment}></textarea></span>
+                <span ><textarea name="COMMENT" rows={4} cols={10} wrap="soft" maxlength="40" onChange={this.handleChange} style={{width: "100%"}} >{comment}</textarea></span>
                 </div>
             );
          }
