@@ -4,6 +4,7 @@ import { FirebaseAuth } from 'react-firebaseui';
 import firebase, { auth, provider } from '../components/firebase';
 import ReactTable from "react-table"; 
 import styled from "styled-components";
+import DatePicker from 'react-date-picker';
 
 // Styled component named StyledButton
 const StyledButton = styled.button`
@@ -593,6 +594,64 @@ initialize(){
 
   }
 
+   newInvoice(){
+    var m_user = firebase.auth().currentUser;
+    var uid = m_user.uid;
+    var businessKeyId ="";
+    var mBizInfo = this.state.bizinfo.slice();
+    for(let x of mBizInfo){
+       businessKeyId = x.businessKeyId ;
+    }
+    var d = new Date();
+    var n = d.getTime();
+
+     var newState = [];
+            newState.push({
+          ACCOUNT_NAME: '',
+          ADDRESS: '',
+          AMOUNT: 0,
+          COMMENT: '',
+          CUSTOMER_ORDER_DATE: '',
+          DELIVERY_DATE: '',
+          DELIVERY_NO: '',
+          DESCRIPTION: '',
+          DISPATCHED_DATE: '',
+          DISPATCHED_THRU: '',
+          INVOICE_DATE: '',
+          INVOICE_DATE_TXT: '',
+          INVOICE_NO: '',
+          INVOICE_TYPE: '',
+          ITEMS: '',
+          LINE_NO: 1,
+          MEMO: '',
+          MYCLASS: '',
+          NAME: '',
+          PRICE: 0,
+          PROFORMA_DATE: '',
+          PROFORMA_NO: '',
+          QTY: 0,
+          TAX: 0,
+          TAX_RATE: 0,
+          TAX_TYPE: 'NONE',
+          TOTAL: 0,
+          UNITS: '',
+          USER_NAME: '',
+          businessKeyId: businessKeyId,
+          debtorsledger_contra_id: '',
+          id: '',
+          invoiceNoPushId: '',
+          log: n,
+          loged_in_user_id: uid,
+          posting_contra_id: '',
+          uniqueRowId: '',
+          unique_id: 0
+        })
+      this.setState({
+        itemsInvoice: newState,
+        displayPanel: 'edit'
+      })
+   }
+
   showInvoice(invoicePushId) {
   var newState = [];
   var comment = "";
@@ -1035,7 +1094,7 @@ initialize(){
                <p style={{color: "blue"}}>Address: {this.state.address} {this.state.telephoneOffice} {this.state.telephoneHome} {this.state.emailHome} {this.state.emailOffice} </p>
                 <hr/>
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
-                <span style={{color: "blue"}}>  Date: {invoiceDate}</span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
+                <span style={{color: "blue"}}>  Date: <DatePicker  onChange={this.handleChange} value={this.state.INVOICE_DATE_TXT} /></span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
                 <label>MEMO:<br/> 
                 <textarea name="MEMO"  rows={4} wrap="soft" value={this.state.MEMO} onChange={this.handleChange} style={{width: "100%"}} />
                 </label>
@@ -1071,7 +1130,7 @@ initialize(){
       : null
     }
     <button onClick={() => this.handleInvoice()} style={{marginLeft: "10px"}}>Invoices List</button>
-    <button onClick={() => this.handleClick(2)} style={{marginLeft: "10px"}}>+Add New</button>
+    <button onClick={() => this.newInvoice()} style={{marginLeft: "10px"}}>+Add New</button>
   </div>
 
   {/*<img src={Dome} alt="Dome Tent" />*/}

@@ -6,11 +6,12 @@
     "@firebase/app": "0.6.13",
     "firebase": "8.1.0",
     "react": "17.0.0",
+    "react-date-picker": "^8.0.7",
     "react-dom": "17.0.0",
     "react-firebaseui": "4.1.0",
-    "react-is": ">= 16.8.0",
+    "react-is": "17.0.1",
     "react-router-dom": "5.2.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
