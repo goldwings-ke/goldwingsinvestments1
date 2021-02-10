@@ -595,10 +595,12 @@ initialize(){
   showInvoice(invoicePushId) {
   var newState = [];
   var comment = "";
+  var memo = "";
   var myvalue = this.state.itemsAll.map((item) =>{
       let myid=item.invoiceNoPushId;
-      comment = item.COMMENT;
       if(myid === invoicePushId){
+        comment = item.COMMENT;
+        memo = item.MEMO;
         newState.push({
           ACCOUNT_NAME: item.ACCOUNT_NAME,
           ADDRESS: item.ADDRESS,
@@ -645,7 +647,8 @@ initialize(){
       this.setState({
         itemsInvoice: newState,
         displayPanel: 'invoice',
-        COMMENT: comment
+        COMMENT: comment,
+        MEMO: memo
       })
     
   }
@@ -693,6 +696,7 @@ initialize(){
       this.setState({itemsInvoice: array});
     }
   }
+
   addRow(){
     var m_user = firebase.auth().currentUser;
     var uid = m_user.uid;
@@ -756,7 +760,8 @@ initialize(){
         this.setState({
           itemsInvoice: myitemsInvoice.concat(newState)
         })
-}
+  }
+  
   render() {
       var address ="";
     var businessName = "";
@@ -1031,7 +1036,7 @@ initialize(){
                 <span style={{color: "black"}}>To: {customer_name}</span><span style={{color: "blue", float: "right"}}>Invoice No: {invoiceNo}</span><br/>
                 <span style={{color: "blue"}}>  Date: {invoiceDate}</span><span style={{float: "right"}}>Order No:{proformaNo}</span><br/>
                 <label>MEMO:<br/> 
-                <textarea name="MEMO"  wrap="soft" value={this.state.MEMO} onChange={this.handleChange} style={{width: "100%"}} />
+                <textarea name="MEMO"  rows={4} wrap="soft" value={this.state.MEMO} onChange={this.handleChange} style={{width: "100%"}} />
                 </label>
                 <button onClick={() => this.addRow()}>+Add Row</button>
                 
@@ -1049,7 +1054,7 @@ initialize(){
                 </table>
                 </div>
                 <label>Comments:<br/> 
-                <textarea name="COMMENT" wrap="soft" value={this.state.COMMENT} onChange={this.handleChange} style={{width: "100%"}} />
+                <textarea name="COMMENT" rows={4} wrap="soft" value={this.state.COMMENT} onChange={this.handleChange} style={{width: "100%"}} />
                 </label>
                 </div>
                 
