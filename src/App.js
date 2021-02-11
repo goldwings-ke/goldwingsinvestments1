@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import About from "./components/About";
 import Customers from "./pages/Customers";
 import Invoices from "./pages/Invoices";
 import Suppliers from "./pages/Suppliers";
